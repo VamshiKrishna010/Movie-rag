@@ -23,7 +23,7 @@ export default tseslint.config(
         "warn",
         {
           allowConstantExport: true,
-          allowExportNames: ["useGenre", "useSearch"],
+          allowExportNames: ["useAuth", "useGenre", "useSearch"],
         },
       ],
     },

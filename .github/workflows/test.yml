@@ -57,6 +57,7 @@ jobs:
           sudo apt-get install -y postgresql-client
           PGPASSWORD=rag psql -h localhost -U rag -d movierag -f sql/01_schema.sql
           PGPASSWORD=rag psql -h localhost -U rag -d movierag -f migrations/008_users.sql
+          PGPASSWORD=rag psql -h localhost -U rag -d movierag -f migrations/009_auth_hardening.sql
 
       - name: Run backend tests
         run: pytest tests/ -v
