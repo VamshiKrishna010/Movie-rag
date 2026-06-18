@@ -31,6 +31,8 @@ Schema is auto-loaded from `sql/01_schema.sql`. Run migrations after ingestion:
 psql $DATABASE_URL -f migrations/004_fts.sql
 psql $DATABASE_URL -f migrations/005_graph_indexes.sql
 psql $DATABASE_URL -f migrations/006_pg_trgm.sql
+psql $DATABASE_URL -f migrations/008_users.sql
+psql $DATABASE_URL -f migrations/009_auth_hardening.sql
 ```
 
 ### 2. Environment
@@ -43,6 +45,9 @@ TMDB_API_KEY=your_tmdb_key
 CEREBRAS_API_KEY=your_cerebras_key
 CEREBRAS_MODEL=gpt-oss-120b
 GROQ_API_KEY=your_groq_key   # eval judge only
+JWT_SECRET_KEY=your-long-random-secret
+JWT_ACCESS_EXPIRE_MINUTES=15
+JWT_REFRESH_EXPIRE_DAYS=30
 ```
 
 ### 3. Ingest & embed
@@ -242,6 +247,51 @@ Scoring: [Ragas](https://github.com/vibrantlabsai/ragas) — faithfulness, answe
 | Naive vector (Day 3) | 0.971 | 0.772 | 1.000 | 0.875 | 0.660 |
 
 *NaN on relational + comparative categories — naive vector retrieval fails to find useful context for cross-entity and set-operation queries. Graph retrieval (Day 5) targets this gap.*
+
+---
+
+## Authentication
+
+Email/password auth with short-lived JWT access tokens and opaque refresh tokens stored server-side (hashed in Postgres).
+
+| Endpoint | Purpose |
+|----------|---------|
+| `POST /auth/register` | Create account |
+| `POST /auth/login` | Returns `access_token` + `refresh_token` |
+| `POST /auth/refresh` | Rotate refresh token, issue new pair |
+| `POST /auth/logout` | Revoke refresh token |
+| `GET /auth/me` | Current user (requires Bearer access token) |
+| `GET /auth/admin/ping` | Admin-only health check |
+
+Login and register are rate-limited (default `5/minute` per IP via `LOGIN_RATE_LIMIT`).
+
+Users have a `role` column (`user` or `admin`). Use `require_admin` dependency for protected admin routes.
+
+### Token storage (frontend)
+
+Access and refresh tokens are stored in `localStorage` and sent as `Authorization: Bearer <access_token>`.
+
+**CSRF:** Not applicable — the browser does not auto-send Bearer tokens on cross-site requests.
+
+**XSS (primary risk):** Any injected script can read `localStorage`. Mitigations in this project:
+- 15-minute access token TTL
+- Refresh token rotation with server-side revocation on logout
+- Reuse of a revoked refresh token revokes all tokens for that user
+
+For production, add a strict Content-Security-Policy at the reverse proxy or middleware layer.
+
+**Cookies vs Bearer header:** httpOnly cookies would reduce XSS token theft but require CSRF protection (`SameSite=Strict` + CSRF tokens). This project uses Bearer + localStorage for simplicity.
+
+### JWT secret rotation
+
+If `JWT_SECRET_KEY` is compromised, rotate without immediately invalidating all sessions:
+
+1. Set `JWT_SECRET_KEY_PREVIOUS` to the current `JWT_SECRET_KEY`.
+2. Generate a new `JWT_SECRET_KEY` and deploy.
+3. New tokens are signed with the new key; existing access tokens verify against the previous key until they expire (max ~access TTL + refresh TTL).
+4. After the grace window, clear `JWT_SECRET_KEY_PREVIOUS`.
+
+Access tokens include `iss` (`movie-rag`) and `aud` (`movie-rag-api`) claims; both are validated on decode.
 
 ---
 

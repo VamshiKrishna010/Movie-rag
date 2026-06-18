@@ -2,11 +2,15 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from slowapi import _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
+from slowapi.middleware import SlowAPIMiddleware
 
 from app.api.auth import router as auth_router
 from app.api.movies import router as movies_router
 from app.api.query import router as query_router
 from app.db import close_pool, get_connection, init_pool
+from app.limiter import limiter
 
 
 @asynccontextmanager
@@ -17,6 +21,9 @@ async def lifespan(_app: FastAPI):
 
 
 app = FastAPI(title="Movie RAG", version="0.1.0", lifespan=lifespan)
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+app.add_middleware(SlowAPIMiddleware)
 
 app.add_middleware(
     CORSMiddleware,
@@ -35,6 +42,8 @@ async def root():
         "health": "/health",
         "auth_register": "/auth/register",
         "auth_login": "/auth/login",
+        "auth_refresh": "/auth/refresh",
+        "auth_logout": "/auth/logout",
         "auth_me": "/auth/me",
         "query": "/query",
         "movies_browse": "/movies/browse",

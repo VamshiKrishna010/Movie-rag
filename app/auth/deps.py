@@ -7,7 +7,10 @@ from app.auth.security import decode_access_token
 from app.auth.users import get_user_by_email
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
-oauth2_scheme_optional = OAuth2PasswordBearer(tokenUrl="/auth/login", auto_error=False)
+oauth2_scheme_optional = OAuth2PasswordBearer(
+    tokenUrl="/auth/login",
+    auto_error=False,
+)
 
 
 async def get_current_user(
@@ -29,7 +32,11 @@ async def get_current_user(
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    return {"id": user["id"], "email": user["email"]}
+    return {
+        "id": user["id"],
+        "email": user["email"],
+        "role": user["role"],
+    }
 
 
 async def get_current_user_optional(
@@ -46,4 +53,19 @@ async def get_current_user_optional(
     if user is None:
         return None
 
-    return {"id": user["id"], "email": user["email"]}
+    return {
+        "id": user["id"],
+        "email": user["email"],
+        "role": user["role"],
+    }
+
+
+async def require_admin(
+    current_user: Annotated[dict, Depends(get_current_user)],
+) -> dict:
+    if current_user["role"] != "admin":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Admin access required",
+        )
+    return current_user

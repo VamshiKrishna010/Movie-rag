@@ -7,15 +7,21 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { fetchMe, login as apiLogin, register as apiRegister } from "../api/auth";
-import { clearToken, getToken, setToken } from "../lib/auth";
+import {
+  fetchMe,
+  login as apiLogin,
+  logoutApi,
+  register as apiRegister,
+  storeTokens,
+} from "../api/auth";
+import { clearToken, getToken } from "../lib/auth";
 
 interface AuthContextValue {
-  user: { id: number; email: string } | null;
+  user: { id: number; email: string; role: string } | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, password: string) => Promise<void>;
-  logout: () => void;
+  logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -27,6 +33,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const token = getToken();
     if (!token) {
+      setLoading(false);
       return;
     }
 
@@ -37,8 +44,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const login = useCallback(async (email: string, password: string) => {
-    const { access_token } = await apiLogin(email, password);
-    setToken(access_token);
+    const tokens = await apiLogin(email, password);
+    storeTokens(tokens);
     const me = await fetchMe();
     setUser(me);
   }, []);
@@ -48,7 +55,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await login(email, password);
   }, [login]);
 
-  const logout = useCallback(() => {
+  const logout = useCallback(async () => {
+    await logoutApi();
     clearToken();
     setUser(null);
   }, []);
