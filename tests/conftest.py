@@ -1,6 +1,7 @@
 import asyncio
 import os
 import sys
+from pathlib import Path
 
 import pytest
 from fastapi.testclient import TestClient
@@ -12,6 +13,10 @@ os.environ.setdefault("DATABASE_URL", "postgresql://rag:rag@localhost:5432/movie
 os.environ.setdefault("JWT_SECRET_KEY", "test-secret-key")
 os.environ.setdefault("TMDB_API_KEY", "test")
 os.environ.setdefault("CEREBRAS_API_KEY", "test")
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 
 from app.main import app  # noqa: E402
 
