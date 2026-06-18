@@ -1,0 +1,13 @@
+fastapi
+uvicorn[standard]
+psycopg[binary]
+pgvector
+pydantic-settings
+python-jose[cryptography]
+passlib[bcrypt]
+python-multipart
+email-validator
+httpx
+tenacity
+openai
+sentence-transformers

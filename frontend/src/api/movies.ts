@@ -1,3 +1,5 @@
+import { authFetch } from "../lib/auth";
+
 export interface Movie {
   id: number;
   title: string;
@@ -64,7 +66,7 @@ function buildParams({ page = 1, limit = PAGE_SIZE, genreId }: ListParams): URLS
 
 export async function browseMovies(params: ListParams = {}): Promise<PaginatedMovies> {
   const qs = buildParams(params);
-  const res = await fetch(`/movies/browse?${qs}`);
+  const res = await authFetch(`/movies/browse?${qs}`);
   if (!res.ok) throw new Error("Failed to load movies");
   return res.json();
 }
@@ -75,8 +77,13 @@ export async function searchMovies(
 ): Promise<SearchResponse> {
   const qs = buildParams(params);
   qs.set("q", q);
-  const res = await fetch(`/movies/search?${qs}`);
-  if (!res.ok) throw new Error("Search failed");
+  const res = await authFetch(`/movies/search?${qs}`);
+  if (!res.ok) {
+    if (res.status === 401) {
+      throw new Error("Sign in required for semantic search");
+    }
+    throw new Error("Search failed");
+  }
   return res.json();
 }
 
@@ -88,7 +95,7 @@ export async function fetchGenres(): Promise<Genre[]> {
 }
 
 export async function fetchMovieDetail(id: number): Promise<MovieDetail> {
-  const res = await fetch(`/movies/${id}`);
+  const res = await authFetch(`/movies/${id}`);
   if (!res.ok) throw new Error("Failed to load movie");
   return res.json();
 }

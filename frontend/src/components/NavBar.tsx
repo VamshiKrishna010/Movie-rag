@@ -1,4 +1,5 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import { useGenre } from "../context/GenreContext";
 import { useSearch } from "../context/SearchContext";
 import { useTheme } from "../hooks/useTheme";
@@ -7,6 +8,7 @@ import { SearchBar } from "./SearchBar";
 import { ThemeToggle } from "./ThemeToggle";
 
 export function NavBar() {
+  const { user, logout } = useAuth();
   const { isDark, toggle } = useTheme();
   const { setSidebarOpen } = useGenre();
   const { query, setQuery, submitSearch } = useSearch();
@@ -58,6 +60,27 @@ export function NavBar() {
           )}
 
           <div className="flex items-center gap-1">
+            {user ? (
+              <div className="flex items-center gap-2">
+                <span className="hidden max-w-[8rem] truncate text-xs text-muted sm:inline">
+                  {user.email}
+                </span>
+                <button
+                  type="button"
+                  onClick={logout}
+                  className="rounded-lg px-2 py-1 text-xs text-muted transition-colors hover:text-text"
+                >
+                  Log out
+                </button>
+              </div>
+            ) : (
+              <Link
+                to="/auth"
+                className="rounded-lg px-2 py-1 text-xs text-muted transition-colors hover:text-text"
+              >
+                Sign in
+              </Link>
+            )}
             <ThemeToggle isDark={isDark} onToggle={toggle} />
             {isHome && (
               <GenreMenuButton onClick={() => setSidebarOpen(true)} />

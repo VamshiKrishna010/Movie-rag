@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.api.auth import router as auth_router
 from app.api.movies import router as movies_router
 from app.api.query import router as query_router
 from app.db import close_pool, get_connection, init_pool
@@ -32,6 +33,9 @@ async def root():
         "message": "Movie RAG API is running",
         "docs": "/docs",
         "health": "/health",
+        "auth_register": "/auth/register",
+        "auth_login": "/auth/login",
+        "auth_me": "/auth/me",
         "query": "/query",
         "movies_browse": "/movies/browse",
         "movies_search": "/movies/search",
@@ -54,5 +58,6 @@ async def health():
     }
 
 
+app.include_router(auth_router)
 app.include_router(query_router, prefix="", tags=["rag"])
 app.include_router(movies_router, prefix="", tags=["movies"])

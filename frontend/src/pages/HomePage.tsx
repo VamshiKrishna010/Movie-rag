@@ -129,15 +129,17 @@ export default function HomePage() {
           setTotalPages(data.total_pages);
           setSearchMode(null);
         }
-      } catch {
+      } catch (err) {
         if (cancelled) return;
         setMovies([]);
         setTotalPages(1);
         setSearchMode(null);
+        const message =
+          err instanceof Error ? err.message : "Something went wrong";
         setError(
           debouncedQuery
-            ? "Search failed. Check that the API and database are running."
-            : "Could not load movies. Is the API running?",
+            ? message
+            : "Failed to load movies. Check that the API and database are running.",
         );
       } finally {
         if (!cancelled) setLoading(false);

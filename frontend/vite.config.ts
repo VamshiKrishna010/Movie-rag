@@ -7,8 +7,10 @@ export default defineConfig({
   server: {
     port: 5173,
     proxy: {
+      "/auth": "http://localhost:8000",
       "/movies": "http://localhost:8000",
       "/genres": "http://localhost:8000",
+      "/query": "http://localhost:8000",
     },
   },
 });

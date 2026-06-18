@@ -1,9 +1,9 @@
-import asyncio
-from typing import List
+from typing import Annotated, List
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
 
+from app.auth.deps import get_current_user
 from app.db import get_connection
 from app.rag.generator import generate
 from app.rag.retriever import RetrievedChunk, retrieve
@@ -98,7 +98,10 @@ async def _retrieve(question: str, k: int) -> List[RetrievedChunk]:
 
 
 @router.post("/query", response_model=QueryResponse)
-async def query(req: QueryRequest) -> QueryResponse:
+async def query(
+    req: QueryRequest,
+    _current_user: Annotated[dict, Depends(get_current_user)],
+) -> QueryResponse:
     try:
         chunks = await _retrieve(req.question, k=req.k)
     except Exception as e:

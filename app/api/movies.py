@@ -1,11 +1,12 @@
 import math
 import time
-from typing import Literal
+from typing import Annotated, Literal
 
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query
 from psycopg.rows import dict_row
 from pydantic import BaseModel
 
+from app.auth.deps import get_current_user_optional
 from app.db import get_connection
 from app.rag.retriever import retrieve_movie_rankings
 from app.utils.tmdb import backdrop_url, poster_url
@@ -371,6 +372,7 @@ async def search_movies(
     limit: int = Query(default=_DEFAULT_LIMIT, ge=1, le=16),
     genre_id: int | None = Query(default=None),
     mode: SearchMode = Query(default="auto"),
+    current_user: Annotated[dict | None, Depends(get_current_user_optional)] = None,
 ) -> SearchResponse:
     q = q.strip()
     if not q:
@@ -378,6 +380,12 @@ async def search_movies(
         return SearchResponse(query="", mode="title", **result.model_dump())
 
     resolved = _resolve_mode(q, mode)
+    if resolved == "hybrid" and current_user is None:
+        raise HTTPException(
+            status_code=401,
+            detail="Sign in required for semantic search",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
     if resolved == "title":
         result = await _fetch_title_search(q, page, limit, genre_id)
     else:
