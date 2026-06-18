@@ -1,3 +1,5 @@
+import { authFetch } from "../lib/auth";
+
 export interface User {
   id: number;
   email: string;
@@ -36,7 +38,6 @@ export async function login(email: string, password: string): Promise<TokenRespo
 }
 
 export async function fetchMe(): Promise<User> {
-  const { authFetch } = await import("../lib/auth");
   const res = await authFetch("/auth/me");
   if (!res.ok) throw new Error("Session expired");
   return res.json();
