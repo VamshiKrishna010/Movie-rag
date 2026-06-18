@@ -1,0 +1,200 @@
+=== Step 1/2: TMDB ingest ===
+Ingest target: 10000 movies (discover pages 1–500)
+  discover pages 1–25: 500 IDs so far
+  discover pages 26–50: 1000 IDs so far
+  discover pages 51–75: 1500 IDs so far
+  discover pages 76–100: 2000 IDs so far
+  discover pages 101–125: 2500 IDs so far
+  discover pages 126–150: 3000 IDs so far
+  discover pages 151–175: 3500 IDs so far
+  discover pages 176–200: 4000 IDs so far
+  discover pages 201–225: 4500 IDs so far
+  discover pages 226–250: 5000 IDs so far
+  discover pages 251–275: 5500 IDs so far
+  discover pages 276–300: 6000 IDs so far
+  discover pages 301–325: 6500 IDs so far
+  discover pages 326–350: 7000 IDs so far
+  discover pages 351–375: 7500 IDs so far
+  discover pages 376–400: 8000 IDs so far
+  discover pages 401–425: 8500 IDs so far
+  discover pages 426–450: 9000 IDs so far
+  discover pages 451–475: 9500 IDs so far
+Collected 10000 movie IDs
+Skipping 1800 already in DB; fetching 8200 new
+  details 50/8200
+  details 100/8200
+  details 150/8200
+  details 200/8200
+  details 250/8200
+  details 300/8200
+  details 350/8200
+  details 400/8200
+  details 450/8200
+  details 500/8200
+  details 550/8200
+  details 600/8200
+  details 650/8200
+  details 700/8200
+  details 750/8200
+  details 800/8200
+  details 850/8200
+  details 900/8200
+  details 950/8200
+  details 1000/8200
+  details 1050/8200
+  details 1100/8200
+  details 1150/8200
+  details 1200/8200
+  details 1250/8200
+  details 1300/8200
+  details 1350/8200
+  details 1400/8200
+  details 1450/8200
+  details 1500/8200
+  details 1550/8200
+  details 1600/8200
+  details 1650/8200
+  details 1700/8200
+  details 1750/8200
+  details 1800/8200
+  details 1850/8200
+  details 1900/8200
+  details 1950/8200
+  details 2000/8200
+  details 2050/8200
+  details 2100/8200
+  details 2150/8200
+  details 2200/8200
+  details 2250/8200
+  details 2300/8200
+  details 2350/8200
+  details 2400/8200
+  details 2450/8200
+  details 2500/8200
+  details 2550/8200
+  details 2600/8200
+  details 2650/8200
+  details 2700/8200
+  details 2750/8200
+  details 2800/8200
+  details 2850/8200
+  details 2900/8200
+  details 2950/8200
+  details 3000/8200
+  details 3050/8200
+  details 3100/8200
+  details 3150/8200
+  details 3200/8200
+  details 3250/8200
+  details 3300/8200
+  details 3350/8200
+  details 3400/8200
+  details 3450/8200
+  details 3500/8200
+  details 3550/8200
+  details 3600/8200
+  details 3650/8200
+  details 3700/8200
+  details 3750/8200
+  details 3800/8200
+  details 3850/8200
+  details 3900/8200
+  details 3950/8200
+  details 4000/8200
+  details 4050/8200
+  details 4100/8200
+  details 4150/8200
+  details 4200/8200
+  details 4250/8200
+  details 4300/8200
+  details 4350/8200
+  details 4400/8200
+  details 4450/8200
+  details 4500/8200
+  details 4550/8200
+  details 4600/8200
+  details 4650/8200
+  details 4700/8200
+  details 4750/8200
+  details 4800/8200
+  details 4850/8200
+  details 4900/8200
+  details 4950/8200
+  details 5000/8200
+  details 5050/8200
+  details 5100/8200
+  details 5150/8200
+  details 5200/8200
+  details 5250/8200
+  details 5300/8200
+  details 5350/8200
+  details 5400/8200
+  details 5450/8200
+  details 5500/8200
+  details 5550/8200
+  details 5600/8200
+  details 5650/8200
+  details 5700/8200
+  details 5750/8200
+  details 5800/8200
+  details 5850/8200
+  details 5900/8200
+  details 5950/8200
+  details 6000/8200
+  details 6050/8200
+  details 6100/8200
+  details 6150/8200
+  details 6200/8200
+  details 6250/8200
+  details 6300/8200
+  details 6350/8200
+  details 6400/8200
+  details 6450/8200
+  details 6500/8200
+  details 6550/8200
+  details 6600/8200
+  details 6650/8200
+  details 6700/8200
+  details 6750/8200
+  details 6800/8200
+  details 6850/8200
+  details 6900/8200
+  details 6950/8200
+  details 7000/8200
+  details 7050/8200
+  details 7100/8200
+  details 7150/8200
+  details 7200/8200
+  details 7250/8200
+  details 7300/8200
+  details 7350/8200
+  details 7400/8200
+  details 7450/8200
+  details 7500/8200
+  details 7550/8200
+  details 7600/8200
+  details 7650/8200
+  details 7700/8200
+  details 7750/8200
+  details 7800/8200
+  details 7850/8200
+  details 7900/8200
+  details 7950/8200
+  details 8000/8200
+  details 8050/8200
+  details 8100/8200
+  details 8150/8200
+  details 8200/8200
+Fetched details for 8200 movies
+  committed 50/8200
+  committed 100/8200
+  committed 150/8200
+  committed 200/8200
+  committed 250/8200
+  committed 300/8200
+  committed 350/8200
+  committed 400/8200
+  committed 450/8200
+  committed 500/8200
+  committed 550/8200
+  committed 600/8200

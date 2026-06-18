@@ -1,0 +1,184 @@
+{
+  "version": "1.0",
+  "description": "Movie-RAG evaluation dataset. 25 hand-written Q/A pairs across 4 categories. ground_truth_movies = movies that SHOULD appear in retrieved context (used for context precision sanity checks).",
+  "items": [
+    {
+      "id": "fact_01",
+      "category": "factual",
+      "question": "Who directed Inception?",
+      "ground_truth_answer": "Christopher Nolan directed Inception.",
+      "ground_truth_movies": ["Inception"]
+    },
+    {
+      "id": "fact_02",
+      "category": "factual",
+      "question": "What year was Pulp Fiction released?",
+      "ground_truth_answer": "Pulp Fiction was released in 1994.",
+      "ground_truth_movies": ["Pulp Fiction"]
+    },
+    {
+      "id": "fact_03",
+      "category": "factual",
+      "question": "Who played Tyler Durden in Fight Club?",
+      "ground_truth_answer": "Brad Pitt played Tyler Durden in Fight Club.",
+      "ground_truth_movies": ["Fight Club"]
+    },
+    {
+      "id": "fact_04",
+      "category": "factual",
+      "question": "Who directed Parasite?",
+      "ground_truth_answer": "Bong Joon-ho directed Parasite.",
+      "ground_truth_movies": ["Parasite"]
+    },
+    {
+      "id": "fact_05",
+      "category": "factual",
+      "question": "Who plays Cobb in Inception?",
+      "ground_truth_answer": "Leonardo DiCaprio plays Cobb in Inception.",
+      "ground_truth_movies": ["Inception"]
+    },
+    {
+      "id": "fact_06",
+      "category": "factual",
+      "question": "Who directed Blade Runner 2049?",
+      "ground_truth_answer": "Denis Villeneuve directed Blade Runner 2049.",
+      "ground_truth_movies": ["Blade Runner 2049"]
+    },
+
+    {
+      "id": "them_01",
+      "category": "thematic",
+      "question": "Movies about dreams within dreams",
+      "ground_truth_answer": "Inception is the canonical film about dreams within dreams, where characters enter nested layers of shared dreaming.",
+      "ground_truth_movies": ["Inception"]
+    },
+    {
+      "id": "them_02",
+      "category": "thematic",
+      "question": "Films about isolation and survival in space",
+      "ground_truth_answer": "The Martian, Gravity, Interstellar, and 2001: A Space Odyssey all explore human isolation and survival in space.",
+      "ground_truth_movies": ["The Martian", "Gravity", "Interstellar", "2001: A Space Odyssey"]
+    },
+    {
+      "id": "them_03",
+      "category": "thematic",
+      "question": "Movies that explore memory loss and fractured identity",
+      "ground_truth_answer": "Memento, Eternal Sunshine of the Spotless Mind, and Total Recall all center on memory loss and the way it disrupts personal identity.",
+      "ground_truth_movies": ["Memento", "Eternal Sunshine of the Spotless Mind", "Total Recall"]
+    },
+    {
+      "id": "them_04",
+      "category": "thematic",
+      "question": "Movies about class struggle and economic inequality",
+      "ground_truth_answer": "Parasite, Snowpiercer, and Joker each use the divide between rich and poor as a central engine of their conflict.",
+      "ground_truth_movies": ["Parasite", "Snowpiercer", "Joker"]
+    },
+    {
+      "id": "them_05",
+      "category": "thematic",
+      "question": "Crime films told in non-linear chronological order",
+      "ground_truth_answer": "Pulp Fiction, Memento, and Reservoir Dogs all deliberately fracture chronological order to reframe their crime narratives.",
+      "ground_truth_movies": ["Pulp Fiction", "Memento", "Reservoir Dogs"]
+    },
+    {
+      "id": "them_06",
+      "category": "thematic",
+      "question": "Movies about artificial intelligence developing consciousness",
+      "ground_truth_answer": "Ex Machina, Her, Blade Runner 2049, and The Matrix all grapple with AI that becomes — or appears to become — conscious.",
+      "ground_truth_movies": ["Ex Machina", "Her", "Blade Runner 2049", "The Matrix"]
+    },
+    {
+      "id": "them_07",
+      "category": "thematic",
+      "question": "Heist movies with elaborate multi-step plans",
+      "ground_truth_answer": "Ocean's Eleven, Inception, and Heat all feature carefully choreographed, multi-step heists as their narrative spine.",
+      "ground_truth_movies": ["Ocean's Eleven", "Inception", "Heat"]
+    },
+
+    {
+      "id": "rel_01",
+      "category": "relational",
+      "question": "What other films has the director of Inception made?",
+      "ground_truth_answer": "Christopher Nolan also directed The Dark Knight, Interstellar, The Prestige, Memento, Dunkirk, and Tenet, among others.",
+      "ground_truth_movies": ["Inception", "The Dark Knight", "Interstellar", "The Prestige", "Memento", "Dunkirk", "Tenet"]
+    },
+    {
+      "id": "rel_02",
+      "category": "relational",
+      "question": "Which movies feature both Leonardo DiCaprio and Tom Hardy?",
+      "ground_truth_answer": "Leonardo DiCaprio and Tom Hardy appeared together in Inception and The Revenant.",
+      "ground_truth_movies": ["Inception", "The Revenant"]
+    },
+    {
+      "id": "rel_03",
+      "category": "relational",
+      "question": "Other films by Denis Villeneuve besides Dune",
+      "ground_truth_answer": "Beyond Dune, Denis Villeneuve directed Arrival, Blade Runner 2049, Sicario, and Prisoners.",
+      "ground_truth_movies": ["Dune", "Arrival", "Blade Runner 2049", "Sicario", "Prisoners"]
+    },
+    {
+      "id": "rel_04",
+      "category": "relational",
+      "question": "Films where Brad Pitt worked with director David Fincher",
+      "ground_truth_answer": "Brad Pitt and David Fincher collaborated on Se7en, Fight Club, and The Curious Case of Benjamin Button.",
+      "ground_truth_movies": ["Se7en", "Fight Club", "The Curious Case of Benjamin Button"]
+    },
+    {
+      "id": "rel_05",
+      "category": "relational",
+      "question": "Other crime films directed by Martin Scorsese",
+      "ground_truth_answer": "Martin Scorsese directed Goodfellas, The Departed, Casino, and The Irishman, among other crime films.",
+      "ground_truth_movies": ["Goodfellas", "The Departed", "Casino", "The Irishman"]
+    },
+    {
+      "id": "rel_06",
+      "category": "relational",
+      "question": "Movies that star both Robert De Niro and Al Pacino",
+      "ground_truth_answer": "Robert De Niro and Al Pacino share the screen in Heat and The Irishman (and technically appear in The Godfather Part II, though not in the same scenes).",
+      "ground_truth_movies": ["Heat", "The Irishman", "The Godfather Part II"]
+    },
+
+    {
+      "id": "comp_01",
+      "category": "comparative",
+      "question": "How do Christopher Nolan's films differ in style from Denis Villeneuve's?",
+      "ground_truth_answer": "Both make cerebral sci-fi, but Nolan tends toward intricately structured time-puzzle narratives (Inception, Tenet, Memento) while Villeneuve favors slower, more atmospheric, dread-laden compositions (Arrival, Blade Runner 2049, Sicario).",
+      "ground_truth_movies": ["Inception", "Interstellar", "Tenet", "Arrival", "Blade Runner 2049", "Sicario"]
+    },
+    {
+      "id": "comp_02",
+      "category": "comparative",
+      "question": "Compare the depiction of war in Saving Private Ryan and Dunkirk",
+      "ground_truth_answer": "Saving Private Ryan depicts war through visceral, sustained combat focused on a small unit's mission, while Dunkirk uses a minimalist, near-dialogue-free, tri-timeline structure to convey the tension of evacuation rather than combat itself.",
+      "ground_truth_movies": ["Saving Private Ryan", "Dunkirk"]
+    },
+    {
+      "id": "comp_03",
+      "category": "comparative",
+      "question": "What do Parasite and Snowpiercer share thematically?",
+      "ground_truth_answer": "Both are Bong Joon-ho films that use spatial verticality (a house's basement, a train's compartments) as a literal metaphor for class hierarchy and the violence of economic inequality.",
+      "ground_truth_movies": ["Parasite", "Snowpiercer"]
+    },
+    {
+      "id": "comp_04",
+      "category": "comparative",
+      "question": "What stylistic elements do Quentin Tarantino and the Coen Brothers share?",
+      "ground_truth_answer": "Both are known for dialogue-driven scripts, sudden eruptions of violence punctuating dark humor, ensemble casts of eccentric characters, and genre pastiche — though Tarantino leans into homage and stylization while the Coens lean into regional Americana and dry absurdism.",
+      "ground_truth_movies": ["Pulp Fiction", "Reservoir Dogs", "Inglourious Basterds", "No Country for Old Men", "Fargo", "The Big Lebowski"]
+    },
+    {
+      "id": "comp_05",
+      "category": "comparative",
+      "question": "How is Blade Runner 2049 connected to the original Blade Runner?",
+      "ground_truth_answer": "Blade Runner 2049 is a direct sequel set decades after the original, with Denis Villeneuve replacing Ridley Scott as director. Both films are noir-inflected sci-fi exploring what separates humans from replicants, with 2049 expanding the universe and continuing Deckard's story.",
+      "ground_truth_movies": ["Blade Runner", "Blade Runner 2049"]
+    },
+    {
+      "id": "comp_06",
+      "category": "comparative",
+      "question": "Compare The Dark Knight and Joker as films about the Joker character",
+      "ground_truth_answer": "The Dark Knight features the Joker as a chaos-agent antagonist in a crime epic centered on Batman, while Joker (2019) is a standalone character study of mental illness and societal neglect producing the same figure — different genres (crime thriller vs. psychological drama), different leads (Ledger vs. Phoenix), no shared continuity.",
+      "ground_truth_movies": ["The Dark Knight", "Joker"]
+    }
+  ]
+}

@@ -1,0 +1,89 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #f5f1eb;
+  --surface: #ffffff;
+  --text: #1f1f1f;
+  --muted: #737373;
+  --border: #e5e5e5;
+  --accent: rgba(59, 130, 246, 0.8);
+  --skeleton: #e5e5e5;
+  --shadow-bar: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+:root.dark {
+  --bg: #0f0f0f;
+  --surface: #1a1a1a;
+  --text: #f1f1f1;
+  --muted: #a3a3a3;
+  --border: #2a2a2a;
+  --accent: rgba(96, 165, 250, 0.75);
+  --skeleton: #2a2a2a;
+  --shadow-bar: 0 2px 16px rgba(0, 0, 0, 0.35);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) {
+    --bg: #0f0f0f;
+    --surface: #1a1a1a;
+    --text: #f1f1f1;
+    --muted: #a3a3a3;
+    --border: #2a2a2a;
+    --accent: rgba(96, 165, 250, 0.75);
+    --skeleton: #2a2a2a;
+    --shadow-bar: 0 2px 16px rgba(0, 0, 0, 0.35);
+  }
+}
+
+@theme {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-text: var(--text);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --color-skeleton: var(--skeleton);
+  --shadow-bar: var(--shadow-bar);
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+@keyframes pulse-skeleton {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.skeleton-pulse {
+  animation: pulse-skeleton 1.5s ease-in-out infinite;
+}
+
+@keyframes fade-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.detail-card-enter {
+  animation: fade-slide-up 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.shadow-bar {
+  box-shadow: var(--shadow-bar);
+}
