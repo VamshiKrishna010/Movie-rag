@@ -7,6 +7,7 @@ from psycopg.rows import dict_row
 from pydantic import BaseModel
 
 from app.auth.deps import get_current_user_optional
+from app.auth.scopes import MOVIES_READ
 from app.db import get_connection
 from app.rag.retriever import retrieve_movie_rankings
 from app.utils.tmdb import backdrop_url, poster_url
@@ -380,12 +381,18 @@ async def search_movies(
         return SearchResponse(query="", mode="title", **result.model_dump())
 
     resolved = _resolve_mode(q, mode)
-    if resolved == "hybrid" and current_user is None:
-        raise HTTPException(
-            status_code=401,
-            detail="Sign in required for semantic search",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
+    if resolved == "hybrid":
+        if current_user is None:
+            raise HTTPException(
+                status_code=401,
+                detail="Sign in required for semantic search",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+        if MOVIES_READ not in current_user["scopes"]:
+            raise HTTPException(
+                status_code=403,
+                detail="Missing scopes: movies:read",
+            )
     if resolved == "title":
         result = await _fetch_title_search(q, page, limit, genre_id)
     else:

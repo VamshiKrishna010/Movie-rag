@@ -1,4 +1,15 @@
 import { authFetch } from "../lib/auth";
+import {
+  adminMovieKey,
+  adminMoviesKey,
+  adminStatsKey,
+  adminUsersKey,
+  getCache,
+  invalidateAdminMovies,
+  invalidateAdminStats,
+  invalidateAdminUsers,
+  setCache,
+} from "../lib/cache";
 
 export interface AdminStats {
   user_count: number;
@@ -65,16 +76,42 @@ async function parseError(res: Response, fallback: string): Promise<string> {
   return fallback;
 }
 
+const inflight = new Map<string, Promise<unknown>>();
+
+async function cachedGet<T>(key: string, fetcher: () => Promise<T>): Promise<T> {
+  const hit = getCache<T>(key);
+  if (hit !== null) return hit;
+
+  const pending = inflight.get(key);
+  if (pending) return pending as Promise<T>;
+
+  const promise = fetcher()
+    .then((data) => {
+      setCache(key, data);
+      return data;
+    })
+    .finally(() => {
+      inflight.delete(key);
+    });
+
+  inflight.set(key, promise);
+  return promise;
+}
+
 export async function fetchAdminStats(): Promise<AdminStats> {
-  const res = await authFetch("/admin/stats");
-  if (!res.ok) throw new Error(await parseError(res, "Failed to load stats"));
-  return res.json();
+  return cachedGet(adminStatsKey(), async () => {
+    const res = await authFetch("/admin/stats");
+    if (!res.ok) throw new Error(await parseError(res, "Failed to load stats"));
+    return res.json();
+  });
 }
 
 export async function fetchAdminUsers(): Promise<AdminUser[]> {
-  const res = await authFetch("/admin/users");
-  if (!res.ok) throw new Error(await parseError(res, "Failed to load users"));
-  return res.json();
+  return cachedGet(adminUsersKey(), async () => {
+    const res = await authFetch("/admin/users");
+    if (!res.ok) throw new Error(await parseError(res, "Failed to load users"));
+    return res.json();
+  });
 }
 
 export async function updateAdminUserRole(userId: number, role: string): Promise<AdminUser> {
@@ -84,6 +121,7 @@ export async function updateAdminUserRole(userId: number, role: string): Promise
     body: JSON.stringify({ role }),
   });
   if (!res.ok) throw new Error(await parseError(res, "Failed to update role"));
+  invalidateAdminUsers();
   return res.json();
 }
 
@@ -91,17 +129,22 @@ export async function fetchAdminMovies(
   page: number,
   q: string,
 ): Promise<PaginatedAdminMovies> {
-  const params = new URLSearchParams({ page: String(page), limit: "20" });
-  if (q.trim()) params.set("q", q.trim());
-  const res = await authFetch(`/admin/movies?${params}`);
-  if (!res.ok) throw new Error(await parseError(res, "Failed to load movies"));
-  return res.json();
+  const key = adminMoviesKey(page, q);
+  return cachedGet(key, async () => {
+    const params = new URLSearchParams({ page: String(page), limit: "20" });
+    if (q.trim()) params.set("q", q.trim());
+    const res = await authFetch(`/admin/movies?${params}`);
+    if (!res.ok) throw new Error(await parseError(res, "Failed to load movies"));
+    return res.json();
+  });
 }
 
 export async function fetchAdminMovie(id: number): Promise<AdminMovie> {
-  const res = await authFetch(`/admin/movies/${id}`);
-  if (!res.ok) throw new Error(await parseError(res, "Failed to load movie"));
-  return res.json();
+  return cachedGet(adminMovieKey(id), async () => {
+    const res = await authFetch(`/admin/movies/${id}`);
+    if (!res.ok) throw new Error(await parseError(res, "Failed to load movie"));
+    return res.json();
+  });
 }
 
 function toPayload(data: MovieFormData, includeId: boolean) {
@@ -126,7 +169,10 @@ export async function createAdminMovie(data: MovieFormData): Promise<AdminMovie>
     body: JSON.stringify(toPayload(data, true)),
   });
   if (!res.ok) throw new Error(await parseError(res, "Failed to create movie"));
-  return res.json();
+  const movie: AdminMovie = await res.json();
+  invalidateAdminMovies();
+  invalidateAdminStats();
+  return movie;
 }
 
 export async function updateAdminMovie(id: number, data: MovieFormData): Promise<AdminMovie> {
@@ -136,7 +182,10 @@ export async function updateAdminMovie(id: number, data: MovieFormData): Promise
     body: JSON.stringify(toPayload(data, false)),
   });
   if (!res.ok) throw new Error(await parseError(res, "Failed to update movie"));
-  return res.json();
+  const movie: AdminMovie = await res.json();
+  invalidateAdminMovies();
+  setCache(adminMovieKey(id), movie);
+  return movie;
 }
 
 export async function submitQuery(question: string): Promise<QueryResult> {

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { fetchRoleScopes } from "../api/auth";
 import {
   createAdminMovie,
   emptyMovieForm,
@@ -14,10 +15,17 @@ import {
   type AdminStats,
   type AdminUser,
   type MovieFormData,
+  type PaginatedAdminMovies,
   type QueryResult,
 } from "../api/admin";
 import { ContentShell } from "../components/ContentShell";
 import { Pagination } from "../components/Pagination";
+import {
+  adminMoviesKey,
+  adminStatsKey,
+  adminUsersKey,
+  getCache,
+} from "../lib/cache";
 
 type Tab = "overview" | "users" | "movies" | "rag";
 
@@ -40,8 +48,40 @@ function StatCard({ label, value }: { label: string; value: number }) {
   );
 }
 
+function ScopeList({ title, scopes }: { title: string; scopes: string[] }) {
+  return (
+    <div className="rounded-2xl border border-border bg-bg p-4">
+      <p className="mb-3 text-sm font-medium text-text">{title}</p>
+      <ul className="space-y-1 font-mono text-sm text-muted">
+        {scopes.map((scope) => (
+          <li key={scope}>{scope}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function RoleScopesPanel() {
+  const [roles, setRoles] = useState<Record<string, string[]> | null>(null);
+
+  useEffect(() => {
+    fetchRoleScopes()
+      .then((data) => setRoles(data.roles))
+      .catch(() => setRoles(null));
+  }, []);
+
+  if (!roles) return null;
+
+  return (
+    <div className="mt-8 grid gap-4 sm:grid-cols-2">
+      <ScopeList title="User" scopes={roles.user ?? []} />
+      <ScopeList title="Admin" scopes={roles.admin ?? []} />
+    </div>
+  );
+}
+
 function OverviewTab() {
-  const [stats, setStats] = useState<AdminStats | null>(null);
+  const [stats, setStats] = useState<AdminStats | null>(() => getCache<AdminStats>(adminStatsKey()));
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -54,17 +94,20 @@ function OverviewTab() {
   if (!stats) return <p className="text-sm text-muted">Loading stats…</p>;
 
   return (
-    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-      <StatCard label="Users" value={stats.user_count} />
-      <StatCard label="Movies" value={stats.movie_count} />
-      <StatCard label="Chunks" value={stats.chunk_count} />
-      <StatCard label="Genres" value={stats.genre_count} />
+    <div>
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <StatCard label="Users" value={stats.user_count} />
+        <StatCard label="Movies" value={stats.movie_count} />
+        <StatCard label="Chunks" value={stats.chunk_count} />
+        <StatCard label="Genres" value={stats.genre_count} />
+      </div>
+      <RoleScopesPanel />
     </div>
   );
 }
 
 function UsersTab() {
-  const [users, setUsers] = useState<AdminUser[]>([]);
+  const [users, setUsers] = useState<AdminUser[]>(() => getCache<AdminUser[]>(adminUsersKey()) ?? []);
   const [error, setError] = useState<string | null>(null);
   const [roleError, setRoleError] = useState<string | null>(null);
 
@@ -284,9 +327,13 @@ function MovieForm({
 }
 
 function MoviesTab() {
-  const [movies, setMovies] = useState<AdminMovie[]>([]);
+  const [movies, setMovies] = useState<AdminMovie[]>(
+    () => getCache<PaginatedAdminMovies>(adminMoviesKey(1, ""))?.movies ?? [],
+  );
   const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
+  const [totalPages, setTotalPages] = useState(
+    () => getCache<PaginatedAdminMovies>(adminMoviesKey(1, ""))?.total_pages ?? 1,
+  );
   const [search, setSearch] = useState("");
   const [query, setQuery] = useState("");
   const [error, setError] = useState<string | null>(null);

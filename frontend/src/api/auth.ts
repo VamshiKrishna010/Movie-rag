@@ -4,6 +4,11 @@ export interface User {
   id: number;
   email: string;
   role: string;
+  scopes: string[];
+}
+
+export interface RoleScopes {
+  roles: Record<string, string[]>;
 }
 
 export interface TokenResponse {
@@ -49,6 +54,12 @@ export async function logoutApi(): Promise<void> {
 export async function fetchMe(): Promise<User> {
   const res = await authFetch("/auth/me");
   if (!res.ok) throw new Error("Session expired");
+  return res.json();
+}
+
+export async function fetchRoleScopes(): Promise<RoleScopes> {
+  const res = await fetch("/auth/roles");
+  if (!res.ok) throw new Error("Failed to load role scopes");
   return res.json();
 }
 

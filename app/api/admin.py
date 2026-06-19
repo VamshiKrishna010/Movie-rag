@@ -5,7 +5,15 @@ from pydantic import BaseModel, Field
 
 from app.admin.movies import MovieAdminError, create_movie, get_movie, get_stats, list_movies, update_movie
 from app.admin.users import UserRoleError, list_users, update_user_role
-from app.auth.deps import require_admin
+from app.auth.deps import require_scopes
+from app.auth.scopes import (
+    DATABASE_REINDEX,
+    MOVIES_CREATE,
+    MOVIES_READ,
+    MOVIES_UPDATE,
+    USERS_DISABLE,
+    USERS_READ,
+)
 
 router = APIRouter(prefix="/admin", tags=["admin"])
 
@@ -63,14 +71,22 @@ class PaginatedMoviesAdminOut(BaseModel):
     total_pages: int
 
 
+class ReindexOut(BaseModel):
+    message: str
+
+
 @router.get("/stats", response_model=AdminStatsOut)
-async def admin_stats(_admin: Annotated[dict, Depends(require_admin)]) -> AdminStatsOut:
+async def admin_stats(
+    _user: Annotated[dict, Depends(require_scopes(USERS_READ))],
+) -> AdminStatsOut:
     row = await get_stats()
     return AdminStatsOut(**row)
 
 
 @router.get("/users", response_model=list[AdminUserOut])
-async def admin_list_users(_admin: Annotated[dict, Depends(require_admin)]) -> list[AdminUserOut]:
+async def admin_list_users(
+    _user: Annotated[dict, Depends(require_scopes(USERS_READ))],
+) -> list[AdminUserOut]:
     users = await list_users()
     return [
         AdminUserOut(
@@ -87,7 +103,7 @@ async def admin_list_users(_admin: Annotated[dict, Depends(require_admin)]) -> l
 async def admin_update_user_role(
     user_id: int,
     req: RoleUpdateRequest,
-    admin: Annotated[dict, Depends(require_admin)],
+    admin: Annotated[dict, Depends(require_scopes(USERS_DISABLE))],
 ) -> AdminUserOut:
     try:
         user = await update_user_role(
@@ -108,7 +124,7 @@ async def admin_update_user_role(
 
 @router.get("/movies", response_model=PaginatedMoviesAdminOut)
 async def admin_list_movies(
-    _admin: Annotated[dict, Depends(require_admin)],
+    _user: Annotated[dict, Depends(require_scopes(MOVIES_READ))],
     page: int = Query(default=1, ge=1),
     limit: int = Query(default=20, ge=1, le=100),
     q: str | None = Query(default=None, max_length=200),
@@ -120,7 +136,7 @@ async def admin_list_movies(
 @router.get("/movies/{movie_id}", response_model=MovieAdminOut)
 async def admin_get_movie(
     movie_id: int,
-    _admin: Annotated[dict, Depends(require_admin)],
+    _user: Annotated[dict, Depends(require_scopes(MOVIES_READ))],
 ) -> MovieAdminOut:
     movie = await get_movie(movie_id)
     if movie is None:
@@ -131,7 +147,7 @@ async def admin_get_movie(
 @router.post("/movies", response_model=MovieAdminOut, status_code=status.HTTP_201_CREATED)
 async def admin_create_movie(
     req: MovieCreateRequest,
-    _admin: Annotated[dict, Depends(require_admin)],
+    _user: Annotated[dict, Depends(require_scopes(MOVIES_CREATE))],
 ) -> MovieAdminOut:
     try:
         movie = await create_movie(req.model_dump())
@@ -149,10 +165,19 @@ async def admin_create_movie(
 async def admin_update_movie(
     movie_id: int,
     req: MovieAdminFields,
-    _admin: Annotated[dict, Depends(require_admin)],
+    _user: Annotated[dict, Depends(require_scopes(MOVIES_UPDATE))],
 ) -> MovieAdminOut:
     try:
         movie = await update_movie(movie_id, req.model_dump())
     except MovieAdminError as exc:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(exc)) from exc
     return MovieAdminOut(**movie)
+
+
+@router.post("/reindex", response_model=ReindexOut, status_code=status.HTTP_202_ACCEPTED)
+async def admin_reindex(
+    _user: Annotated[dict, Depends(require_scopes(DATABASE_REINDEX))],
+) -> ReindexOut:
+    return ReindexOut(
+        message="Re-index is not automated yet. Run: python scripts/run_embed.py",
+    )

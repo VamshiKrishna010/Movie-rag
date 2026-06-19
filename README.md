@@ -268,7 +268,13 @@ Email/password auth with short-lived JWT access tokens and opaque refresh tokens
 
 Login and register are rate-limited (default `5/minute` per IP via `LOGIN_RATE_LIMIT`).
 
-Users have a `role` column (`user` or `admin`). Admin routes use the `require_admin` dependency.
+Users have a `role` column (`user` or `admin`). Scopes are derived from role and enforced on protected routes.
+
+**User scopes:** `movies:read`, `chat:use`, `favorites:create`, `profile:update`
+
+**Admin scopes:** all user scopes plus `movies:create`, `movies:update`, `movies:delete`, `users:read`, `users:disable`, `database:reindex`
+
+`GET /auth/me` returns the caller's scopes. `GET /auth/roles` lists scopes per role (public).
 
 ### Admin dashboard
 

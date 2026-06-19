@@ -42,7 +42,19 @@ def test_register_login_and_me(client) -> None:
 
     me = client.get("/auth/me", headers={"Authorization": f"Bearer {token}"})
     assert me.status_code == 200
-    assert me.json()["email"] == email
+    body = me.json()
+    assert body["email"] == email
+    assert "movies:read" in body["scopes"]
+    assert "chat:use" in body["scopes"]
+
+
+def test_roles_endpoint_lists_scopes(client) -> None:
+    response = client.get("/auth/roles")
+    assert response.status_code == 200
+    roles = response.json()["roles"]
+    assert "movies:read" in roles["user"]
+    assert "users:read" in roles["admin"]
+    assert "database:reindex" in roles["admin"]
 
 
 def test_register_duplicate_email_returns_409(client) -> None:

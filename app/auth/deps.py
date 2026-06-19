@@ -3,6 +3,7 @@ from typing import Annotated
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 
+from app.auth.scopes import Scope, scopes_for_role
 from app.auth.security import decode_access_token
 from app.auth.users import get_user_by_email
 
@@ -11,6 +12,17 @@ oauth2_scheme_optional = OAuth2PasswordBearer(
     tokenUrl="/auth/login",
     auto_error=False,
 )
+
+
+def _user_payload(user: dict) -> dict:
+    role = user["role"]
+    scopes = scopes_for_role(role)
+    return {
+        "id": user["id"],
+        "email": user["email"],
+        "role": role,
+        "scopes": scopes,
+    }
 
 
 async def get_current_user(
@@ -32,11 +44,7 @@ async def get_current_user(
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    return {
-        "id": user["id"],
-        "email": user["email"],
-        "role": user["role"],
-    }
+    return _user_payload(user)
 
 
 async def get_current_user_optional(
@@ -53,11 +61,22 @@ async def get_current_user_optional(
     if user is None:
         return None
 
-    return {
-        "id": user["id"],
-        "email": user["email"],
-        "role": user["role"],
-    }
+    return _user_payload(user)
+
+
+def require_scopes(*required: Scope):
+    async def dependency(
+        current_user: Annotated[dict, Depends(get_current_user)],
+    ) -> dict:
+        missing = [scope for scope in required if scope not in current_user["scopes"]]
+        if missing:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=f"Missing scopes: {', '.join(missing)}",
+            )
+        return current_user
+
+    return dependency
 
 
 async def require_admin(

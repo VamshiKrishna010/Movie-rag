@@ -6,6 +6,7 @@ from pydantic import BaseModel, EmailStr, Field
 
 from app.auth.cookies import clear_refresh_cookie, read_refresh_cookie, set_refresh_cookie
 from app.auth.deps import get_current_user
+from app.auth.scopes import ROLE_SCOPES, scopes_for_role
 from app.auth.refresh import RefreshTokenError, issue_token_pair, revoke_refresh_token, rotate_refresh_token
 from app.auth.security import hash_password, verify_password
 from app.auth.users import create_user, get_user_by_email
@@ -24,6 +25,11 @@ class UserOut(BaseModel):
     id: int
     email: EmailStr
     role: str
+    scopes: list[str]
+
+
+class RoleScopesOut(BaseModel):
+    roles: dict[str, list[str]]
 
 
 class TokenResponse(BaseModel):
@@ -42,7 +48,12 @@ async def register(request: Request, req: RegisterRequest) -> UserOut:
         )
 
     user = await create_user(req.email, hash_password(req.password))
-    return UserOut(id=user["id"], email=user["email"], role=user["role"])
+    return UserOut(
+        id=user["id"],
+        email=user["email"],
+        role=user["role"],
+        scopes=scopes_for_role(user["role"]),
+    )
 
 
 @router.post("/login", response_model=TokenResponse)
@@ -97,11 +108,17 @@ async def logout(request: Request, response: Response) -> None:
     clear_refresh_cookie(response)
 
 
+@router.get("/roles", response_model=RoleScopesOut)
+async def roles() -> RoleScopesOut:
+    return RoleScopesOut(roles={role: list(scopes) for role, scopes in ROLE_SCOPES.items()})
+
+
 @router.get("/me", response_model=UserOut)
 async def me(current_user: Annotated[dict, Depends(get_current_user)]) -> UserOut:
     return UserOut(
         id=current_user["id"],
         email=current_user["email"],
         role=current_user["role"],
+        scopes=current_user["scopes"],
     )
 

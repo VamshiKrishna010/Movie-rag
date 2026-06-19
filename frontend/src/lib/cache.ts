@@ -44,3 +44,48 @@ export function searchCacheKey(
 export function detailCacheKey(id: number): string {
   return `mr:detail:${id}`;
 }
+
+export function adminStatsKey(): string {
+  return "mr:admin:stats";
+}
+
+export function adminUsersKey(): string {
+  return "mr:admin:users";
+}
+
+export function adminMoviesKey(page: number, q: string): string {
+  return `mr:admin:movies:${page}:${q.trim() || ""}`;
+}
+
+export function adminMovieKey(id: number): string {
+  return `mr:admin:movie:${id}`;
+}
+
+export function invalidateAdminStats(): void {
+  try {
+    sessionStorage.removeItem(adminStatsKey());
+  } catch {
+    // ignore
+  }
+}
+
+export function invalidateAdminUsers(): void {
+  try {
+    sessionStorage.removeItem(adminUsersKey());
+  } catch {
+    // ignore
+  }
+}
+
+export function invalidateAdminMovies(): void {
+  try {
+    for (let i = sessionStorage.length - 1; i >= 0; i--) {
+      const key = sessionStorage.key(i);
+      if (key?.startsWith("mr:admin:movies:") || key?.startsWith("mr:admin:movie:")) {
+        sessionStorage.removeItem(key);
+      }
+    }
+  } catch {
+    // ignore
+  }
+}
