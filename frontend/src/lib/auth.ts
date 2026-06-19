@@ -1,5 +1,6 @@
 const TOKEN_KEY = "mr_token";
-const REFRESH_KEY = "mr_refresh";
+
+localStorage.removeItem("mr_refresh");
 
 export function getToken(): string | null {
   return localStorage.getItem(TOKEN_KEY);
@@ -9,17 +10,8 @@ export function setToken(token: string): void {
   localStorage.setItem(TOKEN_KEY, token);
 }
 
-export function getRefreshToken(): string | null {
-  return localStorage.getItem(REFRESH_KEY);
-}
-
-export function setRefreshToken(token: string): void {
-  localStorage.setItem(REFRESH_KEY, token);
-}
-
 export function clearToken(): void {
   localStorage.removeItem(TOKEN_KEY);
-  localStorage.removeItem(REFRESH_KEY);
 }
 
 export function authHeaders(): HeadersInit {
@@ -30,24 +22,17 @@ export function authHeaders(): HeadersInit {
 let refreshPromise: Promise<boolean> | null = null;
 
 async function refreshAccessToken(): Promise<boolean> {
-  const refreshToken = getRefreshToken();
-  if (!refreshToken) {
-    return false;
-  }
-
   const res = await fetch("/auth/refresh", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ refresh_token: refreshToken }),
+    credentials: "include",
   });
 
   if (!res.ok) {
     return false;
   }
 
-  const data = (await res.json()) as { access_token: string; refresh_token: string };
+  const data = (await res.json()) as { access_token: string };
   setToken(data.access_token);
-  setRefreshToken(data.refresh_token);
   return true;
 }
 
@@ -70,9 +55,9 @@ export async function authFetch(
     headers.set("Authorization", `Bearer ${token}`);
   }
 
-  let response = await fetch(input, { ...init, headers });
+  let response = await fetch(input, { ...init, headers, credentials: "include" });
 
-  if (response.status === 401 && getRefreshToken()) {
+  if (response.status === 401) {
     const refreshed = await tryRefreshAccessToken();
     if (refreshed) {
       const retryHeaders = new Headers(init.headers);
@@ -80,7 +65,11 @@ export async function authFetch(
       if (newToken) {
         retryHeaders.set("Authorization", `Bearer ${newToken}`);
       }
-      response = await fetch(input, { ...init, headers: retryHeaders });
+      response = await fetch(input, {
+        ...init,
+        headers: retryHeaders,
+        credentials: "include",
+      });
     } else {
       clearToken();
       if (window.location.pathname !== "/auth") {

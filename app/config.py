@@ -15,7 +15,16 @@ class Settings(BaseSettings):
     jwt_issuer: str = "movie-rag"
     jwt_audience: str = "movie-rag-api"
     login_rate_limit: str = "5/minute"
+    refresh_cookie_name: str = "mr_refresh"
+    refresh_cookie_secure: bool = False
+    refresh_cookie_samesite: str = "lax"
+    cors_origins: str = "http://localhost:5173"
 
     model_config = SettingsConfigDict(env_file=".env", case_sensitive=False)
+
+    @property
+    def cors_origin_list(self) -> list[str]:
+        return [origin.strip() for origin in self.cors_origins.split(",") if origin.strip()]
+
 
 settings = Settings()

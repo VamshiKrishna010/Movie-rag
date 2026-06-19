@@ -62,6 +62,14 @@ export function NavBar() {
           <div className="flex items-center gap-1">
             {user ? (
               <div className="flex items-center gap-2">
+                {user.role === "admin" && (
+                  <Link
+                    to="/admin"
+                    className="rounded-lg px-2 py-1 text-xs text-muted transition-colors hover:text-text"
+                  >
+                    Admin
+                  </Link>
+                )}
                 <span className="hidden max-w-[8rem] truncate text-xs text-muted sm:inline">
                   {user.email}
                 </span>

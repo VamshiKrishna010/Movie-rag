@@ -33,6 +33,7 @@ psql $DATABASE_URL -f migrations/005_graph_indexes.sql
 psql $DATABASE_URL -f migrations/006_pg_trgm.sql
 psql $DATABASE_URL -f migrations/008_users.sql
 psql $DATABASE_URL -f migrations/009_auth_hardening.sql
+psql $DATABASE_URL -f migrations/010_user_role_check.sql
 ```
 
 ### 2. Environment
@@ -48,6 +49,9 @@ GROQ_API_KEY=your_groq_key   # eval judge only
 JWT_SECRET_KEY=your-long-random-secret
 JWT_ACCESS_EXPIRE_MINUTES=15
 JWT_REFRESH_EXPIRE_DAYS=30
+CORS_ORIGINS=http://localhost:5173
+REFRESH_COOKIE_SECURE=false
+REFRESH_COOKIE_SAMESITE=lax
 ```
 
 ### 3. Ingest & embed
@@ -257,30 +261,62 @@ Email/password auth with short-lived JWT access tokens and opaque refresh tokens
 | Endpoint | Purpose |
 |----------|---------|
 | `POST /auth/register` | Create account |
-| `POST /auth/login` | Returns `access_token` + `refresh_token` |
-| `POST /auth/refresh` | Rotate refresh token, issue new pair |
-| `POST /auth/logout` | Revoke refresh token |
+| `POST /auth/login` | Returns `access_token`; sets HttpOnly refresh cookie |
+| `POST /auth/refresh` | Rotates refresh cookie, returns new `access_token` |
+| `POST /auth/logout` | Revokes refresh token and clears cookie |
 | `GET /auth/me` | Current user (requires Bearer access token) |
-| `GET /auth/admin/ping` | Admin-only health check |
 
 Login and register are rate-limited (default `5/minute` per IP via `LOGIN_RATE_LIMIT`).
 
-Users have a `role` column (`user` or `admin`). Use `require_admin` dependency for protected admin routes.
+Users have a `role` column (`user` or `admin`). Admin routes use the `require_admin` dependency.
 
-### Token storage (frontend)
+### Admin dashboard
 
-Access and refresh tokens are stored in `localStorage` and sent as `Authorization: Bearer <access_token>`.
+Promote the first admin via SQL:
 
-**CSRF:** Not applicable — the browser does not auto-send Bearer tokens on cross-site requests.
+```sql
+UPDATE users SET role = 'admin' WHERE email = 'you@example.com';
+```
 
-**XSS (primary risk):** Any injected script can read `localStorage`. Mitigations in this project:
-- 15-minute access token TTL
-- Refresh token rotation with server-side revocation on logout
-- Reuse of a revoked refresh token revokes all tokens for that user
+Then open **http://localhost:5173/admin** (link appears in the nav for admin users).
 
-For production, add a strict Content-Security-Policy at the reverse proxy or middleware layer.
+| Area | Capabilities |
+|------|----------------|
+| Overview | User, movie, chunk, and genre counts |
+| Users | View all emails; assign `user` or `admin` roles |
+| Movies | Search, manually add, and edit core fields (title, year, overview, tagline, runtime, rating, poster/backdrop paths) |
+| RAG Test | Run `POST /query` from the UI |
 
-**Cookies vs Bearer header:** httpOnly cookies would reduce XSS token theft but require CSRF protection (`SameSite=Strict` + CSRF tokens). This project uses Bearer + localStorage for simplicity.
+Admin API routes (all require admin):
+
+- `GET /admin/stats`
+- `GET /admin/users`
+- `PATCH /admin/users/{id}`
+- `GET /admin/movies`, `GET /admin/movies/{id}`
+- `POST /admin/movies`, `PATCH /admin/movies/{id}`
+
+Manual movie edits do not re-embed automatically; run `python scripts/run_embed.py` after bulk text changes.
+
+### Token storage
+
+| Token | Where | Sent how |
+|-------|--------|----------|
+| Access (~15 min) | Browser `localStorage` (`mr_token`) | `Authorization: Bearer` header |
+| Refresh (~30 days) | HttpOnly cookie (`mr_refresh`, path `/auth`) | Auto-sent on `/auth/*` with `credentials: include` |
+
+**XSS:** The refresh token is not readable by JavaScript. The access token still is, but it is short-lived. Refresh rotation and server-side revocation on logout limit session theft.
+
+**CSRF:** Refresh/logout use a cookie, mitigated by `SameSite` + strict CORS (`allow_credentials=True` with explicit `CORS_ORIGINS`, not `*`). Bearer-protected API calls remain CSRF-safe.
+
+**Split-origin production** (e.g. `app.example.com` + `api.example.com`):
+
+```env
+CORS_ORIGINS=https://app.example.com
+REFRESH_COOKIE_SECURE=true
+REFRESH_COOKIE_SAMESITE=none
+```
+
+Dev uses the Vite proxy on `localhost:5173` with `SameSite=Lax` and `Secure=false`.
 
 ### JWT secret rotation
 

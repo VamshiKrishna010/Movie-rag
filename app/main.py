@@ -6,9 +6,11 @@ from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 from slowapi.middleware import SlowAPIMiddleware
 
+from app.api.admin import router as admin_router
 from app.api.auth import router as auth_router
 from app.api.movies import router as movies_router
 from app.api.query import router as query_router
+from app.config import settings
 from app.db import close_pool, get_connection, init_pool
 from app.limiter import limiter
 
@@ -27,7 +29,7 @@ app.add_middleware(SlowAPIMiddleware)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=settings.cors_origin_list,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -45,6 +47,7 @@ async def root():
         "auth_refresh": "/auth/refresh",
         "auth_logout": "/auth/logout",
         "auth_me": "/auth/me",
+        "admin": "/admin",
         "query": "/query",
         "movies_browse": "/movies/browse",
         "movies_search": "/movies/search",
@@ -68,5 +71,6 @@ async def health():
 
 
 app.include_router(auth_router)
+app.include_router(admin_router)
 app.include_router(query_router, prefix="", tags=["rag"])
 app.include_router(movies_router, prefix="", tags=["movies"])

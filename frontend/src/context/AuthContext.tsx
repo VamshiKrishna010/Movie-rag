@@ -12,14 +12,15 @@ import {
   login as apiLogin,
   logoutApi,
   register as apiRegister,
-  storeTokens,
+  storeAccessToken,
+  type User,
 } from "../api/auth";
-import { clearToken, getToken } from "../lib/auth";
+import { clearToken, getToken, refreshAccessToken } from "../lib/auth";
 
 interface AuthContextValue {
-  user: { id: number; email: string; role: string } | null;
+  user: User | null;
   loading: boolean;
-  login: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<User>;
   register: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
 }
@@ -28,25 +29,36 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthContextValue["user"]>(null);
-  const [loading, setLoading] = useState(() => !!getToken());
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = getToken();
-    if (!token) {
-      return;
+    async function restoreSession() {
+      try {
+        if (getToken()) {
+          setUser(await fetchMe());
+          return;
+        }
+
+        const refreshed = await refreshAccessToken();
+        if (refreshed) {
+          setUser(await fetchMe());
+        }
+      } catch {
+        clearToken();
+      } finally {
+        setLoading(false);
+      }
     }
 
-    fetchMe()
-      .then((me) => setUser(me))
-      .catch(() => clearToken())
-      .finally(() => setLoading(false));
+    void restoreSession();
   }, []);
 
   const login = useCallback(async (email: string, password: string) => {
     const tokens = await apiLogin(email, password);
-    storeTokens(tokens);
+    storeAccessToken(tokens);
     const me = await fetchMe();
     setUser(me);
+    return me;
   }, []);
 
   const register = useCallback(async (email: string, password: string) => {

@@ -1,10 +1,11 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException, Request, status
+from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
 from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import BaseModel, EmailStr, Field
 
-from app.auth.deps import get_current_user, require_admin
+from app.auth.cookies import clear_refresh_cookie, read_refresh_cookie, set_refresh_cookie
+from app.auth.deps import get_current_user
 from app.auth.refresh import RefreshTokenError, issue_token_pair, revoke_refresh_token, rotate_refresh_token
 from app.auth.security import hash_password, verify_password
 from app.auth.users import create_user, get_user_by_email
@@ -19,14 +20,6 @@ class RegisterRequest(BaseModel):
     password: str = Field(..., min_length=8, max_length=128)
 
 
-class RefreshRequest(BaseModel):
-    refresh_token: str = Field(..., min_length=1)
-
-
-class LogoutRequest(BaseModel):
-    refresh_token: str = Field(..., min_length=1)
-
-
 class UserOut(BaseModel):
     id: int
     email: EmailStr
@@ -35,7 +28,6 @@ class UserOut(BaseModel):
 
 class TokenResponse(BaseModel):
     access_token: str
-    refresh_token: str
     token_type: str = "bearer"
 
 
@@ -57,6 +49,7 @@ async def register(request: Request, req: RegisterRequest) -> UserOut:
 @limiter.limit(settings.login_rate_limit)
 async def login(
     request: Request,
+    response: Response,
     form: Annotated[OAuth2PasswordRequestForm, Depends()],
 ) -> TokenResponse:
     user = await get_user_by_email(form.username)
@@ -68,25 +61,40 @@ async def login(
         )
 
     access_token, refresh_token = await issue_token_pair(user)
-    return TokenResponse(access_token=access_token, refresh_token=refresh_token)
+    set_refresh_cookie(response, refresh_token)
+    return TokenResponse(access_token=access_token)
 
 
 @router.post("/refresh", response_model=TokenResponse)
-async def refresh(req: RefreshRequest) -> TokenResponse:
+async def refresh(request: Request, response: Response) -> TokenResponse:
+    raw_token = read_refresh_cookie(request)
+    if raw_token is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Refresh token missing",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
     try:
-        access_token, refresh_token = await rotate_refresh_token(req.refresh_token)
+        access_token, new_refresh_token = await rotate_refresh_token(raw_token)
     except RefreshTokenError as exc:
+        clear_refresh_cookie(response)
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail=str(exc),
             headers={"WWW-Authenticate": "Bearer"},
         ) from exc
-    return TokenResponse(access_token=access_token, refresh_token=refresh_token)
+
+    set_refresh_cookie(response, new_refresh_token)
+    return TokenResponse(access_token=access_token)
 
 
 @router.post("/logout", status_code=status.HTTP_204_NO_CONTENT)
-async def logout(req: LogoutRequest) -> None:
-    await revoke_refresh_token(req.refresh_token)
+async def logout(request: Request, response: Response) -> None:
+    raw_token = read_refresh_cookie(request)
+    if raw_token is not None:
+        await revoke_refresh_token(raw_token)
+    clear_refresh_cookie(response)
 
 
 @router.get("/me", response_model=UserOut)
@@ -97,7 +105,3 @@ async def me(current_user: Annotated[dict, Depends(get_current_user)]) -> UserOu
         role=current_user["role"],
     )
 
-
-@router.get("/admin/ping")
-async def admin_ping(_admin: Annotated[dict, Depends(require_admin)]) -> dict:
-    return {"status": "ok"}
