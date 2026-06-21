@@ -37,6 +37,25 @@ async def close_pool() -> None:
     _pool = None
 
 
+async def _release(conn: psycopg.AsyncConnection) -> None:
+    """Reset transaction state and return the connection to the pool.
+
+    A rollback clears any open or aborted transaction so the next caller gets a
+    clean connection (psycopg defaults to autocommit=False). If the connection
+    is dead, the rollback raises and we close it instead of pooling it.
+    """
+    try:
+        await conn.rollback()
+    except Exception:
+        await conn.close()
+        return
+    async with _pool_lock:
+        if _pool is not None and len(_pool) < _POOL_SIZE:
+            _pool.append(conn)
+        else:
+            await conn.close()
+
+
 @asynccontextmanager
 async def get_connection():
     """Yield a pooled psycopg connection with pgvector types registered."""
@@ -49,13 +68,11 @@ async def get_connection():
         return
 
     async with _pool_lock:
-        conn = _pool.popleft() if _pool else await _open_connection()
+        conn = _pool.popleft() if _pool else None
+    if conn is None:
+        conn = await _open_connection()
 
     try:
         yield conn
     finally:
-        async with _pool_lock:
-            if _pool is not None and len(_pool) < _POOL_SIZE:
-                _pool.append(conn)
-            else:
-                await conn.close()
+        await _release(conn)

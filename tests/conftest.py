@@ -14,7 +14,7 @@ if sys.platform == "win32":
     asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
 os.environ.setdefault("DATABASE_URL", "postgresql://rag:rag@localhost:5432/movierag")
-os.environ.setdefault("JWT_SECRET_KEY", "test-secret-key")
+os.environ.setdefault("JWT_SECRET_KEY", "test-secret-key-for-ci-at-least-32-chars-long")
 os.environ.setdefault("TMDB_API_KEY", "test")
 os.environ.setdefault("CEREBRAS_API_KEY", "test")
 
