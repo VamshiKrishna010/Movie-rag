@@ -7,7 +7,7 @@ class Settings(BaseSettings):
     groq_api_key: str = ""
     cerebras_api_key: str = ""
     cerebras_model: str = "gpt-oss-120b"
-    jwt_secret_key: str = "change-me-in-production"
+    jwt_secret_key: str = ""
     jwt_secret_key_previous: str = ""
     jwt_algorithm: str = "HS256"
     jwt_access_expire_minutes: int = 15
@@ -28,3 +28,10 @@ class Settings(BaseSettings):
 
 
 settings = Settings()
+
+_INSECURE_SECRETS = {"", "change-me-in-production", "secret", "changeme"}
+if settings.jwt_secret_key in _INSECURE_SECRETS or len(settings.jwt_secret_key) < 32:
+    raise RuntimeError(
+        "JWT_SECRET_KEY must be set to a strong value (>=32 chars). "
+        "Generate one with: python -c \"import secrets; print(secrets.token_urlsafe(48))\""
+    )

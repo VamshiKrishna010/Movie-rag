@@ -60,14 +60,8 @@ async def root():
 async def health():
     """Confirms the app is up AND can talk to Postgres."""
     async with get_connection() as conn:
-        result = await conn.execute("SELECT version()")
-        row = await result.fetchone()
-        pg_version = row[0] if row else "unknown"
-
-    return {
-        "status": "ok",
-        "postgres": pg_version,
-    }
+        await conn.execute("SELECT 1")
+    return {"status": "ok"}
 
 
 app.include_router(auth_router)

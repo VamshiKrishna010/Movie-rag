@@ -292,7 +292,7 @@ async def _fetch_hybrid_search(
     try:
         rankings = await retrieve_movie_rankings(q, k=_HYBRID_POOL_MAX)
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Search failed: {e}") from e
+        raise HTTPException(status_code=500, detail="Search failed") from e
 
     if not rankings:
         return PaginatedMoviesResponse(**_paginated([], page, limit, 0))

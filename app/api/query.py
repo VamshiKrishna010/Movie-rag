@@ -105,16 +105,16 @@ async def query(
 ) -> QueryResponse:
     try:
         chunks = await _retrieve(req.question, k=req.k)
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Retrieval failed: {e}")
+    except Exception:
+        raise HTTPException(status_code=500, detail="Retrieval failed")
 
     if not chunks:
         raise HTTPException(status_code=404, detail="No relevant movies found.")
 
     try:
         answer = await generate(req.question, chunks)
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Generation failed: {e}")
+    except Exception:
+        raise HTTPException(status_code=500, detail="Generation failed")
 
     return QueryResponse(
         question=req.question,

@@ -18,7 +18,7 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 
 class RegisterRequest(BaseModel):
     email: EmailStr
-    password: str = Field(..., min_length=8, max_length=128)
+    password: str = Field(..., min_length=8, max_length=72)
 
 
 class UserOut(BaseModel):
@@ -77,6 +77,7 @@ async def login(
 
 
 @router.post("/refresh", response_model=TokenResponse)
+@limiter.limit(settings.login_rate_limit)
 async def refresh(request: Request, response: Response) -> TokenResponse:
     raw_token = read_refresh_cookie(request)
     if raw_token is None:
@@ -101,6 +102,7 @@ async def refresh(request: Request, response: Response) -> TokenResponse:
 
 
 @router.post("/logout", status_code=status.HTTP_204_NO_CONTENT)
+@limiter.limit(settings.login_rate_limit)
 async def logout(request: Request, response: Response) -> None:
     raw_token = read_refresh_cookie(request)
     if raw_token is not None:
