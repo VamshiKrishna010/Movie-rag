@@ -19,6 +19,10 @@ class Settings(BaseSettings):
     refresh_cookie_secure: bool = False
     refresh_cookie_samesite: str = "lax"
     cors_origins: str = "http://localhost:5173"
+    google_client_id: str = ""
+    google_client_secret: str = ""
+    google_redirect_uri: str = ""
+    oauth_session_secret: str = ""
 
     model_config = SettingsConfigDict(env_file=".env", case_sensitive=False)
 

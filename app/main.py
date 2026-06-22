@@ -5,11 +5,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 from slowapi.middleware import SlowAPIMiddleware
+from starlette.middleware.sessions import SessionMiddleware
 
 from app.api.admin import router as admin_router
 from app.api.auth import router as auth_router
 from app.api.movies import router as movies_router
 from app.api.query import router as query_router
+from app.auth.google_routes import router as google_auth_router
 from app.config import settings
 from app.db import close_pool, get_connection, init_pool
 from app.limiter import limiter
@@ -23,6 +25,14 @@ async def lifespan(_app: FastAPI):
 
 
 app = FastAPI(title="Movie RAG", version="0.1.0", lifespan=lifespan)
+app.add_middleware(
+    SessionMiddleware,
+    secret_key=settings.oauth_session_secret,
+    session_cookie="movie_rag_oauth",
+    max_age=600,
+    same_site="lax",
+    https_only=False,  # localhost testing only
+)
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 app.add_middleware(SlowAPIMiddleware)
@@ -65,6 +75,7 @@ async def health():
 
 
 app.include_router(auth_router)
+app.include_router(google_auth_router)
 app.include_router(admin_router)
 app.include_router(query_router, prefix="", tags=["rag"])
 app.include_router(movies_router, prefix="", tags=["movies"])

@@ -20,6 +20,38 @@ def test_jwt_roundtrip() -> None:
     assert decode_access_token("not-a-valid-token") is None
 
 
+def test_jwt_previous_key_still_decodes(monkeypatch) -> None:
+    """During JWT_SECRET_KEY rotation, tokens signed by the prior key must
+    still verify until they expire. New tokens are signed by the new key."""
+    from jose import jwt as jose_jwt
+
+    from app.auth import security
+    from app.config import settings
+
+    old_key = settings.jwt_secret_key
+    new_key = "rotated-key-also-needs-to-be-at-least-32-characters-long"
+
+    # Simulate a token already issued under the old key.
+    old_token = create_access_token(subject="rotated@example.com")
+
+    monkeypatch.setattr(settings, "jwt_secret_key", new_key)
+    monkeypatch.setattr(settings, "jwt_secret_key_previous", old_key)
+
+    # Old token still verifies via the fallback key.
+    assert decode_access_token(old_token) == "rotated@example.com"
+
+    # New tokens are signed with the new key.
+    new_token = create_access_token(subject="rotated@example.com")
+    header = jose_jwt.get_unverified_header(new_token)
+    assert header["alg"] == settings.jwt_algorithm
+    assert decode_access_token(new_token) == "rotated@example.com"
+
+    # After grace window: previous key is cleared, old tokens stop verifying.
+    monkeypatch.setattr(settings, "jwt_secret_key_previous", "")
+    assert decode_access_token(old_token) is None
+    assert decode_access_token(new_token) == "rotated@example.com"
+
+
 def test_register_login_and_me(client) -> None:
     email = f"user-{uuid.uuid4().hex[:8]}@example.com"
     password = "password123"

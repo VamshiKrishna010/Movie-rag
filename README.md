@@ -92,7 +92,7 @@ flowchart TB
     subgraph retrieval [Retrieval Layers]
         RAG --> HybridSQL[Vector + FTS in one SQL]
         Movies --> HybridSQL
-        GraphLayer[graph/ + retrieve/] -.->|"built, not wired to /query yet"| HybridSQL
+        GraphLayer[graph/ + retrieve/] -->|"now primary for /query (RRF fusion)"| HybridSQL
     end
 
     PG --> RAG
@@ -160,9 +160,9 @@ Request body: `question`, `k` (1–20), optional `include_chunks`.
 
 ## Retrieval System
 
-There are **two retrieval stacks** — one live in the production API, one more advanced but not yet connected.
+There are **two retrieval stacks, both live**: a single-SQL hybrid in `app/rag/`, and a multi-source fusion in `app/retrieve/` + `app/graph/`. `POST /query` runs the multi-source fusion first and falls back to the single-SQL path when it returns nothing; hybrid movie search uses the single-SQL path directly.
 
-### 1. Production path — `app/rag/` (used by `/query` and hybrid movie search)
+### 1. Single-SQL path — `app/rag/` (hybrid movie search; fallback for `/query`)
 
 **`rag/retriever.py`** — Single SQL query fusing:
 
@@ -176,7 +176,7 @@ Also exposes `retrieve_dense()` as a baseline for eval.
 
 **`rag/generator.py`** — Formats chunks into a numbered context block, calls Cerebras with a strict “answer only from context” system prompt.
 
-### 2. Next-gen path — `app/retrieve/` + `app/graph/` (built, not wired to `/query`)
+### 2. Multi-source path — `app/retrieve/` + `app/graph/` (primary for `/query`)
 
 A **three-source** retrieval design:
 
@@ -186,7 +186,7 @@ A **three-source** retrieval design:
 | FTS | reuses `rag/sparse.py` | Keyword match |
 | Graph | `retrieve/graph_retriever.py` | Structural SQL over join tables |
 
-**`retrieve/fusion.py`** — Weighted RRF across sources (graph weighted 2.0, vector 1.0, FTS 0.8). `retrieve_and_fuse()` is the intended unified entry point.
+**`retrieve/fusion.py`** — Weighted RRF across sources (graph weighted 2.0, vector 1.0, FTS 0.8). `retrieve_and_fuse()` is the unified entry point `POST /query` calls (with `use_graph=True`).
 
 **Graph layer:**
 
@@ -343,4 +343,4 @@ Access tokens include `iss` (`movie-rag`) and `aud` (`movie-rag-api`) claims; bo
 2. **One chunk per movie** — simple indexing; graph retriever fetches chunks for structurally matched movies.
 3. **Rule-based graph routing** — deterministic, fast, debuggable; upgrade path to LLM-based planning is documented in code.
 4. **Grounded generation** — LLM is constrained to retrieved context; low temperature (0.3).
-5. **Incremental evolution** — `app/rag/` is what ships today; `app/retrieve/` + `app/graph/` are the Day 5+ architecture waiting to be plugged into `/query`.
+5. **Incremental evolution** — `app/rag/` shipped first as a single-SQL hybrid; the `app/retrieve/` + `app/graph/` multi-source fusion is now wired into `/query` as the primary path, with `app/rag/` kept as the fallback and as the hybrid movie-search backend.
