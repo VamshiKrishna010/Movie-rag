@@ -5,3 +5,5 @@ __pycache__/
 *.pyc
 .pytest_cache/
 .claude/CLAUDE.md
+
+.docs/architecture-explainer.md

@@ -67,7 +67,7 @@ async def hybrid_retrieve(
 
     by_id = {r["chunk_id"]: r for r in rows}
     return [
-        FusedChunk(
+        FusedChunk( 
             chunk_id=cid,
             movie_id=by_id[cid]["movie_id"],
             title=by_id[cid]["title"],
