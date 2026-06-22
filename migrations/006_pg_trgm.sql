@@ -1,7 +1,6 @@
 -- migrations/006_pg_trgm.sql
 --
--- Entity extraction for graph retrieval (app/graph/entities.py) uses pg_trgm
--- similarity() and the %% trigram operator for fuzzy name matching.
+-- Optional trigram indexes for fuzzy title/name matching.
 
 CREATE EXTENSION IF NOT EXISTS pg_trgm;
 

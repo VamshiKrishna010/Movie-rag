@@ -1,6 +1,6 @@
 # Movie RAG
 
-A movie recommendation and Q&A backend built with **FastAPI**, **PostgreSQL + pgvector**, and **hybrid retrieval** (dense vectors, full-text search, and graph traversal over TMDB-shaped relational data).
+A movie recommendation and Q&A backend built with **FastAPI**, **PostgreSQL + pgvector**, and **hybrid retrieval** (dense vectors plus full-text search over TMDB-shaped movie data).
 
 ---
 
@@ -29,8 +29,6 @@ Schema is auto-loaded from `sql/01_schema.sql`. Run migrations after ingestion:
 
 ```bash
 psql $DATABASE_URL -f migrations/004_fts.sql
-psql $DATABASE_URL -f migrations/005_graph_indexes.sql
-psql $DATABASE_URL -f migrations/006_pg_trgm.sql
 psql $DATABASE_URL -f migrations/008_users.sql
 psql $DATABASE_URL -f migrations/009_auth_hardening.sql
 psql $DATABASE_URL -f migrations/010_user_role_check.sql
@@ -92,12 +90,10 @@ flowchart TB
     subgraph retrieval [Retrieval Layers]
         RAG --> HybridSQL[Vector + FTS in one SQL]
         Movies --> HybridSQL
-        GraphLayer[graph/ + retrieve/] -->|"now primary for /query (RRF fusion)"| HybridSQL
     end
 
     PG --> RAG
     PG --> SQL
-    PG --> GraphLayer
 ```
 
 ---
@@ -117,7 +113,7 @@ Defined in `sql/01_schema.sql` with follow-up migrations in `migrations/`.
 
 - `chunks` — one rich text chunk per movie (`chunk_type = 'full'`), `embedding vector(384)`, and FTS columns (`tsv` / `search_vector`)
 
-Indexes support trigram fuzzy matching (`pg_trgm`), graph traversals, vector similarity, and GIN full-text search.
+Indexes support vector similarity, GIN full-text search, relational metadata lookups, and optional trigram fuzzy matching (`pg_trgm`) for title/name fields.
 
 ---
 
@@ -160,9 +156,9 @@ Request body: `question`, `k` (1–20), optional `include_chunks`.
 
 ## Retrieval System
 
-There are **two retrieval stacks, both live**: a single-SQL hybrid in `app/rag/`, and a multi-source fusion in `app/retrieve/` + `app/graph/`. `POST /query` runs the multi-source fusion first and falls back to the single-SQL path when it returns nothing; hybrid movie search uses the single-SQL path directly.
+There is one live retrieval stack: single-SQL hybrid retrieval in `app/rag/`. `POST /query` and hybrid movie search both use this path.
 
-### 1. Single-SQL path — `app/rag/` (hybrid movie search; fallback for `/query`)
+### Single-SQL path — `app/rag/`
 
 **`rag/retriever.py`** — Single SQL query fusing:
 
@@ -175,24 +171,6 @@ Also exposes `retrieve_dense()` as a baseline for eval.
 **`rag/sparse.py`** / **`rag/hybrid.py`** — Alternate Python-side sparse + RRF implementations (parallel code paths, not the primary `/query` path).
 
 **`rag/generator.py`** — Formats chunks into a numbered context block, calls Cerebras with a strict “answer only from context” system prompt.
-
-### 2. Multi-source path — `app/retrieve/` + `app/graph/` (primary for `/query`)
-
-A **three-source** retrieval design:
-
-| Source | Module | What it does |
-|--------|--------|--------------|
-| Vector | `retrieve/hybrid_retriever.py` | Dense nearest-neighbor |
-| FTS | reuses `rag/sparse.py` | Keyword match |
-| Graph | `retrieve/graph_retriever.py` | Structural SQL over join tables |
-
-**`retrieve/fusion.py`** — Weighted RRF across sources (graph weighted 2.0, vector 1.0, FTS 0.8). `retrieve_and_fuse()` is the unified entry point `POST /query` calls (with `use_graph=True`).
-
-**Graph layer:**
-
-- **`graph/entities.py`** — Extracts people, movies, genres, keywords from queries using n-grams + `pg_trgm` similarity
-- **`graph/router.py`** — Rule-based intent detection (filmography, intersection, “movies like X”, tag filters, connection paths) → dispatches to query templates
-- **`graph/queries.py`** — SQL for filmography, set intersections, shared-entity similarity, BFS paths between people
 
 ---
 
@@ -217,19 +195,11 @@ app/
 │   ├── sparse.py        # FTS retriever
 │   ├── hybrid.py        # Python-side hybrid fusion
 │   └── generator.py     # Cerebras answer generation
-├── graph/
-│   ├── entities.py      # Query → structured entities
-│   ├── router.py        # Intent detection + query dispatch
-│   └── queries.py       # Graph traversal SQL
-├── retrieve/
-│   ├── hybrid_retriever.py
-│   ├── graph_retriever.py
-│   └── fusion.py        # Multi-source weighted RRF
 └── utils/
     └── tmdb.py          # TMDB image URL helpers
 
 sql/01_schema.sql        # Base schema (auto-loaded by Docker)
-migrations/              # FTS, graph indexes, pg_trgm
+migrations/              # FTS, vector index, auth, optional metadata indexes
 scripts/                 # run_ingest, run_embed, test scripts
 eval/                    # Ragas evaluation against live /query
 ```
@@ -339,8 +309,8 @@ Access tokens include `iss` (`movie-rag`) and `aud` (`movie-rag-api`) claims; bo
 
 ## Design Choices
 
-1. **Postgres as the single store** — relational movie graph, vectors, and FTS all in one DB; no separate vector DB.
-2. **One chunk per movie** — simple indexing; graph retriever fetches chunks for structurally matched movies.
-3. **Rule-based graph routing** — deterministic, fast, debuggable; upgrade path to LLM-based planning is documented in code.
+1. **Postgres as the single store** — relational movie metadata, vectors, and FTS all in one DB; no separate vector DB.
+2. **One chunk per movie** — simple indexing for semantic and keyword retrieval.
+3. **Hybrid retrieval** — dense semantic search and sparse keyword search are fused with RRF in SQL.
 4. **Grounded generation** — LLM is constrained to retrieved context; low temperature (0.3).
-5. **Incremental evolution** — `app/rag/` shipped first as a single-SQL hybrid; the `app/retrieve/` + `app/graph/` multi-source fusion is now wired into `/query` as the primary path, with `app/rag/` kept as the fallback and as the hybrid movie-search backend.
+5. **Incremental evolution** — `app/rag/` is the active retrieval stack for both `/query` and hybrid movie search.

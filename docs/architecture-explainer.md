@@ -15,9 +15,9 @@ Browser (React + Vite, :5173)
 FastAPI app (Uvicorn, :8000)
         │  async psycopg
         ▼
-PostgreSQL 16  +  pgvector  +  pg_trgm  +  FTS (built-in)
+PostgreSQL 16  +  pgvector  +  FTS (built-in)
                                                 │
-                                                └── one DB, three retrieval signals
+                                                └── one DB, two retrieval signals
 LLM:        Cerebras  (OpenAI-compatible client)  — answer generation
 Embedder:   sentence-transformers  BAAI/bge-small-en-v1.5  (local)
 ```
@@ -85,7 +85,7 @@ PostgreSQL 16, run via `docker-compose.yml`. Schema in `sql/01_schema.sql`, orde
 | Extension | Role |
 |---|---|
 | `vector` (pgvector) | 384-dim semantic embeddings + HNSW index |
-| `pg_trgm` | Trigram fuzzy match (typo-tolerant title/name search) |
+| `pg_trgm` | Optional trigram indexes for title/name search |
 | FTS | Built into Postgres (no extension) — tokenize/stem/index English text |
 
 ### 3.2 Content tables
@@ -130,8 +130,8 @@ Versioned, ordered SQL files that evolve the schema after the base `sql/01_schem
 ```
 migrations/
   004_fts.sql                # tsvector + GIN on chunks
-  005_graph_indexes.sql      # composite indexes for graph queries
-  006_pg_trgm.sql            # pg_trgm + trigram indexes
+  005_graph_indexes.sql      # optional relational metadata indexes
+  006_pg_trgm.sql            # optional pg_trgm + trigram indexes
   007_hnsw.sql               # HNSW vector index (after embeddings exist)
   008_users.sql              # users table
   009_auth_hardening.sql     # users.role + refresh_tokens
@@ -222,7 +222,7 @@ Same idea as a book's index: term → pages. Slow to write, fast to read. Perfec
 
 ## 5. The retrieval stack
 
-This project has **three** retrieval signals in the primary path, plus the graph retriever. All run against the same DB, all return ranked lists of chunk/movie IDs.
+This project has **two** retrieval signals in the primary path. Both run against the same DB and return ranked chunk/movie IDs.
 
 ### 5.1 Dense retriever (semantic)
 
@@ -247,13 +247,9 @@ LIMIT 50;
 
 Tokenize query the same way docs were tokenized → look up lexemes in the GIN index → intersect → rank by `ts_rank` (which considers term frequency and rarity).
 
-### 5.3 Graph retriever
+### 5.3 Hybrid fusion — Reciprocal Rank Fusion (RRF)
 
-Walks `movie_people` / `movie_genres` / `movie_keywords` edges. Uses pg_trgm to fuzzy-match named entities in the query (`"directed by Tarantino"` → finds person row → joins films). Handles **relational queries** that pure text search can't: "movies directed by Spielberg starring Tom Hanks" is a set intersection, not a similarity question.
-
-### 5.4 Fusion — Reciprocal Rank Fusion (RRF)
-
-Each retriever produces a ranked list with its own scoring scale (cosine 0–1, `ts_rank` unbounded floats, graph proximity scores). You can't add them directly — they live in different universes.
+Each retriever produces a ranked list with its own scoring scale (cosine 0–1, `ts_rank` unbounded floats). You can't add them directly — they live in different universes.
 
 **RRF throws the scores away and uses ranks:**
 
@@ -263,10 +259,10 @@ score(doc) = Σ over retrievers   1 / (k + rank_in_that_retriever)
 
 `k ≈ 60`, `rank = 1` for top-1, 2 for top-2, etc. Docs missing from a retriever contribute 0.
 
-Example — a doc ranked 1 in dense, 3 in FTS, missing in graph:
+Example — a doc ranked 1 in dense and 3 in FTS:
 
 ```
-score = 1/(60+1) + 1/(60+3) + 0 = 0.0164 + 0.0159 = 0.0323
+score = 1/(60+1) + 1/(60+3) = 0.0164 + 0.0159 = 0.0323
 ```
 
 Sort all docs by total score, take top-K.
@@ -276,16 +272,15 @@ Why RRF:
 2. Robust to outliers — the `1/(k+rank)` curve flattens fast.
 3. Docs found by multiple retrievers float up automatically.
 4. Zero training data needed.
-5. Works with a retriever that doesn't even produce a comparable score (the graph one).
+5. Keeps dense and sparse ranking behavior comparable without tuning raw scores.
 
-### 5.5 The two retrieval stacks in this codebase
+### 5.4 The retrieval stack in this codebase
 
-Both are live:
+One stack is live:
 
 | Stack | Where | What `POST /query` does |
 |---|---|---|
-| **Multi-source fusion** | `app/retrieve/fusion.py` + `app/graph/` | **Tried first** (vector + FTS + graph, weighted RRF) |
-| **Single-SQL hybrid** | `app/rag/retriever.py` | **Fallback** if fusion returns nothing; also the direct backend for hybrid movie search |
+| **Single-SQL hybrid** | `app/rag/retriever.py` | Runs dense vector search and sparse FTS, then fuses ranks with RRF |
 
 There used to be a "naive vector" baseline (Day 3 in the README's Ragas table) — that's *not* in the live code path, only in the eval table for comparison.
 
@@ -294,7 +289,7 @@ There used to be a "naive vector" baseline (Day 3 in the README's Ragas table) �
 ## 6. The three letters of RAG, in this project
 
 ```
-R — Retrieval     →  app/retrieve/fusion.py + app/rag/retriever.py
+R — Retrieval     →  app/rag/retriever.py
 A — Augmentation  →  app/rag/generator.py (prompt assembly)
 G — Generation    →  app/rag/generator.py (Cerebras call)
 ```
@@ -363,18 +358,17 @@ In a pure LLM app (no RAG) the model answers from its training. In RAG, generati
 
 Retrieval quality dominates answer quality. If retrieval surfaces the right chunks, even a small LLM produces a fine answer. If retrieval misses, no model intelligence saves you.
 
-### 6.5 Naive RAG vs fusion RAG
+### 6.5 Naive RAG vs hybrid RAG
 
 | Name | What it is | This project |
 |---|---|---|
 | Naive RAG | One retriever (usually dense), stuff top-K in the prompt | Day-3 baseline, only in eval table |
-| Hybrid RAG | Dense + sparse fused | `app/rag/` fallback |
-| **Fusion RAG** | Multiple retrievers + explicit fusion (RRF) + graph | `app/retrieve/fusion.py` — the live `/query` path |
-| Graph RAG | Retrieval over a knowledge graph | One of the retrievers in fusion |
+| **Hybrid RAG** | Dense + sparse fused | `app/rag/retriever.py` — the live `/query` path |
+| Graph RAG | Retrieval over a knowledge graph | Not used |
 | Agentic RAG | LLM decides which retrievers to call, iterates | Not used |
 | Self-RAG / CRAG | LLM critiques retrieved chunks, re-retrieves if bad | Not used |
 
-The accurate one-line label for this system: **"Fusion RAG over a Postgres-only stack, RRF-merged, with a graph retriever for relational queries."**
+The accurate one-line label for this system: **"Hybrid RAG over a Postgres-only stack, with dense and FTS ranks merged by RRF."**
 
 "Naive" is not a pejorative — it's the standard term in the RAG literature for the textbook minimal pipeline, the same way "naive Bayes" is a real algorithm with that name.
 
@@ -387,24 +381,20 @@ The accurate one-line label for this system: **"Fusion RAG over a Postgres-only 
 
 2.  FastAPI auth dependency → extract user (optional for this endpoint)
 
-3.  Intent router (app/graph/router.py) → decide if graph retrieval applies
+3.  app/rag/retriever.py embeds the query with BGE
 
-4.  asyncio.gather:
-       ├── hybrid retriever (dense + FTS via single-SQL RRF)
-       └── graph retriever (if applicable)
+4.  Single SQL retrieves dense vector candidates and sparse FTS candidates
 
-5.  fusion.py → weighted RRF merge → top-K chunk IDs
+5.  SQL RRF merge ranks the candidates and returns top-K chunks
 
-6.  SELECT content FROM chunks WHERE id IN (...)
-
-7.  generator.py:
+6.  generator.py:
        ├── augment: build messages = system prompt + context + question
        └── generate: await Cerebras chat.completions.create(...)
 
-8.  Return JSON { answer, sources }  → browser
+7.  Return JSON { answer, sources }  → browser
 ```
 
-Steps 4 and 7 are the slow ones. Step 4 is parallelized by `asyncio.gather`. Step 7 is the single biggest latency contributor (LLM round-trip).
+Steps 4 and 6 are the slow ones. Step 4 includes local query embedding plus Postgres retrieval. Step 6 is the single biggest latency contributor (LLM round-trip).
 
 ---
 
@@ -426,8 +416,7 @@ These three never share tokens — that's fine, because they never compare to ea
 
 | To change… | Go to |
 |---|---|
-| `/query` retrieval — multi-source fusion (primary) | `app/retrieve/fusion.py`, `app/graph/` |
-| `/query` retrieval — single-SQL fallback / movie-search hybrid | `app/rag/retriever.py` |
+| `/query` retrieval / movie-search hybrid | `app/rag/retriever.py` |
 | Answer generation / grounding prompt | `app/rag/generator.py` |
 | Movie browse / search / detail endpoints | `app/api/movies.py` |
 | Auth endpoints (login/refresh/logout/me) | `app/api/auth.py` + `app/auth/` |
@@ -456,4 +445,6 @@ These three never share tokens — that's fine, because they never compare to ea
 
 ## 11. One-paragraph executive summary
 
-This is a movie Q&A backend that turns a user question into a grounded answer by combining three independent retrieval signals — semantic vector search over BGE embeddings (pgvector + HNSW), keyword full-text search over stemmed lexemes (Postgres FTS + GIN), and graph traversal over cast/crew/genre joins — and merging their ranked outputs with Reciprocal Rank Fusion. The top chunks are then injected into an LLM prompt with strict grounding instructions, and a Cerebras-hosted `gpt-oss-120b` model produces the final answer. The architecture is "fusion RAG" — strictly more capable than the textbook naive vector pipeline, designed to handle conceptual queries, exact-name lookups, typos, and relational ("directed by X, starring Y") questions in the same code path. Auth, ingestion, evaluation (Ragas), and a React frontend round out the system; everything runs on Postgres, FastAPI, and the standard async Python stack.
+This is a movie Q&A backend that turns a user question into a grounded answer by combining two retrieval signals: semantic vector search over BGE embeddings with pgvector/HNSW and keyword full-text search over Postgres `tsvector` columns with GIN indexes. The system merges ranked outputs with Reciprocal Rank Fusion, then injects the top chunks into a strictly grounded LLM prompt. A Cerebras-hosted `gpt-oss-120b` model generates the final answer using only the retrieved context.
+
+The architecture is hybrid RAG: more robust than a naive vector-only pipeline because it handles conceptual movie queries and exact keyword/name lookups in the same retrieval path. Auth, ingestion, evaluation with Ragas, and a React frontend round out the system. The stack is built on Postgres, FastAPI, pgvector, and async Python.
