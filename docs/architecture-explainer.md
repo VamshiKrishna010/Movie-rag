@@ -218,6 +218,35 @@ shawshank → [42]
 
 Same idea as a book's index: term → pages. Slow to write, fast to read. Perfect for chunks (write once, search many times).
 
+### 4.6 HNSW index
+
+**HNSW = Hierarchical Navigable Small World.** Built for approximate nearest-neighbor search in high-dimensional vector space. Exact cosine comparison would be O(n) — comparing a query vector against every row. HNSW gets to roughly O(log n) by building a multi-layer graph at index time.
+
+Structure (conceptually):
+
+```
+Layer 2 (sparse):   A ————————— F
+                    |           |
+Layer 1 (medium):   A — C — D — F — H
+                    |   |   |   |   |
+Layer 0 (dense):    A-B-C-D-E-F-G-H-I-J   ← all vectors live here
+```
+
+**Search**: start at the top layer, greedily move toward the query vector, drop to the next layer, repeat. You converge fast because upper layers let you skip large distances in one hop.
+
+**Insert**: each new vector is assigned a random max layer. It connects to its nearest neighbors at each layer it participates in, bounded by `m` connections per node.
+
+Tuning knobs (from `migrations/007_hnsw.sql`):
+
+```sql
+WITH (m = 16, ef_construction = 64)
+```
+
+- `m = 16` — max connections per node per layer; higher = better recall, more memory and slower build.
+- `ef_construction = 64` — search width used *during index build*; higher = better graph quality, slower index creation.
+
+The `<=>` operator in queries (`ORDER BY embedding <=> $1::vector`) triggers the HNSW index automatically via pgvector. The result is approximate — a tiny fraction of truly nearest neighbors may be missed — but in practice recall is high and the speed gain is dramatic.
+
 ---
 
 ## 5. The retrieval stack
@@ -448,3 +477,95 @@ These three never share tokens — that's fine, because they never compare to ea
 This is a movie Q&A backend that turns a user question into a grounded answer by combining two retrieval signals: semantic vector search over BGE embeddings with pgvector/HNSW and keyword full-text search over Postgres `tsvector` columns with GIN indexes. The system merges ranked outputs with Reciprocal Rank Fusion, then injects the top chunks into a strictly grounded LLM prompt. A Cerebras-hosted `gpt-oss-120b` model generates the final answer using only the retrieved context.
 
 The architecture is hybrid RAG: more robust than a naive vector-only pipeline because it handles conceptual movie queries and exact keyword/name lookups in the same retrieval path. Auth, ingestion, evaluation with Ragas, and a React frontend round out the system. The stack is built on Postgres, FastAPI, pgvector, and async Python.
+
+---
+
+## 12. Auth stack
+
+### 12.1 Libraries
+
+| Library | Role |
+|---|---|
+| `bcrypt` | Password hashing (`bcrypt.hashpw` / `checkpw`) |
+| `python-jose` (`jose`) | JWT creation and decoding (`HS256`) |
+| `authlib` | Google OAuth2 client (`authlib.integrations.starlette_client`) |
+| FastAPI `OAuth2PasswordBearer` | Extracts `Bearer <token>` from incoming requests |
+
+### 12.2 Internal modules (`app/auth/`)
+
+| File | Responsibility |
+|---|---|
+| `security.py` | Hash/verify passwords; create/decode JWTs; JWT key rotation support |
+| `refresh.py` | Opaque refresh token lifecycle — issue, rotate, revoke, reuse detection |
+| `cookies.py` | Set/clear the HttpOnly `mr_refresh` cookie |
+| `deps.py` | FastAPI route dependencies — validates Bearer token, injects current user |
+| `scopes.py` | Role → scope mapping (e.g. `admin` gets all scopes) |
+| `users.py` | DB queries for user lookup by email |
+| `google_auth.py` | Authlib OAuth client configured for Google |
+| `google_routes.py` | `/auth/google/login` and `/auth/google/callback` endpoints |
+
+### 12.3 What is a JWT?
+
+A JWT (JSON Web Token) is a signed, self-contained proof of identity. It looks like:
+
+```
+eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyQGV4YW1wbGUuY29tIn0.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+  HEADER                PAYLOAD                                  SIGNATURE
+```
+
+Three Base64-encoded parts separated by dots:
+- **Header** — signing algorithm (`HS256`)
+- **Payload** — claims: user email (`sub`), expiry (`exp`), roles, etc.
+- **Signature** — HMAC of header+payload using `JWT_SECRET_KEY`
+
+Anyone can *read* the payload (it's just Base64), but no one can *forge* a valid signature without the secret. On every API request the server verifies the signature only — no DB lookup required.
+
+### 12.4 Two-token session design
+
+```
+Login
+  → server issues: access JWT (expires 15 min)
+                 + refresh token (HttpOnly cookie, expires 30 days)
+
+Every API call
+  → client sends: Authorization: Bearer <access_jwt>
+  → server verifies signature → done (no DB hit)
+
+Access token expires
+  → client sends refresh cookie → server issues new access JWT + rotates refresh token
+```
+
+The short 15-minute JWT limits damage if a token is stolen — it goes stale quickly. The refresh token handles longer sessions safely.
+
+### 12.5 Refresh token storage (never raw)
+
+Refresh tokens are **random 32-byte URL-safe strings** (`secrets.token_urlsafe(32)`). The raw token is only ever held by the client in the HttpOnly cookie. The server stores only its **SHA-256 hash** in Postgres. If the DB is compromised, the attacker gets hashes — unusable without the original tokens.
+
+### 12.6 Refresh token reuse detection
+
+Every refresh rotates the token: the old hash is marked **revoked**, a new token is issued. When the server receives a refresh request it checks:
+
+1. Hash the incoming token
+2. Look it up in the DB
+3. If found and **active** → rotate normally
+4. If found but **revoked** → **theft detected**
+
+On detecting a revoked token being reused, the server calls `_revoke_all_user_tokens()` — it nukes every refresh token for that user across all devices. This is **token family revocation**: one suspicious event forces a full re-login everywhere.
+
+Why this is strong: even if an attacker steals a refresh token and uses it first, the moment the real user's copy is rejected, all tokens the attacker obtained are also killed immediately.
+
+### 12.7 Cookie hardening
+
+The `mr_refresh` cookie is set with:
+- **`HttpOnly`** — JavaScript cannot read it (XSS protection)
+- **`SameSite=lax`** (`none` in split-origin prod) — CSRF protection
+- **`Path=/auth`** — cookie is only sent to `/auth/*` routes, not to `/movies`, `/query`, etc.
+- **`Secure=true`** in production — HTTPS only
+
+### 12.8 Google OAuth path
+
+Google login issues the same JWT + refresh pair as password login — the OAuth callback validates the Google ID token, upserts the user in Postgres, then runs the normal token issuance flow.
+
+### 12.9 JWT key rotation
+
+`app/config.py` accepts a `JWT_SECRET_KEY_PREVIOUS` env var. `security.py` tries decoding with the current key first; if that fails it falls back to the previous key. This allows zero-downtime secret rotation: deploy the new key, keep the old one as `_PREVIOUS` for the duration of the longest active access token (15 min), then clear it.

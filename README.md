@@ -111,7 +111,7 @@ Defined in `sql/01_schema.sql` with follow-up migrations in `migrations/`.
 
 **RAG layer:**
 
-- `chunks` — one rich text chunk per movie (`chunk_type = 'full'`), `embedding vector(384)`, and FTS columns (`tsv` / `search_vector`)
+- `chunks` — one rich text chunk per movie (`chunk_type = 'full'`), `embedding vector(384)`, and an FTS column (`search_vector`)
 
 Indexes support vector similarity, GIN full-text search, relational metadata lookups, and optional trigram fuzzy matching (`pg_trgm`) for title/name fields.
 
