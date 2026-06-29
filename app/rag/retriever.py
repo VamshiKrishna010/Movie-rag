@@ -194,7 +194,7 @@ def _hybrid_params(question: str, query_vec: list[float], k: int) -> dict:
 
 async def retrieve_dense(
     question: str,
-    k: int = 5,
+    k: int = 10,
     conn_str: str | None = None,
 ) -> List[RetrievedChunk]:
     """Dense-only baseline: nearest neighbors by cosine distance."""

@@ -43,7 +43,7 @@ RESULTS_DIR.mkdir(exist_ok=True)
 # ---- API ---------------------------------------------------------------------
 API_URL = "http://localhost:8000/query"
 TIMEOUT = httpx.Timeout(120.0, connect=10.0)  # Groq generation can take a while
-TOP_K = 5
+TOP_K = 10
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -77,7 +77,7 @@ async def query_api(client: httpx.AsyncClient, question: str) -> tuple[str, list
 
 
 async def collect_predictions(items: list[dict]) -> list[dict]:
-    """Run all 25 questions through /query, return enriched records."""
+    """Run all evaluation questions through /query, return enriched records."""
     async with httpx.AsyncClient() as client:
         results = []
         for i, item in enumerate(items, 1):
@@ -92,6 +92,7 @@ async def collect_predictions(items: list[dict]) -> list[dict]:
             results.append({
                 "id": item["id"],
                 "category": item["category"],
+                "difficulty": item["difficulty"],
                 "question": item["question"],
                 "answer": answer,
                 "contexts": contexts,
@@ -133,6 +134,7 @@ def run_ragas(records: list[dict]) -> pd.DataFrame:
     # Attach id + category so we can group in the summary
     df["id"] = [r["id"] for r in records]
     df["category"] = [r["category"] for r in records]
+    df["difficulty"] = [r["difficulty"] for r in records]
     return df
 
 

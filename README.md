@@ -208,6 +208,33 @@ eval/                    # Ragas evaluation against live /query
 
 ## Evaluation
 
+### Retrieval ranking (MRR@K)
+
+Run the deterministic retrieval evaluation directly against the configured
+database. It does not require the API server, authentication, answer generation,
+or an LLM judge:
+
+```bash
+python -m eval.mrr --strategy hybrid --k 5
+python -m eval.mrr --strategy dense --k 5
+```
+
+The evaluation dataset contains 150 reviewed questions: 40 factual, 40 thematic,
+35 relational, and 35 comparative, with easy, medium, and hard labels.
+
+For each question, reciprocal rank is `1 / rank` for the first expected movie in
+the top K results, or `0` when none is present. MRR@K is the mean of those scores.
+Recall@K measures what fraction of all expected movies appeared in the top K,
+which is important for multi-movie thematic and relational questions.
+Per-question CSV output plus category and difficulty summaries are written under
+`eval/results/`.
+
+MRR is an evaluation metric. It is separate from Reciprocal Rank Fusion (RRF),
+which combines the dense and sparse rankings inside the production hybrid
+retriever.
+
+### End-to-end Ragas evaluation
+
 Run with the API live on port 8000:
 
 ```bash

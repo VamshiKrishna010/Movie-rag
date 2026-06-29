@@ -1,184 +1,1734 @@
 {
-  "version": "1.0",
-  "description": "Movie-RAG evaluation dataset. 25 hand-written Q/A pairs across 4 categories. ground_truth_movies = movies that SHOULD appear in retrieved context (used for context precision sanity checks).",
+  "version": "2.0",
+  "description": "Movie-RAG evaluation dataset. 150 reviewed Q/A pairs across four categories and three difficulty levels. ground_truth_movies contains the exact movie titles considered relevant for retrieval metrics.",
   "items": [
     {
       "id": "fact_01",
       "category": "factual",
       "question": "Who directed Inception?",
       "ground_truth_answer": "Christopher Nolan directed Inception.",
-      "ground_truth_movies": ["Inception"]
+      "ground_truth_movies": [
+        "Inception"
+      ],
+      "difficulty": "easy"
     },
     {
       "id": "fact_02",
       "category": "factual",
       "question": "What year was Pulp Fiction released?",
       "ground_truth_answer": "Pulp Fiction was released in 1994.",
-      "ground_truth_movies": ["Pulp Fiction"]
+      "ground_truth_movies": [
+        "Pulp Fiction"
+      ],
+      "difficulty": "easy"
     },
     {
       "id": "fact_03",
       "category": "factual",
       "question": "Who played Tyler Durden in Fight Club?",
       "ground_truth_answer": "Brad Pitt played Tyler Durden in Fight Club.",
-      "ground_truth_movies": ["Fight Club"]
+      "ground_truth_movies": [
+        "Fight Club"
+      ],
+      "difficulty": "easy"
     },
     {
       "id": "fact_04",
       "category": "factual",
       "question": "Who directed Parasite?",
       "ground_truth_answer": "Bong Joon-ho directed Parasite.",
-      "ground_truth_movies": ["Parasite"]
+      "ground_truth_movies": [
+        "Parasite"
+      ],
+      "difficulty": "easy"
     },
     {
       "id": "fact_05",
       "category": "factual",
       "question": "Who plays Cobb in Inception?",
       "ground_truth_answer": "Leonardo DiCaprio plays Cobb in Inception.",
-      "ground_truth_movies": ["Inception"]
+      "ground_truth_movies": [
+        "Inception"
+      ],
+      "difficulty": "easy"
     },
     {
       "id": "fact_06",
       "category": "factual",
       "question": "Who directed Blade Runner 2049?",
       "ground_truth_answer": "Denis Villeneuve directed Blade Runner 2049.",
-      "ground_truth_movies": ["Blade Runner 2049"]
+      "ground_truth_movies": [
+        "Blade Runner 2049"
+      ],
+      "difficulty": "easy"
     },
-
     {
       "id": "them_01",
       "category": "thematic",
       "question": "Movies about dreams within dreams",
       "ground_truth_answer": "Inception is the canonical film about dreams within dreams, where characters enter nested layers of shared dreaming.",
-      "ground_truth_movies": ["Inception"]
+      "ground_truth_movies": [
+        "Inception"
+      ],
+      "difficulty": "medium"
     },
     {
       "id": "them_02",
       "category": "thematic",
       "question": "Films about isolation and survival in space",
       "ground_truth_answer": "The Martian, Gravity, Interstellar, and 2001: A Space Odyssey all explore human isolation and survival in space.",
-      "ground_truth_movies": ["The Martian", "Gravity", "Interstellar", "2001: A Space Odyssey"]
+      "ground_truth_movies": [
+        "The Martian",
+        "Gravity",
+        "Interstellar",
+        "2001: A Space Odyssey"
+      ],
+      "difficulty": "medium"
     },
     {
       "id": "them_03",
       "category": "thematic",
       "question": "Movies that explore memory loss and fractured identity",
       "ground_truth_answer": "Memento, Eternal Sunshine of the Spotless Mind, and Total Recall all center on memory loss and the way it disrupts personal identity.",
-      "ground_truth_movies": ["Memento", "Eternal Sunshine of the Spotless Mind", "Total Recall"]
+      "ground_truth_movies": [
+        "Memento",
+        "Eternal Sunshine of the Spotless Mind",
+        "Total Recall"
+      ],
+      "difficulty": "medium"
     },
     {
       "id": "them_04",
       "category": "thematic",
       "question": "Movies about class struggle and economic inequality",
       "ground_truth_answer": "Parasite, Snowpiercer, and Joker each use the divide between rich and poor as a central engine of their conflict.",
-      "ground_truth_movies": ["Parasite", "Snowpiercer", "Joker"]
+      "ground_truth_movies": [
+        "Parasite",
+        "Snowpiercer",
+        "Joker"
+      ],
+      "difficulty": "medium"
     },
     {
       "id": "them_05",
       "category": "thematic",
       "question": "Crime films told in non-linear chronological order",
       "ground_truth_answer": "Pulp Fiction, Memento, and Reservoir Dogs all deliberately fracture chronological order to reframe their crime narratives.",
-      "ground_truth_movies": ["Pulp Fiction", "Memento", "Reservoir Dogs"]
+      "ground_truth_movies": [
+        "Pulp Fiction",
+        "Memento",
+        "Reservoir Dogs"
+      ],
+      "difficulty": "medium"
     },
     {
       "id": "them_06",
       "category": "thematic",
       "question": "Movies about artificial intelligence developing consciousness",
       "ground_truth_answer": "Ex Machina, Her, Blade Runner 2049, and The Matrix all grapple with AI that becomes — or appears to become — conscious.",
-      "ground_truth_movies": ["Ex Machina", "Her", "Blade Runner 2049", "The Matrix"]
+      "ground_truth_movies": [
+        "Ex Machina",
+        "Her",
+        "Blade Runner 2049",
+        "The Matrix"
+      ],
+      "difficulty": "hard"
     },
     {
       "id": "them_07",
       "category": "thematic",
       "question": "Heist movies with elaborate multi-step plans",
       "ground_truth_answer": "Ocean's Eleven, Inception, and Heat all feature carefully choreographed, multi-step heists as their narrative spine.",
-      "ground_truth_movies": ["Ocean's Eleven", "Inception", "Heat"]
+      "ground_truth_movies": [
+        "Ocean's Eleven",
+        "Inception",
+        "Heat"
+      ],
+      "difficulty": "medium"
     },
-
     {
       "id": "rel_01",
       "category": "relational",
       "question": "What other films has the director of Inception made?",
       "ground_truth_answer": "Christopher Nolan also directed The Dark Knight, Interstellar, The Prestige, Memento, Dunkirk, and Tenet, among others.",
-      "ground_truth_movies": ["Inception", "The Dark Knight", "Interstellar", "The Prestige", "Memento", "Dunkirk", "Tenet"]
+      "ground_truth_movies": [
+        "Inception",
+        "The Dark Knight",
+        "Interstellar",
+        "The Prestige",
+        "Memento",
+        "Dunkirk",
+        "Tenet"
+      ],
+      "difficulty": "hard"
     },
     {
       "id": "rel_02",
       "category": "relational",
       "question": "Which movies feature both Leonardo DiCaprio and Tom Hardy?",
       "ground_truth_answer": "Leonardo DiCaprio and Tom Hardy appeared together in Inception and The Revenant.",
-      "ground_truth_movies": ["Inception", "The Revenant"]
+      "ground_truth_movies": [
+        "Inception",
+        "The Revenant"
+      ],
+      "difficulty": "hard"
     },
     {
       "id": "rel_03",
       "category": "relational",
       "question": "Other films by Denis Villeneuve besides Dune",
       "ground_truth_answer": "Beyond Dune, Denis Villeneuve directed Arrival, Blade Runner 2049, Sicario, and Prisoners.",
-      "ground_truth_movies": ["Dune", "Arrival", "Blade Runner 2049", "Sicario", "Prisoners"]
+      "ground_truth_movies": [
+        "Dune",
+        "Arrival",
+        "Blade Runner 2049",
+        "Sicario",
+        "Prisoners"
+      ],
+      "difficulty": "hard"
     },
     {
       "id": "rel_04",
       "category": "relational",
       "question": "Films where Brad Pitt worked with director David Fincher",
       "ground_truth_answer": "Brad Pitt and David Fincher collaborated on Se7en, Fight Club, and The Curious Case of Benjamin Button.",
-      "ground_truth_movies": ["Se7en", "Fight Club", "The Curious Case of Benjamin Button"]
+      "ground_truth_movies": [
+        "Se7en",
+        "Fight Club",
+        "The Curious Case of Benjamin Button"
+      ],
+      "difficulty": "hard"
     },
     {
       "id": "rel_05",
       "category": "relational",
       "question": "Other crime films directed by Martin Scorsese",
       "ground_truth_answer": "Martin Scorsese directed Goodfellas, The Departed, Casino, and The Irishman, among other crime films.",
-      "ground_truth_movies": ["Goodfellas", "The Departed", "Casino", "The Irishman"]
+      "ground_truth_movies": [
+        "Goodfellas",
+        "The Departed",
+        "Casino",
+        "The Irishman"
+      ],
+      "difficulty": "hard"
     },
     {
       "id": "rel_06",
       "category": "relational",
       "question": "Movies that star both Robert De Niro and Al Pacino",
       "ground_truth_answer": "Robert De Niro and Al Pacino share the screen in Heat and The Irishman (and technically appear in The Godfather Part II, though not in the same scenes).",
-      "ground_truth_movies": ["Heat", "The Irishman", "The Godfather Part II"]
+      "ground_truth_movies": [
+        "Heat",
+        "The Irishman",
+        "The Godfather Part II"
+      ],
+      "difficulty": "hard"
     },
-
     {
       "id": "comp_01",
       "category": "comparative",
       "question": "How do Christopher Nolan's films differ in style from Denis Villeneuve's?",
       "ground_truth_answer": "Both make cerebral sci-fi, but Nolan tends toward intricately structured time-puzzle narratives (Inception, Tenet, Memento) while Villeneuve favors slower, more atmospheric, dread-laden compositions (Arrival, Blade Runner 2049, Sicario).",
-      "ground_truth_movies": ["Inception", "Interstellar", "Tenet", "Arrival", "Blade Runner 2049", "Sicario"]
+      "ground_truth_movies": [
+        "Inception",
+        "Interstellar",
+        "Tenet",
+        "Arrival",
+        "Blade Runner 2049",
+        "Sicario"
+      ],
+      "difficulty": "hard"
     },
     {
       "id": "comp_02",
       "category": "comparative",
       "question": "Compare the depiction of war in Saving Private Ryan and Dunkirk",
       "ground_truth_answer": "Saving Private Ryan depicts war through visceral, sustained combat focused on a small unit's mission, while Dunkirk uses a minimalist, near-dialogue-free, tri-timeline structure to convey the tension of evacuation rather than combat itself.",
-      "ground_truth_movies": ["Saving Private Ryan", "Dunkirk"]
+      "ground_truth_movies": [
+        "Saving Private Ryan",
+        "Dunkirk"
+      ],
+      "difficulty": "hard"
     },
     {
       "id": "comp_03",
       "category": "comparative",
       "question": "What do Parasite and Snowpiercer share thematically?",
       "ground_truth_answer": "Both are Bong Joon-ho films that use spatial verticality (a house's basement, a train's compartments) as a literal metaphor for class hierarchy and the violence of economic inequality.",
-      "ground_truth_movies": ["Parasite", "Snowpiercer"]
+      "ground_truth_movies": [
+        "Parasite",
+        "Snowpiercer"
+      ],
+      "difficulty": "hard"
     },
     {
       "id": "comp_04",
       "category": "comparative",
       "question": "What stylistic elements do Quentin Tarantino and the Coen Brothers share?",
       "ground_truth_answer": "Both are known for dialogue-driven scripts, sudden eruptions of violence punctuating dark humor, ensemble casts of eccentric characters, and genre pastiche — though Tarantino leans into homage and stylization while the Coens lean into regional Americana and dry absurdism.",
-      "ground_truth_movies": ["Pulp Fiction", "Reservoir Dogs", "Inglourious Basterds", "No Country for Old Men", "Fargo", "The Big Lebowski"]
+      "ground_truth_movies": [
+        "Pulp Fiction",
+        "Reservoir Dogs",
+        "Inglourious Basterds",
+        "No Country for Old Men",
+        "Fargo",
+        "The Big Lebowski"
+      ],
+      "difficulty": "hard"
     },
     {
       "id": "comp_05",
       "category": "comparative",
       "question": "How is Blade Runner 2049 connected to the original Blade Runner?",
       "ground_truth_answer": "Blade Runner 2049 is a direct sequel set decades after the original, with Denis Villeneuve replacing Ridley Scott as director. Both films are noir-inflected sci-fi exploring what separates humans from replicants, with 2049 expanding the universe and continuing Deckard's story.",
-      "ground_truth_movies": ["Blade Runner", "Blade Runner 2049"]
+      "ground_truth_movies": [
+        "Blade Runner",
+        "Blade Runner 2049"
+      ],
+      "difficulty": "hard"
     },
     {
       "id": "comp_06",
       "category": "comparative",
       "question": "Compare The Dark Knight and Joker as films about the Joker character",
       "ground_truth_answer": "The Dark Knight features the Joker as a chaos-agent antagonist in a crime epic centered on Batman, while Joker (2019) is a standalone character study of mental illness and societal neglect producing the same figure — different genres (crime thriller vs. psychological drama), different leads (Ledger vs. Phoenix), no shared continuity.",
-      "ground_truth_movies": ["The Dark Knight", "Joker"]
+      "ground_truth_movies": [
+        "The Dark Knight",
+        "Joker"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "fact_07",
+      "category": "factual",
+      "difficulty": "easy",
+      "question": "Who directed The Matrix?",
+      "ground_truth_answer": "Lana Wachowski and Lilly Wachowski directed The Matrix.",
+      "ground_truth_movies": [
+        "The Matrix"
+      ]
+    },
+    {
+      "id": "fact_08",
+      "category": "factual",
+      "difficulty": "easy",
+      "question": "Who directed The Godfather?",
+      "ground_truth_answer": "Francis Ford Coppola directed The Godfather.",
+      "ground_truth_movies": [
+        "The Godfather"
+      ]
+    },
+    {
+      "id": "fact_09",
+      "category": "factual",
+      "difficulty": "easy",
+      "question": "What year was The Shawshank Redemption released?",
+      "ground_truth_answer": "The Shawshank Redemption was released in 1994.",
+      "ground_truth_movies": [
+        "The Shawshank Redemption"
+      ]
+    },
+    {
+      "id": "fact_10",
+      "category": "factual",
+      "difficulty": "easy",
+      "question": "Who directed Spirited Away?",
+      "ground_truth_answer": "Hayao Miyazaki directed Spirited Away.",
+      "ground_truth_movies": [
+        "Spirited Away"
+      ]
+    },
+    {
+      "id": "fact_11",
+      "category": "factual",
+      "difficulty": "easy",
+      "question": "Who played the Joker in The Dark Knight?",
+      "ground_truth_answer": "Heath Ledger played the Joker in The Dark Knight.",
+      "ground_truth_movies": [
+        "The Dark Knight"
+      ]
+    },
+    {
+      "id": "fact_12",
+      "category": "factual",
+      "difficulty": "easy",
+      "question": "What year was Titanic released?",
+      "ground_truth_answer": "Titanic was released in 1997.",
+      "ground_truth_movies": [
+        "Titanic"
+      ]
+    },
+    {
+      "id": "fact_13",
+      "category": "factual",
+      "difficulty": "easy",
+      "question": "Who directed Alien?",
+      "ground_truth_answer": "Ridley Scott directed Alien.",
+      "ground_truth_movies": [
+        "Alien"
+      ]
+    },
+    {
+      "id": "fact_14",
+      "category": "factual",
+      "difficulty": "easy",
+      "question": "Who directed The Shining?",
+      "ground_truth_answer": "Stanley Kubrick directed The Shining.",
+      "ground_truth_movies": [
+        "The Shining"
+      ]
+    },
+    {
+      "id": "fact_15",
+      "category": "factual",
+      "difficulty": "easy",
+      "question": "Who directed GoodFellas?",
+      "ground_truth_answer": "Martin Scorsese directed GoodFellas.",
+      "ground_truth_movies": [
+        "GoodFellas"
+      ]
+    },
+    {
+      "id": "fact_16",
+      "category": "factual",
+      "difficulty": "easy",
+      "question": "Who played Maximus in Gladiator?",
+      "ground_truth_answer": "Russell Crowe played Maximus in Gladiator.",
+      "ground_truth_movies": [
+        "Gladiator"
+      ]
+    },
+    {
+      "id": "fact_17",
+      "category": "factual",
+      "difficulty": "easy",
+      "question": "Who directed The Silence of the Lambs?",
+      "ground_truth_answer": "Jonathan Demme directed The Silence of the Lambs.",
+      "ground_truth_movies": [
+        "The Silence of the Lambs"
+      ]
+    },
+    {
+      "id": "fact_18",
+      "category": "factual",
+      "difficulty": "easy",
+      "question": "What year was Back to the Future released?",
+      "ground_truth_answer": "Back to the Future was released in 1985.",
+      "ground_truth_movies": [
+        "Back to the Future"
+      ]
+    },
+    {
+      "id": "fact_19",
+      "category": "factual",
+      "difficulty": "easy",
+      "question": "Who directed The Lord of the Rings: The Return of the King?",
+      "ground_truth_answer": "Peter Jackson directed The Lord of the Rings: The Return of the King.",
+      "ground_truth_movies": [
+        "The Lord of the Rings: The Return of the King"
+      ]
+    },
+    {
+      "id": "fact_20",
+      "category": "factual",
+      "difficulty": "easy",
+      "question": "Who directed Schindler's List?",
+      "ground_truth_answer": "Steven Spielberg directed Schindler's List.",
+      "ground_truth_movies": [
+        "Schindler's List"
+      ]
+    },
+    {
+      "id": "fact_21",
+      "category": "factual",
+      "difficulty": "easy",
+      "question": "Who directed Django Unchained?",
+      "ground_truth_answer": "Quentin Tarantino directed Django Unchained.",
+      "ground_truth_movies": [
+        "Django Unchained"
+      ]
+    },
+    {
+      "id": "fact_22",
+      "category": "factual",
+      "difficulty": "easy",
+      "question": "Who directed Whiplash?",
+      "ground_truth_answer": "Damien Chazelle directed Whiplash.",
+      "ground_truth_movies": [
+        "Whiplash"
+      ]
+    },
+    {
+      "id": "fact_23",
+      "category": "factual",
+      "difficulty": "easy",
+      "question": "Who directed Coco?",
+      "ground_truth_answer": "Lee Unkrich directed Coco.",
+      "ground_truth_movies": [
+        "Coco"
+      ]
+    },
+    {
+      "id": "fact_24",
+      "category": "factual",
+      "difficulty": "easy",
+      "question": "Who directed Oldboy?",
+      "ground_truth_answer": "Park Chan-wook directed Oldboy.",
+      "ground_truth_movies": [
+        "Oldboy"
+      ]
+    },
+    {
+      "id": "fact_25",
+      "category": "factual",
+      "difficulty": "easy",
+      "question": "Who directed Princess Mononoke?",
+      "ground_truth_answer": "Hayao Miyazaki directed Princess Mononoke.",
+      "ground_truth_movies": [
+        "Princess Mononoke"
+      ]
+    },
+    {
+      "id": "fact_26",
+      "category": "factual",
+      "difficulty": "easy",
+      "question": "Who directed Saving Private Ryan?",
+      "ground_truth_answer": "Steven Spielberg directed Saving Private Ryan.",
+      "ground_truth_movies": [
+        "Saving Private Ryan"
+      ]
+    },
+    {
+      "id": "fact_27",
+      "category": "factual",
+      "difficulty": "easy",
+      "question": "Who directed Taxi Driver?",
+      "ground_truth_answer": "Martin Scorsese directed Taxi Driver.",
+      "ground_truth_movies": [
+        "Taxi Driver"
+      ]
+    },
+    {
+      "id": "fact_28",
+      "category": "factual",
+      "difficulty": "easy",
+      "question": "Who directed The Social Network?",
+      "ground_truth_answer": "David Fincher directed The Social Network.",
+      "ground_truth_movies": [
+        "The Social Network"
+      ]
+    },
+    {
+      "id": "fact_29",
+      "category": "factual",
+      "difficulty": "easy",
+      "question": "Who directed Mad Max: Fury Road?",
+      "ground_truth_answer": "George Miller directed Mad Max: Fury Road.",
+      "ground_truth_movies": [
+        "Mad Max: Fury Road"
+      ]
+    },
+    {
+      "id": "fact_30",
+      "category": "factual",
+      "difficulty": "easy",
+      "question": "Who directed Get Out?",
+      "ground_truth_answer": "Jordan Peele directed Get Out.",
+      "ground_truth_movies": [
+        "Get Out"
+      ]
+    },
+    {
+      "id": "fact_31",
+      "category": "factual",
+      "difficulty": "easy",
+      "question": "Who directed Moonlight?",
+      "ground_truth_answer": "Barry Jenkins directed Moonlight.",
+      "ground_truth_movies": [
+        "Moonlight"
+      ]
+    },
+    {
+      "id": "fact_32",
+      "category": "factual",
+      "difficulty": "easy",
+      "question": "Who directed La La Land?",
+      "ground_truth_answer": "Damien Chazelle directed La La Land.",
+      "ground_truth_movies": [
+        "La La Land"
+      ]
+    },
+    {
+      "id": "fact_33",
+      "category": "factual",
+      "difficulty": "easy",
+      "question": "Who directed The Grand Budapest Hotel?",
+      "ground_truth_answer": "Wes Anderson directed The Grand Budapest Hotel.",
+      "ground_truth_movies": [
+        "The Grand Budapest Hotel"
+      ]
+    },
+    {
+      "id": "fact_34",
+      "category": "factual",
+      "difficulty": "medium",
+      "question": "Who directed Everything Everywhere All at Once?",
+      "ground_truth_answer": "Daniel Kwan and Daniel Scheinert directed Everything Everywhere All at Once.",
+      "ground_truth_movies": [
+        "Everything Everywhere All at Once"
+      ]
+    },
+    {
+      "id": "fact_35",
+      "category": "factual",
+      "difficulty": "easy",
+      "question": "Who directed The Departed?",
+      "ground_truth_answer": "Martin Scorsese directed The Departed.",
+      "ground_truth_movies": [
+        "The Departed"
+      ]
+    },
+    {
+      "id": "fact_36",
+      "category": "factual",
+      "difficulty": "medium",
+      "question": "Who directed No Country for Old Men?",
+      "ground_truth_answer": "Joel Coen and Ethan Coen directed No Country for Old Men.",
+      "ground_truth_movies": [
+        "No Country for Old Men"
+      ]
+    },
+    {
+      "id": "fact_37",
+      "category": "factual",
+      "difficulty": "easy",
+      "question": "Who directed Arrival?",
+      "ground_truth_answer": "Denis Villeneuve directed Arrival.",
+      "ground_truth_movies": [
+        "Arrival"
+      ]
+    },
+    {
+      "id": "fact_38",
+      "category": "factual",
+      "difficulty": "easy",
+      "question": "Who directed Her?",
+      "ground_truth_answer": "Spike Jonze directed Her.",
+      "ground_truth_movies": [
+        "Her"
+      ]
+    },
+    {
+      "id": "fact_39",
+      "category": "factual",
+      "difficulty": "easy",
+      "question": "Who directed Ex Machina?",
+      "ground_truth_answer": "Alex Garland directed Ex Machina.",
+      "ground_truth_movies": [
+        "Ex Machina"
+      ]
+    },
+    {
+      "id": "fact_40",
+      "category": "factual",
+      "difficulty": "easy",
+      "question": "Who directed Eternal Sunshine of the Spotless Mind?",
+      "ground_truth_answer": "Michel Gondry directed Eternal Sunshine of the Spotless Mind.",
+      "ground_truth_movies": [
+        "Eternal Sunshine of the Spotless Mind"
+      ]
+    },
+    {
+      "id": "them_08",
+      "category": "thematic",
+      "difficulty": "medium",
+      "question": "Movies where time travel creates dangerous consequences",
+      "ground_truth_answer": "Twelve Monkeys, Looper, and Predestination use time travel to create paradoxes and dangerous consequences.",
+      "ground_truth_movies": [
+        "Twelve Monkeys",
+        "Looper",
+        "Predestination"
+      ]
+    },
+    {
+      "id": "them_09",
+      "category": "thematic",
+      "difficulty": "medium",
+      "question": "Films about discovering that reality is artificial or controlled",
+      "ground_truth_answer": "The Matrix, The Truman Show, and eXistenZ center on protagonists discovering that their reality is constructed or controlled.",
+      "ground_truth_movies": [
+        "The Matrix",
+        "The Truman Show",
+        "eXistenZ"
+      ]
+    },
+    {
+      "id": "them_10",
+      "category": "thematic",
+      "difficulty": "medium",
+      "question": "Dystopian movies about government surveillance and control",
+      "ground_truth_answer": "Nineteen Eighty-Four, Brazil, Minority Report, and V for Vendetta depict authoritarian surveillance and social control.",
+      "ground_truth_movies": [
+        "Nineteen Eighty-Four",
+        "Brazil",
+        "Minority Report",
+        "V for Vendetta"
+      ]
+    },
+    {
+      "id": "them_11",
+      "category": "thematic",
+      "difficulty": "medium",
+      "question": "Movies about surviving environmental collapse",
+      "ground_truth_answer": "Snowpiercer, The Day After Tomorrow, WALL·E, and Interstellar portray societies confronting environmental catastrophe.",
+      "ground_truth_movies": [
+        "Snowpiercer",
+        "The Day After Tomorrow",
+        "WALL·E",
+        "Interstellar"
+      ]
+    },
+    {
+      "id": "them_12",
+      "category": "thematic",
+      "difficulty": "medium",
+      "question": "Films about robots learning empathy or humanity",
+      "ground_truth_answer": "WALL·E, A.I. Artificial Intelligence, The Iron Giant, and Bicentennial Man explore machines developing empathy or human qualities.",
+      "ground_truth_movies": [
+        "WALL·E",
+        "A.I. Artificial Intelligence",
+        "The Iron Giant",
+        "Bicentennial Man"
+      ]
+    },
+    {
+      "id": "them_13",
+      "category": "thematic",
+      "difficulty": "medium",
+      "question": "Movies centered on grief after losing a family member",
+      "ground_truth_answer": "Manchester by the Sea, Three Billboards Outside Ebbing, Missouri, Ordinary People, and Rabbit Hole examine family grief and guilt.",
+      "ground_truth_movies": [
+        "Manchester by the Sea",
+        "Three Billboards Outside Ebbing, Missouri",
+        "Ordinary People",
+        "Rabbit Hole"
+      ]
+    },
+    {
+      "id": "them_14",
+      "category": "thematic",
+      "difficulty": "medium",
+      "question": "Films about artists driven toward self-destruction by perfectionism",
+      "ground_truth_answer": "Whiplash, Black Swan, and Amadeus portray artistic ambition becoming obsession and self-destruction.",
+      "ground_truth_movies": [
+        "Whiplash",
+        "Black Swan",
+        "Amadeus"
+      ]
+    },
+    {
+      "id": "them_15",
+      "category": "thematic",
+      "difficulty": "hard",
+      "question": "Thrillers with unreliable narrators and fractured perception",
+      "ground_truth_answer": "Fight Club, Shutter Island, Memento, and The Usual Suspects use unreliable narration to destabilize the audience's understanding.",
+      "ground_truth_movies": [
+        "Fight Club",
+        "Shutter Island",
+        "Memento",
+        "The Usual Suspects"
+      ]
+    },
+    {
+      "id": "them_16",
+      "category": "thematic",
+      "difficulty": "medium",
+      "question": "Westerns that question simple ideas of heroes and villains",
+      "ground_truth_answer": "Unforgiven, No Country for Old Men, and True Grit present morally ambiguous violence rather than uncomplicated heroism.",
+      "ground_truth_movies": [
+        "Unforgiven",
+        "No Country for Old Men",
+        "True Grit"
+      ]
+    },
+    {
+      "id": "them_17",
+      "category": "thematic",
+      "difficulty": "medium",
+      "question": "Movies about strangers becoming a found family",
+      "ground_truth_answer": "Guardians of the Galaxy, Little Miss Sunshine, and Hunt for the Wilderpeople follow mismatched people who form chosen families.",
+      "ground_truth_movies": [
+        "Guardians of the Galaxy",
+        "Little Miss Sunshine",
+        "Hunt for the Wilderpeople"
+      ]
+    },
+    {
+      "id": "them_18",
+      "category": "thematic",
+      "difficulty": "medium",
+      "question": "Coming-of-age films about identity and belonging",
+      "ground_truth_answer": "Lady Bird, Boyhood, Moonlight, and Stand by Me examine young people forming identities and finding belonging.",
+      "ground_truth_movies": [
+        "Lady Bird",
+        "Boyhood",
+        "Moonlight",
+        "Stand by Me"
+      ]
+    },
+    {
+      "id": "them_19",
+      "category": "thematic",
+      "difficulty": "medium",
+      "question": "Movies about journalists exposing powerful institutions",
+      "ground_truth_answer": "Spotlight, All the President's Men, and The Post dramatize journalists investigating institutional wrongdoing.",
+      "ground_truth_movies": [
+        "Spotlight",
+        "All the President's Men",
+        "The Post"
+      ]
+    },
+    {
+      "id": "them_20",
+      "category": "thematic",
+      "difficulty": "medium",
+      "question": "Courtroom dramas about doubt and the meaning of justice",
+      "ground_truth_answer": "12 Angry Men, A Few Good Men, and Anatomy of a Fall use legal proceedings to question truth and justice.",
+      "ground_truth_movies": [
+        "12 Angry Men",
+        "A Few Good Men",
+        "Anatomy of a Fall"
+      ]
+    },
+    {
+      "id": "them_21",
+      "category": "thematic",
+      "difficulty": "medium",
+      "question": "Prison films about preserving hope and dignity",
+      "ground_truth_answer": "The Shawshank Redemption, The Green Mile, and Escape from Alcatraz focus on prisoners preserving dignity under confinement.",
+      "ground_truth_movies": [
+        "The Shawshank Redemption",
+        "The Green Mile",
+        "Escape from Alcatraz"
+      ]
+    },
+    {
+      "id": "them_22",
+      "category": "thematic",
+      "difficulty": "hard",
+      "question": "Movies portraying addiction and psychological decline",
+      "ground_truth_answer": "Requiem for a Dream, Trainspotting, and Leaving Las Vegas depict addiction's destructive physical and emotional consequences.",
+      "ground_truth_movies": [
+        "Requiem for a Dream",
+        "Trainspotting",
+        "Leaving Las Vegas"
+      ]
+    },
+    {
+      "id": "them_23",
+      "category": "thematic",
+      "difficulty": "medium",
+      "question": "Films about loneliness in a crowded city",
+      "ground_truth_answer": "Taxi Driver, Lost in Translation, and Her portray isolation despite dense urban surroundings.",
+      "ground_truth_movies": [
+        "Taxi Driver",
+        "Lost in Translation",
+        "Her"
+      ]
+    },
+    {
+      "id": "them_24",
+      "category": "thematic",
+      "difficulty": "medium",
+      "question": "Revenge movies where vengeance consumes the protagonist",
+      "ground_truth_answer": "Oldboy, Kill Bill: Vol. 1, Gladiator, and John Wick center on protagonists whose lives become defined by revenge.",
+      "ground_truth_movies": [
+        "Oldboy",
+        "Kill Bill: Vol. 1",
+        "Gladiator",
+        "John Wick"
+      ]
+    },
+    {
+      "id": "them_25",
+      "category": "thematic",
+      "difficulty": "hard",
+      "question": "Psychological films about doubles and divided identity",
+      "ground_truth_answer": "Enemy, Black Swan, and The Prestige use doubles or mirrored identities to explore obsession and fractured selves.",
+      "ground_truth_movies": [
+        "Enemy",
+        "Black Swan",
+        "The Prestige"
+      ]
+    },
+    {
+      "id": "them_26",
+      "category": "thematic",
+      "difficulty": "medium",
+      "question": "Science-fiction films about humanity's first contact with aliens",
+      "ground_truth_answer": "Arrival, Contact, and Close Encounters of the Third Kind focus on communication during first contact.",
+      "ground_truth_movies": [
+        "Arrival",
+        "Contact",
+        "Close Encounters of the Third Kind"
+      ]
+    },
+    {
+      "id": "them_27",
+      "category": "thematic",
+      "difficulty": "medium",
+      "question": "Movies about immigrant families balancing two cultures",
+      "ground_truth_answer": "Minari, The Farewell, and Everything Everywhere All at Once explore immigrant families negotiating cultural identity.",
+      "ground_truth_movies": [
+        "Minari",
+        "The Farewell",
+        "Everything Everywhere All at Once"
+      ]
+    },
+    {
+      "id": "them_28",
+      "category": "thematic",
+      "difficulty": "medium",
+      "question": "Films about musicians sacrificing stability for their craft",
+      "ground_truth_answer": "Whiplash, La La Land, and Sound of Metal examine the personal cost of musical ambition.",
+      "ground_truth_movies": [
+        "Whiplash",
+        "La La Land",
+        "Sound of Metal"
+      ]
+    },
+    {
+      "id": "them_29",
+      "category": "thematic",
+      "difficulty": "medium",
+      "question": "Lighthearted heist films built around an ensemble plan",
+      "ground_truth_answer": "Ocean's Eleven, Logan Lucky, and The Italian Job combine elaborate ensemble robberies with humor.",
+      "ground_truth_movies": [
+        "Ocean's Eleven",
+        "Logan Lucky",
+        "The Italian Job"
+      ]
+    },
+    {
+      "id": "them_30",
+      "category": "thematic",
+      "difficulty": "hard",
+      "question": "Horror films where grief takes a supernatural form",
+      "ground_truth_answer": "Hereditary, The Babadook, and Midsommar transform bereavement and family trauma into horror.",
+      "ground_truth_movies": [
+        "Hereditary",
+        "The Babadook",
+        "Midsommar"
+      ]
+    },
+    {
+      "id": "them_31",
+      "category": "thematic",
+      "difficulty": "medium",
+      "question": "Movies about greed and corruption in high finance",
+      "ground_truth_answer": "The Wolf of Wall Street, The Big Short, and Margin Call examine greed and systemic corruption in finance.",
+      "ground_truth_movies": [
+        "The Wolf of Wall Street",
+        "The Big Short",
+        "Margin Call"
+      ]
+    },
+    {
+      "id": "them_32",
+      "category": "thematic",
+      "difficulty": "hard",
+      "question": "Films about media manipulation and manufactured narratives",
+      "ground_truth_answer": "Network, The Truman Show, and Nightcrawler critique media systems that manipulate reality for audiences.",
+      "ground_truth_movies": [
+        "Network",
+        "The Truman Show",
+        "Nightcrawler"
+      ]
+    },
+    {
+      "id": "them_33",
+      "category": "thematic",
+      "difficulty": "hard",
+      "question": "War films focused on soldiers' lasting psychological trauma",
+      "ground_truth_answer": "Apocalypse Now, The Deer Hunter, and Full Metal Jacket emphasize war's psychological damage.",
+      "ground_truth_movies": [
+        "Apocalypse Now",
+        "The Deer Hunter",
+        "Full Metal Jacket"
+      ]
+    },
+    {
+      "id": "them_34",
+      "category": "thematic",
+      "difficulty": "medium",
+      "question": "Road movies where an unlikely friendship develops",
+      "ground_truth_answer": "Green Book, Thelma & Louise, and Rain Man use travel to develop transformative relationships.",
+      "ground_truth_movies": [
+        "Green Book",
+        "Thelma & Louise",
+        "Rain Man"
+      ]
+    },
+    {
+      "id": "them_35",
+      "category": "thematic",
+      "difficulty": "hard",
+      "question": "Science-fiction films about artificial romantic companions",
+      "ground_truth_answer": "Her, Blade Runner 2049, and Ex Machina explore intimacy between humans and artificial beings.",
+      "ground_truth_movies": [
+        "Her",
+        "Blade Runner 2049",
+        "Ex Machina"
+      ]
+    },
+    {
+      "id": "them_36",
+      "category": "thematic",
+      "difficulty": "medium",
+      "question": "Survival films about isolation in the wilderness",
+      "ground_truth_answer": "The Revenant, Into the Wild, and Cast Away center on individuals enduring isolation and hostile environments.",
+      "ground_truth_movies": [
+        "The Revenant",
+        "Into the Wild",
+        "Cast Away"
+      ]
+    },
+    {
+      "id": "them_37",
+      "category": "thematic",
+      "difficulty": "medium",
+      "question": "Movies where characters travel through multiple universes",
+      "ground_truth_answer": "Everything Everywhere All at Once, Spider-Man: No Way Home, and Doctor Strange in the Multiverse of Madness use multiverse travel.",
+      "ground_truth_movies": [
+        "Everything Everywhere All at Once",
+        "Spider-Man: No Way Home",
+        "Doctor Strange in the Multiverse of Madness"
+      ]
+    },
+    {
+      "id": "them_38",
+      "category": "thematic",
+      "difficulty": "medium",
+      "question": "Movies where cooking becomes a form of creativity or identity",
+      "ground_truth_answer": "Ratatouille, Chef, and The Menu use food and cooking to explore creativity, work, and identity.",
+      "ground_truth_movies": [
+        "Ratatouille",
+        "Chef",
+        "The Menu"
+      ]
+    },
+    {
+      "id": "them_39",
+      "category": "thematic",
+      "difficulty": "hard",
+      "question": "Films where dreams blur the boundary with reality",
+      "ground_truth_answer": "Inception, Mulholland Drive, and Paprika create uncertainty between dreams and waking reality.",
+      "ground_truth_movies": [
+        "Inception",
+        "Mulholland Drive",
+        "Paprika"
+      ]
+    },
+    {
+      "id": "them_40",
+      "category": "thematic",
+      "difficulty": "hard",
+      "question": "Movies about ordinary people resisting authoritarian systems",
+      "ground_truth_answer": "V for Vendetta, Brazil, and Nineteen Eighty-Four portray individuals resisting oppressive state control.",
+      "ground_truth_movies": [
+        "V for Vendetta",
+        "Brazil",
+        "Nineteen Eighty-Four"
+      ]
+    },
+    {
+      "id": "rel_07",
+      "category": "relational",
+      "difficulty": "hard",
+      "question": "Which films pair director Steven Spielberg with actor Tom Hanks?",
+      "ground_truth_answer": "Steven Spielberg directed Tom Hanks in Saving Private Ryan, Catch Me If You Can, The Terminal, and Bridge of Spies.",
+      "ground_truth_movies": [
+        "Saving Private Ryan",
+        "Catch Me If You Can",
+        "The Terminal",
+        "Bridge of Spies"
+      ]
+    },
+    {
+      "id": "rel_08",
+      "category": "relational",
+      "difficulty": "hard",
+      "question": "Which Martin Scorsese films star Leonardo DiCaprio?",
+      "ground_truth_answer": "Their collaborations include Gangs of New York, The Aviator, The Departed, Shutter Island, and The Wolf of Wall Street.",
+      "ground_truth_movies": [
+        "Gangs of New York",
+        "The Aviator",
+        "The Departed",
+        "Shutter Island",
+        "The Wolf of Wall Street"
+      ]
+    },
+    {
+      "id": "rel_09",
+      "category": "relational",
+      "difficulty": "hard",
+      "question": "Which Quentin Tarantino films feature Samuel L. Jackson?",
+      "ground_truth_answer": "Samuel L. Jackson appears in Pulp Fiction, Jackie Brown, Kill Bill: Vol. 2, Django Unchained, and The Hateful Eight.",
+      "ground_truth_movies": [
+        "Pulp Fiction",
+        "Jackie Brown",
+        "Kill Bill: Vol. 2",
+        "Django Unchained",
+        "The Hateful Eight"
+      ]
+    },
+    {
+      "id": "rel_10",
+      "category": "relational",
+      "difficulty": "hard",
+      "question": "Which Christopher Nolan films star Christian Bale?",
+      "ground_truth_answer": "Christian Bale stars in Batman Begins, The Prestige, The Dark Knight, and The Dark Knight Rises.",
+      "ground_truth_movies": [
+        "Batman Begins",
+        "The Prestige",
+        "The Dark Knight",
+        "The Dark Knight Rises"
+      ]
+    },
+    {
+      "id": "rel_11",
+      "category": "relational",
+      "difficulty": "medium",
+      "question": "Which Denis Villeneuve films star Jake Gyllenhaal?",
+      "ground_truth_answer": "Jake Gyllenhaal stars in Villeneuve's Prisoners and Enemy.",
+      "ground_truth_movies": [
+        "Prisoners",
+        "Enemy"
+      ]
+    },
+    {
+      "id": "rel_12",
+      "category": "relational",
+      "difficulty": "hard",
+      "question": "Which David Fincher films feature Rooney Mara?",
+      "ground_truth_answer": "Rooney Mara appears in The Social Network and stars in The Girl with the Dragon Tattoo.",
+      "ground_truth_movies": [
+        "The Social Network",
+        "The Girl with the Dragon Tattoo"
+      ]
+    },
+    {
+      "id": "rel_13",
+      "category": "relational",
+      "difficulty": "hard",
+      "question": "Which Wes Anderson films feature Bill Murray?",
+      "ground_truth_answer": "Bill Murray appears in Rushmore, The Royal Tenenbaums, The Life Aquatic with Steve Zissou, Moonrise Kingdom, The Grand Budapest Hotel, and Isle of Dogs.",
+      "ground_truth_movies": [
+        "Rushmore",
+        "The Royal Tenenbaums",
+        "The Life Aquatic with Steve Zissou",
+        "Moonrise Kingdom",
+        "The Grand Budapest Hotel",
+        "Isle of Dogs"
+      ]
+    },
+    {
+      "id": "rel_14",
+      "category": "relational",
+      "difficulty": "medium",
+      "question": "Which Godfather films were directed by Francis Ford Coppola and star Al Pacino?",
+      "ground_truth_answer": "The Godfather, The Godfather Part II, and The Godfather Part III were directed by Coppola and star Al Pacino.",
+      "ground_truth_movies": [
+        "The Godfather",
+        "The Godfather Part II",
+        "The Godfather Part III"
+      ]
+    },
+    {
+      "id": "rel_15",
+      "category": "relational",
+      "difficulty": "hard",
+      "question": "Which Steven Spielberg films star Harrison Ford as Indiana Jones?",
+      "ground_truth_answer": "They include Raiders of the Lost Ark, Indiana Jones and the Temple of Doom, Indiana Jones and the Last Crusade, and Indiana Jones and the Kingdom of the Crystal Skull.",
+      "ground_truth_movies": [
+        "Raiders of the Lost Ark",
+        "Indiana Jones and the Temple of Doom",
+        "Indiana Jones and the Last Crusade",
+        "Indiana Jones and the Kingdom of the Crystal Skull"
+      ]
+    },
+    {
+      "id": "rel_16",
+      "category": "relational",
+      "difficulty": "hard",
+      "question": "Which Ridley Scott films star Russell Crowe?",
+      "ground_truth_answer": "Their collaborations include Gladiator, A Good Year, American Gangster, and Robin Hood.",
+      "ground_truth_movies": [
+        "Gladiator",
+        "A Good Year",
+        "American Gangster",
+        "Robin Hood"
+      ]
+    },
+    {
+      "id": "rel_17",
+      "category": "relational",
+      "difficulty": "hard",
+      "question": "Which Coen brothers films feature Frances McDormand?",
+      "ground_truth_answer": "Frances McDormand appears in Blood Simple, Fargo, The Man Who Wasn't There, Burn After Reading, and Hail, Caesar!",
+      "ground_truth_movies": [
+        "Blood Simple",
+        "Fargo",
+        "The Man Who Wasn't There",
+        "Burn After Reading",
+        "Hail, Caesar!"
+      ]
+    },
+    {
+      "id": "rel_18",
+      "category": "relational",
+      "difficulty": "medium",
+      "question": "Which Paul Thomas Anderson films star Daniel Day-Lewis?",
+      "ground_truth_answer": "Daniel Day-Lewis stars in There Will Be Blood and Phantom Thread.",
+      "ground_truth_movies": [
+        "There Will Be Blood",
+        "Phantom Thread"
+      ]
+    },
+    {
+      "id": "rel_19",
+      "category": "relational",
+      "difficulty": "hard",
+      "question": "Which Tim Burton films star Johnny Depp?",
+      "ground_truth_answer": "Their collaborations include Edward Scissorhands, Ed Wood, Sleepy Hollow, Charlie and the Chocolate Factory, Sweeney Todd, Alice in Wonderland, and Dark Shadows.",
+      "ground_truth_movies": [
+        "Edward Scissorhands",
+        "Ed Wood",
+        "Sleepy Hollow",
+        "Charlie and the Chocolate Factory",
+        "Sweeney Todd: The Demon Barber of Fleet Street",
+        "Alice in Wonderland",
+        "Dark Shadows"
+      ]
+    },
+    {
+      "id": "rel_20",
+      "category": "relational",
+      "difficulty": "hard",
+      "question": "Which Martin Scorsese films star Robert De Niro?",
+      "ground_truth_answer": "Their collaborations include Mean Streets, Taxi Driver, Raging Bull, GoodFellas, Cape Fear, Casino, The Irishman, and Killers of the Flower Moon.",
+      "ground_truth_movies": [
+        "Mean Streets",
+        "Taxi Driver",
+        "Raging Bull",
+        "GoodFellas",
+        "Cape Fear",
+        "Casino",
+        "The Irishman",
+        "Killers of the Flower Moon"
+      ]
+    },
+    {
+      "id": "rel_21",
+      "category": "relational",
+      "difficulty": "medium",
+      "question": "Which Greta Gerwig films star Saoirse Ronan?",
+      "ground_truth_answer": "Saoirse Ronan stars in Gerwig's Lady Bird and Little Women.",
+      "ground_truth_movies": [
+        "Lady Bird",
+        "Little Women"
+      ]
+    },
+    {
+      "id": "rel_22",
+      "category": "relational",
+      "difficulty": "medium",
+      "question": "Which Damien Chazelle films star Ryan Gosling?",
+      "ground_truth_answer": "Ryan Gosling stars in La La Land and First Man.",
+      "ground_truth_movies": [
+        "La La Land",
+        "First Man"
+      ]
+    },
+    {
+      "id": "rel_23",
+      "category": "relational",
+      "difficulty": "hard",
+      "question": "Which Bong Joon Ho films star Song Kang-ho?",
+      "ground_truth_answer": "Song Kang-ho stars in Memories of Murder, The Host, Snowpiercer, and Parasite.",
+      "ground_truth_movies": [
+        "Memories of Murder",
+        "The Host",
+        "Snowpiercer",
+        "Parasite"
+      ]
+    },
+    {
+      "id": "rel_24",
+      "category": "relational",
+      "difficulty": "medium",
+      "question": "What major films were directed by Alfonso Cuarón?",
+      "ground_truth_answer": "Alfonso Cuarón directed Children of Men, Gravity, Roma, and Harry Potter and the Prisoner of Azkaban.",
+      "ground_truth_movies": [
+        "Children of Men",
+        "Gravity",
+        "Roma",
+        "Harry Potter and the Prisoner of Azkaban"
+      ]
+    },
+    {
+      "id": "rel_25",
+      "category": "relational",
+      "difficulty": "medium",
+      "question": "Which major films were directed by James Cameron?",
+      "ground_truth_answer": "James Cameron directed The Terminator, Aliens, Terminator 2, Titanic, and Avatar.",
+      "ground_truth_movies": [
+        "The Terminator",
+        "Aliens",
+        "Terminator 2: Judgment Day",
+        "Titanic",
+        "Avatar"
+      ]
+    },
+    {
+      "id": "rel_26",
+      "category": "relational",
+      "difficulty": "hard",
+      "question": "Which films star both Tom Hanks and Meg Ryan?",
+      "ground_truth_answer": "Tom Hanks and Meg Ryan co-star in Joe Versus the Volcano, Sleepless in Seattle, and You've Got Mail.",
+      "ground_truth_movies": [
+        "Joe Versus the Volcano",
+        "Sleepless in Seattle",
+        "You've Got Mail"
+      ]
+    },
+    {
+      "id": "rel_27",
+      "category": "relational",
+      "difficulty": "hard",
+      "question": "Which films star both Emma Stone and Ryan Gosling?",
+      "ground_truth_answer": "They co-star in Crazy, Stupid, Love., Gangster Squad, and La La Land.",
+      "ground_truth_movies": [
+        "Crazy, Stupid, Love.",
+        "Gangster Squad",
+        "La La Land"
+      ]
+    },
+    {
+      "id": "rel_28",
+      "category": "relational",
+      "difficulty": "hard",
+      "question": "Which films star both Robert De Niro and Joe Pesci?",
+      "ground_truth_answer": "They co-star in Raging Bull, GoodFellas, Casino, and The Irishman.",
+      "ground_truth_movies": [
+        "Raging Bull",
+        "GoodFellas",
+        "Casino",
+        "The Irishman"
+      ]
+    },
+    {
+      "id": "rel_29",
+      "category": "relational",
+      "difficulty": "hard",
+      "question": "Which films feature both Matt Damon and Ben Affleck?",
+      "ground_truth_answer": "They appear together in Good Will Hunting, Dogma, and The Last Duel.",
+      "ground_truth_movies": [
+        "Good Will Hunting",
+        "Dogma",
+        "The Last Duel"
+      ]
+    },
+    {
+      "id": "rel_30",
+      "category": "relational",
+      "difficulty": "medium",
+      "question": "Which films star both Kate Winslet and Leonardo DiCaprio?",
+      "ground_truth_answer": "They co-star in Titanic and Revolutionary Road.",
+      "ground_truth_movies": [
+        "Titanic",
+        "Revolutionary Road"
+      ]
+    },
+    {
+      "id": "rel_31",
+      "category": "relational",
+      "difficulty": "hard",
+      "question": "Which films feature both Christian Bale and Amy Adams?",
+      "ground_truth_answer": "They appear together in The Fighter, American Hustle, and Vice.",
+      "ground_truth_movies": [
+        "The Fighter",
+        "American Hustle",
+        "Vice"
+      ]
+    },
+    {
+      "id": "rel_32",
+      "category": "relational",
+      "difficulty": "hard",
+      "question": "Which films feature both George Clooney and Brad Pitt?",
+      "ground_truth_answer": "They co-star in Ocean's Eleven, Ocean's Twelve, Ocean's Thirteen, and Burn After Reading.",
+      "ground_truth_movies": [
+        "Ocean's Eleven",
+        "Ocean's Twelve",
+        "Ocean's Thirteen",
+        "Burn After Reading"
+      ]
+    },
+    {
+      "id": "rel_33",
+      "category": "relational",
+      "difficulty": "hard",
+      "question": "Which Quentin Tarantino films star Uma Thurman?",
+      "ground_truth_answer": "Uma Thurman stars in Pulp Fiction, Kill Bill: Vol. 1, and Kill Bill: Vol. 2.",
+      "ground_truth_movies": [
+        "Pulp Fiction",
+        "Kill Bill: Vol. 1",
+        "Kill Bill: Vol. 2"
+      ]
+    },
+    {
+      "id": "rel_34",
+      "category": "relational",
+      "difficulty": "hard",
+      "question": "Which Stanley Kubrick films focus on war or the military?",
+      "ground_truth_answer": "Paths of Glory, Full Metal Jacket, and Dr. Strangelove are major Kubrick films centered on war and military institutions.",
+      "ground_truth_movies": [
+        "Paths of Glory",
+        "Full Metal Jacket",
+        "Dr. Strangelove or: How I Learned to Stop Worrying and Love the Bomb"
+      ]
+    },
+    {
+      "id": "rel_35",
+      "category": "relational",
+      "difficulty": "hard",
+      "question": "Which films make up Park Chan-wook's Vengeance Trilogy?",
+      "ground_truth_answer": "The trilogy consists of Sympathy for Mr. Vengeance, Oldboy, and Lady Vengeance.",
+      "ground_truth_movies": [
+        "Sympathy for Mr. Vengeance",
+        "Oldboy",
+        "Lady Vengeance"
+      ]
+    },
+    {
+      "id": "comp_07",
+      "category": "comparative",
+      "difficulty": "hard",
+      "question": "Compare organized crime in The Godfather and GoodFellas",
+      "ground_truth_answer": "The Godfather presents crime as dynastic power and family obligation, while GoodFellas emphasizes volatile street-level ambition and betrayal.",
+      "ground_truth_movies": [
+        "The Godfather",
+        "GoodFellas"
+      ]
+    },
+    {
+      "id": "comp_08",
+      "category": "comparative",
+      "difficulty": "hard",
+      "question": "How do Alien and The Thing create horror from isolation?",
+      "ground_truth_answer": "Alien traps a crew with a hidden predator in space, while The Thing uses Antarctic confinement and uncertainty over who remains human.",
+      "ground_truth_movies": [
+        "Alien",
+        "The Thing"
+      ]
+    },
+    {
+      "id": "comp_09",
+      "category": "comparative",
+      "difficulty": "hard",
+      "question": "Compare the false realities in The Matrix and The Truman Show",
+      "ground_truth_answer": "The Matrix depicts a machine simulation hiding human enslavement, while The Truman Show presents one man's life as a manufactured television set.",
+      "ground_truth_movies": [
+        "The Matrix",
+        "The Truman Show"
+      ]
+    },
+    {
+      "id": "comp_10",
+      "category": "comparative",
+      "difficulty": "hard",
+      "question": "How are ambition and perfectionism portrayed in Whiplash and Black Swan?",
+      "ground_truth_answer": "Both link artistic excellence to bodily and psychological harm, with Whiplash focused on music and Black Swan on ballet.",
+      "ground_truth_movies": [
+        "Whiplash",
+        "Black Swan"
+      ]
+    },
+    {
+      "id": "comp_11",
+      "category": "comparative",
+      "difficulty": "hard",
+      "question": "Compare communication with aliens in Arrival and Contact",
+      "ground_truth_answer": "Arrival builds communication through linguistics and nonlinear time, while Contact uses scientific signals and a journey shaped by faith and evidence.",
+      "ground_truth_movies": [
+        "Arrival",
+        "Contact"
+      ]
+    },
+    {
+      "id": "comp_12",
+      "category": "comparative",
+      "difficulty": "hard",
+      "question": "How do Her and Ex Machina differ in their treatment of artificial intelligence?",
+      "ground_truth_answer": "Her treats AI intimacy as an evolving relationship, while Ex Machina frames it through captivity, manipulation, and a test of consciousness.",
+      "ground_truth_movies": [
+        "Her",
+        "Ex Machina"
+      ]
+    },
+    {
+      "id": "comp_13",
+      "category": "comparative",
+      "difficulty": "hard",
+      "question": "Compare the portrayal of war in Apocalypse Now and Full Metal Jacket",
+      "ground_truth_answer": "Apocalypse Now presents war as a surreal descent into madness, while Full Metal Jacket separates dehumanizing training from urban combat.",
+      "ground_truth_movies": [
+        "Apocalypse Now",
+        "Full Metal Jacket"
+      ]
+    },
+    {
+      "id": "comp_14",
+      "category": "comparative",
+      "difficulty": "hard",
+      "question": "How do 12 Angry Men and Anatomy of a Fall explore reasonable doubt?",
+      "ground_truth_answer": "12 Angry Men focuses on jurors challenging assumptions, while Anatomy of a Fall leaves truth unstable through conflicting testimony and interpretation.",
+      "ground_truth_movies": [
+        "12 Angry Men",
+        "Anatomy of a Fall"
+      ]
+    },
+    {
+      "id": "comp_15",
+      "category": "comparative",
+      "difficulty": "hard",
+      "question": "Compare nature and industrialization in Spirited Away and Princess Mononoke",
+      "ground_truth_answer": "Both criticize human greed, but Spirited Away uses a spirit bathhouse while Princess Mononoke stages an open conflict between industry and the forest.",
+      "ground_truth_movies": [
+        "Spirited Away",
+        "Princess Mononoke"
+      ]
+    },
+    {
+      "id": "comp_16",
+      "category": "comparative",
+      "difficulty": "hard",
+      "question": "Compare ambition in The Social Network and Steve Jobs",
+      "ground_truth_answer": "Both portray brilliant technology leaders whose drive produces innovation while damaging their closest relationships.",
+      "ground_truth_movies": [
+        "The Social Network",
+        "Steve Jobs"
+      ]
+    },
+    {
+      "id": "comp_17",
+      "category": "comparative",
+      "difficulty": "hard",
+      "question": "How do Moonlight and Boyhood portray growing up?",
+      "ground_truth_answer": "Moonlight uses three actors and focused chapters to examine identity, while Boyhood follows one actor continuously across twelve years.",
+      "ground_truth_movies": [
+        "Moonlight",
+        "Boyhood"
+      ]
+    },
+    {
+      "id": "comp_18",
+      "category": "comparative",
+      "difficulty": "hard",
+      "question": "Compare the social criticism in Get Out and Parasite",
+      "ground_truth_answer": "Get Out uses racial horror and liberal hypocrisy, while Parasite uses class conflict and spatial inequality; both turn social systems into suspense.",
+      "ground_truth_movies": [
+        "Get Out",
+        "Parasite"
+      ]
+    },
+    {
+      "id": "comp_19",
+      "category": "comparative",
+      "difficulty": "hard",
+      "question": "How do Blade Runner and The Matrix question what makes someone human?",
+      "ground_truth_answer": "Blade Runner blurs the boundary between humans and replicants, while The Matrix questions whether lived experience remains meaningful inside a simulation.",
+      "ground_truth_movies": [
+        "Blade Runner",
+        "The Matrix"
+      ]
+    },
+    {
+      "id": "comp_20",
+      "category": "comparative",
+      "difficulty": "hard",
+      "question": "Compare hope and injustice in The Shawshank Redemption and The Green Mile",
+      "ground_truth_answer": "Both use prison settings and compassionate inmates, but Shawshank centers on endurance and escape while The Green Mile adds supernatural tragedy.",
+      "ground_truth_movies": [
+        "The Shawshank Redemption",
+        "The Green Mile"
+      ]
+    },
+    {
+      "id": "comp_21",
+      "category": "comparative",
+      "difficulty": "hard",
+      "question": "How does artistic ambition differ in La La Land and Whiplash?",
+      "ground_truth_answer": "La La Land balances ambition against romance and compromise, while Whiplash portrays achievement through abusive discipline and obsession.",
+      "ground_truth_movies": [
+        "La La Land",
+        "Whiplash"
+      ]
+    },
+    {
+      "id": "comp_22",
+      "category": "comparative",
+      "difficulty": "hard",
+      "question": "Compare memory in Memento and Eternal Sunshine of the Spotless Mind",
+      "ground_truth_answer": "Memento treats memory loss as a mystery and tool of self-deception, while Eternal Sunshine explores deliberately erased romantic memories.",
+      "ground_truth_movies": [
+        "Memento",
+        "Eternal Sunshine of the Spotless Mind"
+      ]
+    },
+    {
+      "id": "comp_23",
+      "category": "comparative",
+      "difficulty": "hard",
+      "question": "Compare class hierarchy in Mad Max: Fury Road and Snowpiercer",
+      "ground_truth_answer": "Both visualize oppressive class systems through controlled resources, but Fury Road uses a desert convoy while Snowpiercer uses a vertically ordered train.",
+      "ground_truth_movies": [
+        "Mad Max: Fury Road",
+        "Snowpiercer"
+      ]
+    },
+    {
+      "id": "comp_24",
+      "category": "comparative",
+      "difficulty": "hard",
+      "question": "How do No Country for Old Men and Fargo portray crime?",
+      "ground_truth_answer": "Both use regional landscapes and dark humor, but No Country is fatalistic and austere while Fargo stresses ordinary decency amid absurd violence.",
+      "ground_truth_movies": [
+        "No Country for Old Men",
+        "Fargo"
+      ]
+    },
+    {
+      "id": "comp_25",
+      "category": "comparative",
+      "difficulty": "hard",
+      "question": "Compare wilderness survival in The Revenant and Cast Away",
+      "ground_truth_answer": "The Revenant emphasizes revenge and physical brutality in a hostile frontier, while Cast Away focuses on solitude, adaptation, and returning home.",
+      "ground_truth_movies": [
+        "The Revenant",
+        "Cast Away"
+      ]
+    },
+    {
+      "id": "comp_26",
+      "category": "comparative",
+      "difficulty": "hard",
+      "question": "Compare alienation in Joker and Taxi Driver",
+      "ground_truth_answer": "Both follow isolated unreliable men in decaying cities, with Joker transforming the pattern into a comic-book origin and public spectacle.",
+      "ground_truth_movies": [
+        "Joker",
+        "Taxi Driver"
+      ]
+    },
+    {
+      "id": "comp_27",
+      "category": "comparative",
+      "difficulty": "hard",
+      "question": "How do Dunkirk and 1917 structure wartime suspense?",
+      "ground_truth_answer": "Dunkirk intercuts three timelines across land, sea, and air, while 1917 simulates a continuous journey through enemy territory.",
+      "ground_truth_movies": [
+        "Dunkirk",
+        "1917"
+      ]
+    },
+    {
+      "id": "comp_28",
+      "category": "comparative",
+      "difficulty": "hard",
+      "question": "Compare Greta Gerwig's Lady Bird and Little Women",
+      "ground_truth_answer": "Both center ambitious young women and family bonds, but Lady Bird is a contemporary coming-of-age story while Little Women adapts a period novel.",
+      "ground_truth_movies": [
+        "Lady Bird",
+        "Little Women"
+      ]
+    },
+    {
+      "id": "comp_29",
+      "category": "comparative",
+      "difficulty": "hard",
+      "question": "How do The Irishman and GoodFellas differ in their view of gangster life?",
+      "ground_truth_answer": "GoodFellas captures the speed and seduction of criminal ascent, while The Irishman looks back on crime through age, regret, and isolation.",
+      "ground_truth_movies": [
+        "The Irishman",
+        "GoodFellas"
+      ]
+    },
+    {
+      "id": "comp_30",
+      "category": "comparative",
+      "difficulty": "hard",
+      "question": "Compare the desert epics Dune and Lawrence of Arabia",
+      "ground_truth_answer": "Both use immense desert landscapes and outsider messiah narratives, while Dune translates those ideas into science fiction and ecological prophecy.",
+      "ground_truth_movies": [
+        "Dune",
+        "Lawrence of Arabia"
+      ]
+    },
+    {
+      "id": "comp_31",
+      "category": "comparative",
+      "difficulty": "hard",
+      "question": "How do Inception and Paprika depict shared dream worlds?",
+      "ground_truth_answer": "Both enter layered collective dreams and blur reality, with Inception framing dreams as a heist and Paprika as fluid psychological transformation.",
+      "ground_truth_movies": [
+        "Inception",
+        "Paprika"
+      ]
+    },
+    {
+      "id": "comp_32",
+      "category": "comparative",
+      "difficulty": "hard",
+      "question": "Compare the horror and social themes of Us and Get Out",
+      "ground_truth_answer": "Get Out targets racial exploitation through intimate conspiracy, while Us uses doubles and an underground society to examine privilege and exclusion.",
+      "ground_truth_movies": [
+        "Us",
+        "Get Out"
+      ]
+    },
+    {
+      "id": "comp_33",
+      "category": "comparative",
+      "difficulty": "hard",
+      "question": "How do Ratatouille and Chef connect cooking with creativity?",
+      "ground_truth_answer": "Both portray cooking as personal expression and renewal, with Ratatouille using an outsider fairy tale and Chef emphasizing independence and family.",
+      "ground_truth_movies": [
+        "Ratatouille",
+        "Chef"
+      ]
+    },
+    {
+      "id": "comp_34",
+      "category": "comparative",
+      "difficulty": "hard",
+      "question": "Compare investigative journalism in Spotlight and All the President's Men",
+      "ground_truth_answer": "Both emphasize patient reporting and institutional resistance, covering the Catholic Church abuse scandal and Watergate respectively.",
+      "ground_truth_movies": [
+        "Spotlight",
+        "All the President's Men"
+      ]
+    },
+    {
+      "id": "comp_35",
+      "category": "comparative",
+      "difficulty": "hard",
+      "question": "How do WALL·E and Interstellar portray environmental collapse?",
+      "ground_truth_answer": "WALL·E uses animation and consumer satire to show an abandoned Earth, while Interstellar treats ecological failure as the impetus for space migration.",
+      "ground_truth_movies": [
+        "WALL·E",
+        "Interstellar"
+      ]
     }
   ]
 }
