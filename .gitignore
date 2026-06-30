@@ -7,3 +7,4 @@ __pycache__/
 .claude/CLAUDE.md
 
 .docs/architecture-explainer.md
+.eval/results/

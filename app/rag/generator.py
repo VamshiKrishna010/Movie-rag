@@ -23,11 +23,15 @@ Answering:
 
 # Module-level shared async client. The AsyncOpenAI client maintains an
 # HTTP connection pool internally; reusing one instance across requests avoids
-# re-establishing TCP/TLS on every call. Cerebras serves an OpenAI-compatible
-# API, so we just override base_url.
-_client = AsyncOpenAI(
-    api_key=settings.cerebras_api_key,
-    base_url="https://api.cerebras.ai/v1",
+# re-establishing TCP/TLS on every call. Groq serves an OpenAI-compatible API,
+# so we only need to override base_url.
+_client = (
+    AsyncOpenAI(
+        api_key=settings.groq_api_key,
+        base_url="https://api.groq.com/openai/v1",
+    )
+    if settings.groq_api_key
+    else None
 )
 
 
@@ -42,6 +46,9 @@ async def generate(
     chunks: List[RetrievedChunk],
     model: str | None = None,
 ) -> str:
+    if _client is None:
+        raise RuntimeError("GROQ_API_KEY must be configured for LLM generation")
+
     context = format_context(chunks)
 
     user_message = f"""Context (retrieved movies):
@@ -52,7 +59,7 @@ Question: {question}
 Answer:"""
 
     response = await _client.chat.completions.create(
-        model=model or settings.cerebras_model,
+        model=model or settings.groq_model,
         messages=[
             {"role": "system", "content": SYSTEM_PROMPT},
             {"role": "user", "content": user_message},
@@ -62,10 +69,10 @@ Answer:"""
     )
 
     if not response.choices:
-        raise RuntimeError("Cerebras chat completion returned no choices")
+        raise RuntimeError("Groq chat completion returned no choices")
 
     content = response.choices[0].message.content
     if content is None:
-        raise RuntimeError("Cerebras chat completion returned empty content")
+        raise RuntimeError("Groq chat completion returned empty content")
 
     return content

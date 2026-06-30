@@ -9,6 +9,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 if sys.platform == "win32":
     asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
+from app.ingest.chunker import CHUNK_TYPES
 from app.ingest.store import embed_and_store
 
 
@@ -25,10 +26,22 @@ def main() -> None:
         default=512,
         help="Movies per embed wave (lower if you run out of RAM)",
     )
+    parser.add_argument(
+        "--refresh-types",
+        nargs="+",
+        choices=CHUNK_TYPES,
+        default=[],
+        metavar="TYPE",
+        help="Delete and rebuild only these chunk types before embedding",
+    )
     args = parser.parse_args()
 
     asyncio.run(
-        embed_and_store(full_rebuild=args.full_rebuild, embed_batch=args.batch_size)
+        embed_and_store(
+            full_rebuild=args.full_rebuild,
+            refresh_types=tuple(args.refresh_types),
+            embed_batch=args.batch_size,
+        )
     )
 
 

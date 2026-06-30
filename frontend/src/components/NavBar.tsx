@@ -70,6 +70,12 @@ export function NavBar() {
                     Admin
                   </Link>
                 )}
+                <Link
+                  to="/chat"
+                  className="rounded-lg px-2 py-1 text-xs text-muted transition-colors hover:text-text"
+                >
+                  Chat
+                </Link>
                 <span className="hidden max-w-[8rem] truncate text-xs text-muted sm:inline">
                   {user.email}
                 </span>

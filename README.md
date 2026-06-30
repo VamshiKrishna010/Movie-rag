@@ -11,9 +11,9 @@ A movie recommendation and Q&A backend built with **FastAPI**, **PostgreSQL + pg
 | API | FastAPI (`app/main.py`) |
 | DB | PostgreSQL 16 with `pgvector`, `pg_trgm`, FTS (`docker-compose.yml` → `pgvector/pgvector:pg16`) |
 | Embeddings | `BAAI/bge-small-en-v1.5` (384-dim, via `sentence-transformers`) |
-| LLM | Cerebras API (OpenAI-compatible client in `app/rag/generator.py`) |
+| LLM | Groq API (OpenAI-compatible client in `app/rag/generator.py`) |
 | External data | TMDB REST API |
-| Config | Pydantic Settings from `.env` (`database_url`, `tmdb_api_key`, `cerebras_api_key`, etc.) |
+| Config | Pydantic Settings from `.env` (`database_url`, `tmdb_api_key`, `groq_api_key`, etc.) |
 
 ---
 
@@ -41,9 +41,8 @@ Create a `.env` file in the project root:
 ```env
 DATABASE_URL=postgresql://rag:rag@localhost:5432/movierag
 TMDB_API_KEY=your_tmdb_key
-CEREBRAS_API_KEY=your_cerebras_key
-CEREBRAS_MODEL=gpt-oss-120b
-GROQ_API_KEY=your_groq_key   # eval judge only
+GROQ_API_KEY=your_groq_key
+GROQ_MODEL=llama-3.3-70b-versatile
 JWT_SECRET_KEY=your-long-random-secret
 JWT_ACCESS_EXPIRE_MINUTES=15
 JWT_REFRESH_EXPIRE_DAYS=30
@@ -57,6 +56,7 @@ REFRESH_COOKIE_SAMESITE=lax
 ```bash
 python scripts/run_ingest.py    # fetch ~1000 movies from TMDB → Postgres
 python scripts/run_embed.py     # chunk + embed → chunks table
+python scripts/run_embed.py --refresh-types themes  # rebuild only heuristic theme chunks
 ```
 
 ### 4. Run the API
@@ -111,7 +111,7 @@ Defined in `sql/01_schema.sql` with follow-up migrations in `migrations/`.
 
 **RAG layer:**
 
-- `chunks` — one rich text chunk per movie (`chunk_type = 'full'`), `embedding vector(384)`, and an FTS column (`search_vector`)
+- `chunks` — multiple retrieval chunks per movie (`chunk_type = 'full'`, plot-focused `plot`, and heuristic `themes`), `embedding vector(384)`, and an FTS column (`search_vector`)
 
 Indexes support vector similarity, GIN full-text search, relational metadata lookups, and optional trigram fuzzy matching (`pg_trgm`) for title/name fields.
 
@@ -122,7 +122,7 @@ Indexes support vector similarity, GIN full-text search, relational metadata loo
 Three offline steps (`scripts/`):
 
 1. **`ingest/pipeline.py`** — Discovers popular movies from TMDB, fetches full details (credits + keywords), caches raw JSON under `data/raw/`, upserts into Postgres.
-2. **`ingest/chunker.py`** — Builds a single prose chunk per movie from title, cast, crew, genres, overview, keywords.
+2. **`ingest/chunker.py`** — Builds retrieval chunks from title, cast, crew, genres, overview, tagline, and keywords, including plot-focused and heuristic theme chunks for thematic search.
 3. **`ingest/store.py`** — Embeds all chunks with BGE and writes vectors to `chunks`.
 
 TMDB client (`ingest/tmdb_client.py`) uses retries, concurrency limits, and `append_to_response=credits,keywords`.
@@ -136,7 +136,7 @@ TMDB client (`ingest/tmdb_client.py`) uses retries, concurrency limits, and `app
 Flow:
 
 1. **Retrieve** top-k chunks via `app.rag.retriever.retrieve`
-2. **Generate** answer via `app.rag.generator.generate` (Cerebras, grounded on retrieved context only)
+2. **Generate** answer via `app.rag.generator.generate` (Groq, grounded on retrieved context only)
 
 Request body: `question`, `k` (1–20), optional `include_chunks`.
 
@@ -170,7 +170,7 @@ Also exposes `retrieve_dense()` as a baseline for eval.
 
 **`rag/sparse.py`** / **`rag/hybrid.py`** — Alternate Python-side sparse + RRF implementations (parallel code paths, not the primary `/query` path).
 
-**`rag/generator.py`** — Formats chunks into a numbered context block, calls Cerebras with a strict “answer only from context” system prompt.
+**`rag/generator.py`** — Formats chunks into a numbered context block, calls Groq with a strict “answer only from context” system prompt.
 
 ---
 
@@ -194,7 +194,7 @@ app/
 │   ├── retriever.py     # Production hybrid retrieval (SQL RRF)
 │   ├── sparse.py        # FTS retriever
 │   ├── hybrid.py        # Python-side hybrid fusion
-│   └── generator.py     # Cerebras answer generation
+│   └── generator.py     # Groq answer generation
 └── utils/
     └── tmdb.py          # TMDB image URL helpers
 
@@ -217,7 +217,13 @@ or an LLM judge:
 ```bash
 python -m eval.mrr --strategy hybrid --k 5
 python -m eval.mrr --strategy dense --k 5
+python -m eval.mrr --strategy sparse --k 5
+python -m eval.mrr --strategy routed --k 5 --workers 4
 ```
+
+MRR evaluation runs up to four retrievals concurrently by default. Set
+`--workers 1` for sequential execution or lower the worker count if GPU memory
+or database capacity is constrained.
 
 The evaluation dataset contains 150 reviewed questions: 40 factual, 40 thematic,
 35 relational, and 35 comparative, with easy, medium, and hard labels.
@@ -231,7 +237,8 @@ Per-question CSV output plus category and difficulty summaries are written under
 
 MRR is an evaluation metric. It is separate from Reciprocal Rank Fusion (RRF),
 which combines the dense and sparse rankings inside the production hybrid
-retriever.
+retriever. `sparse` is keyword/FTS-only and is useful for comparing the lexical
+side of hybrid retrieval against dense-only behavior.
 
 ### End-to-end Ragas evaluation
 
@@ -298,7 +305,7 @@ Admin API routes (all require admin):
 - `GET /admin/movies`, `GET /admin/movies/{id}`
 - `POST /admin/movies`, `PATCH /admin/movies/{id}`
 
-Manual movie edits do not re-embed automatically; run `python scripts/run_embed.py` after bulk text changes.
+Manual movie edits do not re-embed automatically; run `python scripts/run_embed.py` after bulk text changes. After changing only theme-chunk rules, run `python scripts/run_embed.py --refresh-types themes`.
 
 ### Token storage
 
@@ -337,7 +344,7 @@ Access tokens include `iss` (`movie-rag`) and `aud` (`movie-rag-api`) claims; bo
 ## Design Choices
 
 1. **Postgres as the single store** — relational movie metadata, vectors, and FTS all in one DB; no separate vector DB.
-2. **One chunk per movie** — simple indexing for semantic and keyword retrieval.
+2. **Multiple chunks per movie** — full, plot-focused, and heuristic theme chunks support semantic and keyword retrieval.
 3. **Hybrid retrieval** — dense semantic search and sparse keyword search are fused with RRF in SQL.
 4. **Grounded generation** — LLM is constrained to retrieved context; low temperature (0.3).
 5. **Incremental evolution** — `app/rag/` is the active retrieval stack for both `/query` and hybrid movie search.

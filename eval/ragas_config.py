@@ -1,9 +1,7 @@
 """
 Ragas configuration for the movie-RAG eval harness.
 
-  - Judge LLM: Cerebras's llama-3.3-70b via OpenAI-compatible endpoint.
-    (langchain-cerebras is stuck on old langchain-core, so we use the
-    OpenAI client pointed at Cerebras's URL — same wire protocol.)
+  - Judge LLM: Groq's llama-3.3-70b-versatile via OpenAI-compatible endpoint.
   - Embedder:  local bge-small-en-v1.5    (same model as the retriever)
 """
 
@@ -43,13 +41,13 @@ load_dotenv()
 
 # ---- Judge LLM ---------------------------------------------------------------
 
-_cerebras_llm = ChatOpenAI(
-    model="gpt-oss-120b",
-    api_key=os.environ["CEREBRAS_API_KEY"],
-    base_url="https://api.cerebras.ai/v1",
+_groq_llm = ChatOpenAI(
+    model=os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile"),
+    api_key=os.environ["GROQ_API_KEY"],
+    base_url="https://api.groq.com/openai/v1",
     temperature=0,
 )
-JUDGE_LLM = LangchainLLMWrapper(_cerebras_llm, bypass_n=True)
+JUDGE_LLM = LangchainLLMWrapper(_groq_llm, bypass_n=True)
 
 
 # ---- Judge embedder ----------------------------------------------------------

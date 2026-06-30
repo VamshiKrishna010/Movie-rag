@@ -1,7 +1,1630 @@
 {
   "version": "2.0",
-  "description": "Movie-RAG evaluation dataset. 150 reviewed Q/A pairs across four categories and three difficulty levels. ground_truth_movies contains the exact movie titles considered relevant for retrieval metrics.",
+  "description": "Movie-RAG evaluation dataset. 200 reviewed Q/A pairs across five categories and three difficulty levels. ground_truth_movies contains the exact movie titles considered relevant for retrieval metrics.",
   "items": [
+    {
+      "id": "ind_01",
+      "category": "indirect",
+      "question": "What films did Quentin Tarantino direct?",
+      "ground_truth_answer": "Quentin Tarantino directed Reservoir Dogs, Pulp Fiction, Jackie Brown, the Kill Bill films, Inglourious Basterds, Django Unchained, The Hateful Eight, and Once Upon a Time in Hollywood.",
+      "ground_truth_movies": [
+        "Reservoir Dogs",
+        "Pulp Fiction",
+        "Four Rooms",
+        "Jackie Brown",
+        "Kill Bill: Vol. 1",
+        "Kill Bill: Vol. 2",
+        "Death Proof",
+        "Inglourious Basterds",
+        "Kill Bill: The Whole Bloody Affair",
+        "Django Unchained",
+        "The Hateful Eight",
+        "Once Upon a Time... in Hollywood"
+      ],
+      "difficulty": "hard",
+      "_anchor": {
+        "person": "Quentin Tarantino",
+        "role": "director"
+      }
+    },
+    {
+      "id": "ind_02",
+      "category": "indirect",
+      "question": "List the feature films directed by Christopher Nolan.",
+      "ground_truth_answer": "Christopher Nolan directed Memento, Insomnia, Batman Begins, The Prestige, The Dark Knight, Inception, The Dark Knight Rises, Interstellar, Dunkirk, Tenet, and Oppenheimer.",
+      "ground_truth_movies": [
+        "Doodlebug",
+        "Following",
+        "Memento",
+        "Insomnia",
+        "Batman Begins",
+        "The Prestige",
+        "The Dark Knight",
+        "Inception",
+        "The Dark Knight Rises",
+        "Interstellar",
+        "Dunkirk",
+        "Tenet",
+        "Oppenheimer"
+      ],
+      "difficulty": "hard",
+      "_anchor": {
+        "person": "Christopher Nolan",
+        "role": "director"
+      }
+    },
+    {
+      "id": "ind_03",
+      "category": "indirect",
+      "question": "Which movies did Martin Scorsese direct?",
+      "ground_truth_answer": "Martin Scorsese directed Taxi Driver, Raging Bull, Goodfellas, Casino, Gangs of New York, The Aviator, The Departed, Shutter Island, The Wolf of Wall Street, and The Irishman, among others.",
+      "ground_truth_movies": [
+        "The Big Shave",
+        "Mean Streets",
+        "Alice Doesn't Live Here Anymore",
+        "Taxi Driver",
+        "New York, New York",
+        "Raging Bull",
+        "The King of Comedy",
+        "After Hours",
+        "The Color of Money",
+        "The Last Temptation of Christ",
+        "New York Stories",
+        "GoodFellas",
+        "Cape Fear",
+        "The Age of Innocence",
+        "Casino",
+        "Kundun",
+        "Bringing Out the Dead",
+        "Gangs of New York",
+        "The Aviator",
+        "The Departed",
+        "Shutter Island",
+        "Hugo",
+        "The Wolf of Wall Street",
+        "Silence",
+        "The Irishman",
+        "Killers of the Flower Moon"
+      ],
+      "difficulty": "hard",
+      "_anchor": {
+        "person": "Martin Scorsese",
+        "role": "director"
+      }
+    },
+    {
+      "id": "ind_04",
+      "category": "indirect",
+      "question": "What films has Steven Spielberg directed?",
+      "ground_truth_answer": "Steven Spielberg directed Jaws, E.T., the Indiana Jones films, Jurassic Park, Schindler's List, Saving Private Ryan, Minority Report, Catch Me If You Can, and Lincoln, among many others.",
+      "ground_truth_movies": [
+        "Duel",
+        "The Sugarland Express",
+        "Jaws",
+        "Close Encounters of the Third Kind",
+        "1941",
+        "Raiders of the Lost Ark",
+        "E.T. the Extra-Terrestrial",
+        "Poltergeist",
+        "Twilight Zone: The Movie",
+        "Indiana Jones and the Temple of Doom",
+        "The Color Purple",
+        "Empire of the Sun",
+        "Always",
+        "Indiana Jones and the Last Crusade",
+        "Hook",
+        "Jurassic Park",
+        "Schindler's List",
+        "Amistad",
+        "The Lost World: Jurassic Park",
+        "Saving Private Ryan",
+        "A.I. Artificial Intelligence",
+        "Catch Me If You Can",
+        "Minority Report",
+        "The Terminal",
+        "Munich",
+        "War of the Worlds",
+        "Indiana Jones and the Kingdom of the Crystal Skull",
+        "The Adventures of Tintin",
+        "War Horse",
+        "Lincoln",
+        "Bridge of Spies",
+        "The BFG",
+        "The Post",
+        "Ready Player One",
+        "West Side Story",
+        "The Fabelmans"
+      ],
+      "difficulty": "hard",
+      "_anchor": {
+        "person": "Steven Spielberg",
+        "role": "director"
+      }
+    },
+    {
+      "id": "ind_05",
+      "category": "indirect",
+      "question": "Which films did David Fincher direct?",
+      "ground_truth_answer": "David Fincher directed Se7en, Fight Club, Zodiac, The Social Network, The Girl with the Dragon Tattoo, Gone Girl, and Mank, among others.",
+      "ground_truth_movies": [
+        "Alien³",
+        "Se7en",
+        "The Game",
+        "Fight Club",
+        "Panic Room",
+        "Zodiac",
+        "The Curious Case of Benjamin Button",
+        "The Social Network",
+        "The Girl with the Dragon Tattoo",
+        "Gone Girl",
+        "Mank",
+        "The Killer"
+      ],
+      "difficulty": "hard",
+      "_anchor": {
+        "person": "David Fincher",
+        "role": "director"
+      }
+    },
+    {
+      "id": "ind_06",
+      "category": "indirect",
+      "question": "List the films directed by Denis Villeneuve.",
+      "ground_truth_answer": "Denis Villeneuve directed Incendies, Prisoners, Enemy, Sicario, Arrival, Blade Runner 2049, Dune, and Dune: Part Two.",
+      "ground_truth_movies": [
+        "Polytechnique",
+        "Incendies",
+        "Prisoners",
+        "Enemy",
+        "Sicario",
+        "Arrival",
+        "Blade Runner 2049",
+        "Dune",
+        "Dune: Part Two"
+      ],
+      "difficulty": "hard",
+      "_anchor": {
+        "person": "Denis Villeneuve",
+        "role": "director"
+      }
+    },
+    {
+      "id": "ind_07",
+      "category": "indirect",
+      "question": "What movies did Wes Anderson direct?",
+      "ground_truth_answer": "Wes Anderson directed Rushmore, The Royal Tenenbaums, The Life Aquatic, Fantastic Mr. Fox, Moonrise Kingdom, The Grand Budapest Hotel, and Isle of Dogs, among others.",
+      "ground_truth_movies": [
+        "Bottle Rocket",
+        "Rushmore",
+        "The Royal Tenenbaums",
+        "The Life Aquatic with Steve Zissou",
+        "Hotel Chevalier",
+        "The Darjeeling Limited",
+        "Fantastic Mr. Fox",
+        "Moonrise Kingdom",
+        "The Grand Budapest Hotel",
+        "Isle of Dogs",
+        "The French Dispatch of the Liberty, Kansas Evening Sun",
+        "Asteroid City",
+        "Poison",
+        "The Rat Catcher",
+        "The Swan",
+        "The Wonderful Story of Henry Sugar",
+        "The Phoenician Scheme"
+      ],
+      "difficulty": "hard",
+      "_anchor": {
+        "person": "Wes Anderson",
+        "role": "director"
+      }
+    },
+    {
+      "id": "ind_08",
+      "category": "indirect",
+      "question": "Which films did the Coen brothers direct?",
+      "ground_truth_answer": "Joel and Ethan Coen directed Fargo, The Big Lebowski, No Country for Old Men, True Grit, A Serious Man, Inside Llewyn Davis, and Burn After Reading, among others.",
+      "ground_truth_movies": [
+        "Blood Simple",
+        "Raising Arizona",
+        "Miller's Crossing",
+        "Barton Fink",
+        "The Hudsucker Proxy",
+        "Fargo",
+        "The Big Lebowski",
+        "O Brother, Where Art Thou?",
+        "The Man Who Wasn't There",
+        "Intolerable Cruelty",
+        "The Ladykillers",
+        "Paris Je T'aime",
+        "No Country for Old Men",
+        "Burn After Reading",
+        "A Serious Man",
+        "True Grit",
+        "Inside Llewyn Davis",
+        "Hail, Caesar!",
+        "The Ballad of Buster Scruggs",
+        "The Tragedy of Macbeth"
+      ],
+      "difficulty": "hard",
+      "_anchor": {
+        "person": "Joel Coen",
+        "role": "director"
+      }
+    },
+    {
+      "id": "ind_09",
+      "category": "indirect",
+      "question": "What films has Bong Joon-ho directed?",
+      "ground_truth_answer": "Bong Joon-ho directed Memories of Murder, The Host, Mother, Snowpiercer, Okja, and Parasite.",
+      "ground_truth_movies": [
+        "Memories of Murder",
+        "The Host",
+        "Mother",
+        "Snowpiercer",
+        "Okja",
+        "Parasite",
+        "Mickey 17"
+      ],
+      "difficulty": "hard",
+      "_anchor": {
+        "person": "Bong Joon-ho",
+        "role": "director"
+      }
+    },
+    {
+      "id": "ind_10",
+      "category": "indirect",
+      "question": "List the films directed by Paul Thomas Anderson.",
+      "ground_truth_answer": "Paul Thomas Anderson directed Boogie Nights, Magnolia, There Will Be Blood, The Master, Inherent Vice, Phantom Thread, and Licorice Pizza.",
+      "ground_truth_movies": [
+        "Boogie Nights",
+        "Hard Eight",
+        "Magnolia",
+        "Punch-Drunk Love",
+        "There Will Be Blood",
+        "The Master",
+        "Inherent Vice",
+        "Phantom Thread",
+        "Anima",
+        "Licorice Pizza",
+        "One Battle After Another"
+      ],
+      "difficulty": "hard",
+      "_anchor": {
+        "person": "Paul Thomas Anderson",
+        "role": "director"
+      }
+    },
+    {
+      "id": "ind_11",
+      "category": "indirect",
+      "question": "Which movies did Stanley Kubrick direct?",
+      "ground_truth_answer": "Stanley Kubrick directed Dr. Strangelove, 2001: A Space Odyssey, A Clockwork Orange, Barry Lyndon, The Shining, Full Metal Jacket, and Eyes Wide Shut.",
+      "ground_truth_movies": [
+        "Fear and Desire",
+        "Killer's Kiss",
+        "The Killing",
+        "Paths of Glory",
+        "Spartacus",
+        "Lolita",
+        "Dr. Strangelove or: How I Learned to Stop Worrying and Love the Bomb",
+        "2001: A Space Odyssey",
+        "A Clockwork Orange",
+        "Barry Lyndon",
+        "The Shining",
+        "Full Metal Jacket",
+        "Eyes Wide Shut"
+      ],
+      "difficulty": "hard",
+      "_anchor": {
+        "person": "Stanley Kubrick",
+        "role": "director"
+      }
+    },
+    {
+      "id": "ind_12",
+      "category": "indirect",
+      "question": "What films did Spike Lee direct?",
+      "ground_truth_answer": "Spike Lee directed Do the Right Thing, Malcolm X, 25th Hour, Inside Man, BlacKkKlansman, and Da 5 Bloods, among others.",
+      "ground_truth_movies": [
+        "She's Gotta Have It",
+        "Do the Right Thing",
+        "Malcolm X",
+        "Clockers",
+        "He Got Game",
+        "Summer of Sam",
+        "25th Hour",
+        "Inside Man",
+        "Miracle at St. Anna",
+        "Oldboy",
+        "BlacKkKlansman",
+        "Da 5 Bloods",
+        "Highest 2 Lowest"
+      ],
+      "difficulty": "hard",
+      "_anchor": {
+        "person": "Spike Lee",
+        "role": "director"
+      }
+    },
+    {
+      "id": "ind_13",
+      "category": "indirect",
+      "question": "Which films has Ridley Scott directed?",
+      "ground_truth_answer": "Ridley Scott directed Alien, Blade Runner, Thelma & Louise, Gladiator, Black Hawk Down, American Gangster, Prometheus, and The Martian, among others.",
+      "ground_truth_movies": [
+        "The Duellists",
+        "Alien",
+        "Blade Runner",
+        "Legend",
+        "Black Rain",
+        "Thelma & Louise",
+        "1492: Conquest of Paradise",
+        "White Squall",
+        "G.I. Jane",
+        "Gladiator",
+        "Black Hawk Down",
+        "Hannibal",
+        "Matchstick Men",
+        "Kingdom of Heaven",
+        "A Good Year",
+        "American Gangster",
+        "Body of Lies",
+        "Robin Hood",
+        "Prometheus",
+        "The Counselor",
+        "Exodus: Gods and Kings",
+        "The Martian",
+        "Alien: Covenant",
+        "All the Money in the World",
+        "House of Gucci",
+        "The Last Duel",
+        "Napoleon",
+        "Gladiator II"
+      ],
+      "difficulty": "hard",
+      "_anchor": {
+        "person": "Ridley Scott",
+        "role": "director"
+      }
+    },
+    {
+      "id": "ind_14",
+      "category": "indirect",
+      "question": "What films did Damien Chazelle direct?",
+      "ground_truth_answer": "Damien Chazelle directed Whiplash, La La Land, First Man, and Babylon.",
+      "ground_truth_movies": [
+        "Whiplash",
+        "La La Land",
+        "First Man",
+        "Babylon"
+      ],
+      "difficulty": "medium",
+      "_anchor": {
+        "person": "Damien Chazelle",
+        "role": "director"
+      }
+    },
+    {
+      "id": "ind_15",
+      "category": "indirect",
+      "question": "Which movies did Guillermo del Toro direct?",
+      "ground_truth_answer": "Guillermo del Toro directed Pan's Labyrinth, Hellboy, Pacific Rim, Crimson Peak, The Shape of Water, Nightmare Alley, and Pinocchio.",
+      "ground_truth_movies": [
+        "Cronos",
+        "Mimic",
+        "The Devil's Backbone",
+        "Blade II",
+        "Hellboy",
+        "Pan's Labyrinth",
+        "Hellboy II: The Golden Army",
+        "Pacific Rim",
+        "Crimson Peak",
+        "The Shape of Water",
+        "Nightmare Alley",
+        "Guillermo del Toro's Pinocchio",
+        "Frankenstein"
+      ],
+      "difficulty": "hard",
+      "_anchor": {
+        "person": "Guillermo del Toro",
+        "role": "director"
+      }
+    },
+    {
+      "id": "ind_16",
+      "category": "indirect",
+      "question": "What movies has Tom Hanks starred in?",
+      "ground_truth_answer": "Tom Hanks starred in Big, Forrest Gump, Apollo 13, Saving Private Ryan, The Green Mile, Cast Away, Catch Me If You Can, and Captain Phillips, among others.",
+      "ground_truth_movies": [
+        "Bachelor Party",
+        "Splash",
+        "The Money Pit",
+        "Dragnet",
+        "Big",
+        "The 'Burbs",
+        "Turner & Hooch",
+        "Joe Versus the Volcano",
+        "The Bonfire of the Vanities",
+        "A League of Their Own",
+        "Philadelphia",
+        "Sleepless in Seattle",
+        "Forrest Gump",
+        "Apollo 13",
+        "Toy Story",
+        "That Thing You Do!",
+        "Saving Private Ryan",
+        "You've Got Mail",
+        "The Green Mile",
+        "Toy Story 2",
+        "Cast Away",
+        "Catch Me If You Can",
+        "Road to Perdition",
+        "The Ladykillers",
+        "The Polar Express",
+        "The Terminal",
+        "The Da Vinci Code",
+        "Charlie Wilson's War",
+        "Angels & Demons",
+        "Toy Story 3",
+        "Extremely Loud & Incredibly Close",
+        "Hawaiian Vacation",
+        "Larry Crowne",
+        "Small Fry",
+        "Cloud Atlas",
+        "Partysaurus Rex",
+        "Captain Phillips",
+        "Saving Mr. Banks",
+        "Toy Story of Terror!",
+        "Toy Story That Time Forgot",
+        "Bridge of Spies",
+        "A Hologram for the King",
+        "Inferno",
+        "Sully",
+        "The Circle",
+        "The Post",
+        "A Beautiful Day in the Neighborhood",
+        "Toy Story 4",
+        "Borat Subsequent Moviefilm: Delivery of Prodigious Bribe to American Regime for Make Benefit Once Glorious Nation of Kazakhstan",
+        "Greyhound",
+        "News of the World",
+        "Finch",
+        "A Man Called Otto",
+        "Elvis",
+        "Pinocchio",
+        "Asteroid City",
+        "Here",
+        "The Phoenician Scheme"
+      ],
+      "difficulty": "hard",
+      "_anchor": {
+        "person": "Tom Hanks",
+        "role": "actor"
+      }
+    },
+    {
+      "id": "ind_17",
+      "category": "indirect",
+      "question": "List the films starring Leonardo DiCaprio.",
+      "ground_truth_answer": "Leonardo DiCaprio starred in Titanic, Gangs of New York, The Aviator, The Departed, Shutter Island, Inception, The Wolf of Wall Street, The Revenant, and Once Upon a Time in Hollywood, among others.",
+      "ground_truth_movies": [
+        "Critters 3",
+        "Poison Ivy",
+        "This Boy's Life",
+        "What's Eating Gilbert Grape",
+        "The Basketball Diaries",
+        "The Quick and the Dead",
+        "Total Eclipse",
+        "Marvin's Room",
+        "Romeo + Juliet",
+        "Titanic",
+        "Celebrity",
+        "The Man in the Iron Mask",
+        "The Beach",
+        "Catch Me If You Can",
+        "Gangs of New York",
+        "The Aviator",
+        "Blood Diamond",
+        "The Departed",
+        "Body of Lies",
+        "Revolutionary Road",
+        "Inception",
+        "Shutter Island",
+        "J. Edgar",
+        "Django Unchained",
+        "The Great Gatsby",
+        "The Wolf of Wall Street",
+        "The Revenant",
+        "Before the Flood",
+        "Once Upon a Time... in Hollywood",
+        "Don't Look Up",
+        "Killers of the Flower Moon",
+        "One Battle After Another"
+      ],
+      "difficulty": "hard",
+      "_anchor": {
+        "person": "Leonardo DiCaprio",
+        "role": "actor"
+      }
+    },
+    {
+      "id": "ind_18",
+      "category": "indirect",
+      "question": "Which movies has Denzel Washington starred in?",
+      "ground_truth_answer": "Denzel Washington starred in Glory, Malcolm X, Training Day, American Gangster, Man on Fire, Flight, and Fences, among others.",
+      "ground_truth_movies": [
+        "Glory",
+        "Ricochet",
+        "Malcolm X",
+        "Much Ado About Nothing",
+        "Philadelphia",
+        "The Pelican Brief",
+        "Crimson Tide",
+        "Devil in a Blue Dress",
+        "Virtuosity",
+        "Courage Under Fire",
+        "Fallen",
+        "He Got Game",
+        "The Siege",
+        "The Bone Collector",
+        "The Hurricane",
+        "Remember the Titans",
+        "Training Day",
+        "Antwone Fisher",
+        "John Q",
+        "Out of Time",
+        "Man on Fire",
+        "The Manchurian Candidate",
+        "Déjà Vu",
+        "Inside Man",
+        "American Gangster",
+        "The Great Debaters",
+        "The Taking of Pelham 1 2 3",
+        "The Book of Eli",
+        "Unstoppable",
+        "Flight",
+        "Safe House",
+        "2 Guns",
+        "The Equalizer",
+        "Fences",
+        "The Magnificent Seven",
+        "Roman J. Israel, Esq.",
+        "The Equalizer 2",
+        "The Little Things",
+        "The Tragedy of Macbeth",
+        "The Equalizer 3",
+        "Gladiator II",
+        "Highest 2 Lowest"
+      ],
+      "difficulty": "hard",
+      "_anchor": {
+        "person": "Denzel Washington",
+        "role": "actor"
+      }
+    },
+    {
+      "id": "ind_19",
+      "category": "indirect",
+      "question": "What films has Meryl Streep appeared in?",
+      "ground_truth_answer": "Meryl Streep appeared in Kramer vs. Kramer, Sophie's Choice, The Devil Wears Prada, Doubt, Julie & Julia, and The Iron Lady, among many others.",
+      "ground_truth_movies": [
+        "The Deer Hunter",
+        "Kramer vs. Kramer",
+        "Manhattan",
+        "Sophie's Choice",
+        "Silkwood",
+        "Falling in Love",
+        "Out of Africa",
+        "She-Devil",
+        "Death Becomes Her",
+        "The House of the Spirits",
+        "The River Wild",
+        "The Bridges of Madison County",
+        "Marvin's Room",
+        "A.I. Artificial Intelligence",
+        "Adaptation.",
+        "The Hours",
+        "Lemony Snicket's A Series of Unfortunate Events",
+        "The Manchurian Candidate",
+        "Prime",
+        "The Ant Bully",
+        "The Devil Wears Prada",
+        "Lions for Lambs",
+        "Rendition",
+        "Doubt",
+        "Mamma Mia!",
+        "Fantastic Mr. Fox",
+        "It's Complicated",
+        "Julie & Julia",
+        "The Iron Lady",
+        "Hope Springs",
+        "August: Osage County",
+        "Into the Woods",
+        "The Giver",
+        "Ricki and the Flash",
+        "Suffragette",
+        "Florence Foster Jenkins",
+        "The Post",
+        "Mary Poppins Returns",
+        "The Laundromat",
+        "The Prom",
+        "Don't Look Up",
+        "The Devil Wears Prada 2"
+      ],
+      "difficulty": "hard",
+      "_anchor": {
+        "person": "Meryl Streep",
+        "role": "actor"
+      }
+    },
+    {
+      "id": "ind_20",
+      "category": "indirect",
+      "question": "List the films starring Tom Cruise.",
+      "ground_truth_answer": "Tom Cruise starred in Top Gun, Rain Man, A Few Good Men, Jerry Maguire, Magnolia, Minority Report, the Mission: Impossible films, Edge of Tomorrow, and Top Gun: Maverick.",
+      "ground_truth_movies": [
+        "Risky Business",
+        "The Outsiders",
+        "Legend",
+        "The Color of Money",
+        "Top Gun",
+        "Cocktail",
+        "Rain Man",
+        "Born on the Fourth of July",
+        "Days of Thunder",
+        "A Few Good Men",
+        "Far and Away",
+        "The Firm",
+        "Interview with the Vampire",
+        "Jerry Maguire",
+        "Mission: Impossible",
+        "Eyes Wide Shut",
+        "Magnolia",
+        "Mission: Impossible II",
+        "Vanilla Sky",
+        "Minority Report",
+        "The Last Samurai",
+        "Collateral",
+        "War of the Worlds",
+        "Mission: Impossible III",
+        "Lions for Lambs",
+        "Tropic Thunder",
+        "Valkyrie",
+        "Knight and Day",
+        "Mission: Impossible - Ghost Protocol",
+        "Jack Reacher",
+        "Rock of Ages",
+        "Oblivion",
+        "Edge of Tomorrow",
+        "Mission: Impossible - Rogue Nation",
+        "Jack Reacher: Never Go Back",
+        "American Made",
+        "The Mummy",
+        "Mission: Impossible - Fallout",
+        "Top Gun: Maverick",
+        "Mission: Impossible - Dead Reckoning Part One",
+        "Mission: Impossible - The Final Reckoning"
+      ],
+      "difficulty": "hard",
+      "_anchor": {
+        "person": "Tom Cruise",
+        "role": "actor"
+      }
+    },
+    {
+      "id": "ind_21",
+      "category": "indirect",
+      "question": "Which movies has Scarlett Johansson starred in?",
+      "ground_truth_answer": "Scarlett Johansson starred in Lost in Translation, Under the Skin, Her, Lucy, Jojo Rabbit, and Marriage Story, among others.",
+      "ground_truth_movies": [
+        "Just Cause",
+        "Home Alone 3",
+        "The Horse Whisperer",
+        "Ghost World",
+        "The Man Who Wasn't There",
+        "Eight Legged Freaks",
+        "Girl with a Pearl Earring",
+        "Lost in Translation",
+        "A Love Song for Bobby Long",
+        "In Good Company",
+        "The Perfect Score",
+        "The SpongeBob SquarePants Movie",
+        "Match Point",
+        "The Island",
+        "Scoop",
+        "The Black Dahlia",
+        "The Prestige",
+        "The Nanny Diaries",
+        "The Other Boleyn Girl",
+        "The Spirit",
+        "Vicky Cristina Barcelona",
+        "He's Just Not That Into You",
+        "Iron Man 2",
+        "We Bought a Zoo",
+        "Hitchcock",
+        "The Avengers",
+        "Don Jon",
+        "Her",
+        "Captain America: The Winter Soldier",
+        "Chef",
+        "Lucy",
+        "Under the Skin",
+        "Avengers: Age of Ultron",
+        "Captain America: Civil War",
+        "Hail, Caesar!",
+        "Sing",
+        "The Jungle Book",
+        "Ghost in the Shell",
+        "Rough Night",
+        "Avengers: Infinity War",
+        "Avengers: Endgame",
+        "Jojo Rabbit",
+        "Marriage Story",
+        "Black Widow",
+        "Sing 2",
+        "Asteroid City",
+        "Fly Me to the Moon",
+        "Transformers One",
+        "Jurassic World Rebirth"
+      ],
+      "difficulty": "hard",
+      "_anchor": {
+        "person": "Scarlett Johansson",
+        "role": "actor"
+      }
+    },
+    {
+      "id": "ind_22",
+      "category": "indirect",
+      "question": "What films has Joaquin Phoenix appeared in?",
+      "ground_truth_answer": "Joaquin Phoenix appeared in Gladiator, Walk the Line, The Master, Her, You Were Never Really Here, and Joker.",
+      "ground_truth_movies": [
+        "Parenthood",
+        "To Die For",
+        "U Turn",
+        "8MM",
+        "Gladiator",
+        "Quills",
+        "The Yards",
+        "Signs",
+        "Brother Bear",
+        "Hotel Rwanda",
+        "Ladder 49",
+        "The Village",
+        "Walk the Line",
+        "Reservation Road",
+        "We Own the Night",
+        "Two Lovers",
+        "I'm Still Here",
+        "The Master",
+        "Her",
+        "The Immigrant",
+        "Inherent Vice",
+        "Irrational Man",
+        "You Were Never Really Here",
+        "Don't Worry, He Won't Get Far on Foot",
+        "Mary Magdalene",
+        "The Sisters Brothers",
+        "Joker",
+        "C'mon C'mon",
+        "Beau Is Afraid",
+        "Napoleon",
+        "Joker: Folie à Deux",
+        "Eddington"
+      ],
+      "difficulty": "hard",
+      "_anchor": {
+        "person": "Joaquin Phoenix",
+        "role": "actor"
+      }
+    },
+    {
+      "id": "ind_23",
+      "category": "indirect",
+      "question": "List the films starring Cate Blanchett.",
+      "ground_truth_answer": "Cate Blanchett starred in Elizabeth, The Aviator, Blue Jasmine, Carol, and Tár, among others.",
+      "ground_truth_movies": [
+        "Elizabeth",
+        "Pushing Tin",
+        "The Talented Mr. Ripley",
+        "The Gift",
+        "Bandits",
+        "The Shipping News",
+        "The Missing",
+        "The Aviator",
+        "The Life Aquatic with Steve Zissou",
+        "Babel",
+        "Notes on a Scandal",
+        "Elizabeth: The Golden Age",
+        "I'm Not There",
+        "Indiana Jones and the Kingdom of the Crystal Skull",
+        "The Curious Case of Benjamin Button",
+        "Robin Hood",
+        "Hanna",
+        "Blue Jasmine",
+        "How to Train Your Dragon 2",
+        "The Monuments Men",
+        "Carol",
+        "Cinderella",
+        "Knight of Cups",
+        "Song to Song",
+        "Thor: Ragnarok",
+        "Mowgli: Legend of the Jungle",
+        "Ocean's Eight",
+        "The House with a Clock in Its Walls",
+        "How to Train Your Dragon: The Hidden World",
+        "Where'd You Go, Bernadette",
+        "Don't Look Up",
+        "Nightmare Alley",
+        "Guillermo del Toro's Pinocchio",
+        "TÁR",
+        "Borderlands",
+        "Black Bag"
+      ],
+      "difficulty": "hard",
+      "_anchor": {
+        "person": "Cate Blanchett",
+        "role": "actor"
+      }
+    },
+    {
+      "id": "ind_24",
+      "category": "indirect",
+      "question": "Which movies has Christian Bale starred in?",
+      "ground_truth_answer": "Christian Bale starred in American Psycho, The Machinist, the Dark Knight trilogy, The Fighter, American Hustle, The Big Short, and Ford v Ferrari, among others.",
+      "ground_truth_movies": [
+        "Empire of the Sun",
+        "Little Women",
+        "Pocahontas",
+        "Velvet Goldmine",
+        "A Midsummer Night's Dream",
+        "American Psycho",
+        "Shaft",
+        "Captain Corelli's Mandolin",
+        "Equilibrium",
+        "Reign of Fire",
+        "The Machinist",
+        "Batman Begins",
+        "Harsh Times",
+        "The New World",
+        "The Prestige",
+        "3:10 to Yuma",
+        "I'm Not There",
+        "Rescue Dawn",
+        "The Dark Knight",
+        "Public Enemies",
+        "Terminator Salvation",
+        "The Fighter",
+        "The Flowers of War",
+        "The Dark Knight Rises",
+        "American Hustle",
+        "Out of the Furnace",
+        "Exodus: Gods and Kings",
+        "Knight of Cups",
+        "The Big Short",
+        "The Promise",
+        "Hostiles",
+        "Mowgli: Legend of the Jungle",
+        "Vice",
+        "Ford v Ferrari",
+        "Amsterdam",
+        "The Pale Blue Eye",
+        "Thor: Love and Thunder",
+        "The Bride!"
+      ],
+      "difficulty": "hard",
+      "_anchor": {
+        "person": "Christian Bale",
+        "role": "actor"
+      }
+    },
+    {
+      "id": "ind_25",
+      "category": "indirect",
+      "question": "What films has Frances McDormand appeared in?",
+      "ground_truth_answer": "Frances McDormand appeared in Fargo, Burn After Reading, Three Billboards Outside Ebbing, Missouri, and Nomadland, among others.",
+      "ground_truth_movies": [
+        "Blood Simple",
+        "Raising Arizona",
+        "Mississippi Burning",
+        "Darkman",
+        "Short Cuts",
+        "Fargo",
+        "Primal Fear",
+        "Almost Famous",
+        "Wonder Boys",
+        "The Man Who Wasn't There",
+        "City by the Sea",
+        "Something's Gotta Give",
+        "Æon Flux",
+        "North Country",
+        "Friends with Money",
+        "Burn After Reading",
+        "Miss Pettigrew Lives for a Day",
+        "This Must Be the Place",
+        "Transformers: Dark of the Moon",
+        "Madagascar 3: Europe's Most Wanted",
+        "Moonrise Kingdom",
+        "Promised Land",
+        "The Good Dinosaur",
+        "Hail, Caesar!",
+        "Three Billboards Outside Ebbing, Missouri",
+        "Nomadland",
+        "The French Dispatch of the Liberty, Kansas Evening Sun",
+        "The Tragedy of Macbeth",
+        "Wolfs"
+      ],
+      "difficulty": "medium",
+      "_anchor": {
+        "person": "Frances McDormand",
+        "role": "actor"
+      }
+    },
+    {
+      "id": "ind_26",
+      "category": "indirect",
+      "question": "Which films feature both Robert De Niro and Al Pacino?",
+      "ground_truth_answer": "Robert De Niro and Al Pacino appeared together in Heat, Righteous Kill, and The Irishman (and both, without shared scenes, in The Godfather Part II).",
+      "ground_truth_movies": [
+        "The Godfather Part II",
+        "Heat",
+        "Righteous Kill",
+        "The Irishman"
+      ],
+      "difficulty": "hard",
+      "_anchor": {
+        "people": [
+          "Robert De Niro",
+          "Al Pacino"
+        ],
+        "role": "actor",
+        "intersection": true
+      }
+    },
+    {
+      "id": "ind_27",
+      "category": "indirect",
+      "question": "What movies star both Brad Pitt and George Clooney?",
+      "ground_truth_answer": "Brad Pitt and George Clooney appeared together in the Ocean's trilogy and Burn After Reading.",
+      "ground_truth_movies": [
+        "Ocean's Eleven",
+        "Ocean's Twelve",
+        "Ocean's Thirteen",
+        "Burn After Reading",
+        "Wolfs"
+      ],
+      "difficulty": "hard",
+      "_anchor": {
+        "people": [
+          "Brad Pitt",
+          "George Clooney"
+        ],
+        "role": "actor",
+        "intersection": true
+      }
+    },
+    {
+      "id": "ind_28",
+      "category": "indirect",
+      "question": "List the movies in this catalog that include both Matt Damon and Ben Affleck.",
+      "ground_truth_answer": "Matt Damon and Ben Affleck appeared together in Good Will Hunting, Dogma, and Jay and Silent Bob Strike Back.",
+      "ground_truth_movies": [
+        "School Ties",
+        "Chasing Amy",
+        "Good Will Hunting",
+        "Dogma",
+        "The Last Duel",
+        "Air",
+        "The Rip"
+      ],
+      "difficulty": "hard",
+      "_anchor": {
+        "people": [
+          "Matt Damon",
+          "Ben Affleck"
+        ],
+        "role": "actor",
+        "intersection": true
+      }
+    },
+    {
+      "id": "ind_29",
+      "category": "indirect",
+      "question": "What movies pair Emma Stone with Ryan Gosling?",
+      "ground_truth_answer": "Emma Stone and Ryan Gosling co-starred in Crazy, Stupid, Love., Gangster Squad, and La La Land.",
+      "ground_truth_movies": [
+        "Crazy, Stupid, Love.",
+        "Gangster Squad",
+        "La La Land"
+      ],
+      "difficulty": "medium",
+      "_anchor": {
+        "people": [
+          "Emma Stone",
+          "Ryan Gosling"
+        ],
+        "role": "actor",
+        "intersection": true
+      }
+    },
+    {
+      "id": "ind_30",
+      "category": "indirect",
+      "question": "Which films feature both Kate Winslet and Leonardo DiCaprio?",
+      "ground_truth_answer": "Kate Winslet and Leonardo DiCaprio starred together in Titanic and Revolutionary Road.",
+      "ground_truth_movies": [
+        "Titanic",
+        "Revolutionary Road"
+      ],
+      "difficulty": "medium",
+      "_anchor": {
+        "people": [
+          "Kate Winslet",
+          "Leonardo DiCaprio"
+        ],
+        "role": "actor",
+        "intersection": true
+      }
+    },
+    {
+      "id": "ind_31",
+      "category": "indirect",
+      "question": "What movies feature both Cillian Murphy and Tom Hardy?",
+      "ground_truth_answer": "Cillian Murphy and Tom Hardy appeared together in Inception and Dunkirk.",
+      "ground_truth_movies": [
+        "Inception",
+        "Dunkirk"
+      ],
+      "difficulty": "hard",
+      "_anchor": {
+        "people": [
+          "Cillian Murphy",
+          "Tom Hardy"
+        ],
+        "role": "actor",
+        "intersection": true
+      }
+    },
+    {
+      "id": "ind_32",
+      "category": "indirect",
+      "question": "Which films pair Timothée Chalamet with Saoirse Ronan?",
+      "ground_truth_answer": "Timothée Chalamet and Saoirse Ronan co-starred in Lady Bird and Little Women.",
+      "ground_truth_movies": [
+        "Lady Bird",
+        "Little Women"
+      ],
+      "difficulty": "medium",
+      "_anchor": {
+        "people": [
+          "Timothée Chalamet",
+          "Saoirse Ronan"
+        ],
+        "role": "actor",
+        "intersection": true
+      }
+    },
+    {
+      "id": "ind_33",
+      "category": "indirect",
+      "question": "What films feature Bill Murray in a Wes Anderson movie?",
+      "ground_truth_answer": "Bill Murray appeared in the Wes Anderson films Rushmore, The Royal Tenenbaums, The Life Aquatic, The Darjeeling Limited, Moonrise Kingdom, and The Grand Budapest Hotel, among others.",
+      "ground_truth_movies": [
+        "Rushmore",
+        "The Royal Tenenbaums",
+        "The Life Aquatic with Steve Zissou",
+        "The Darjeeling Limited",
+        "Fantastic Mr. Fox",
+        "Moonrise Kingdom",
+        "The Grand Budapest Hotel",
+        "Isle of Dogs"
+      ],
+      "difficulty": "hard",
+      "_anchor": {
+        "people": [
+          "Bill Murray",
+          "Wes Anderson"
+        ],
+        "roles": [
+          "actor",
+          "director"
+        ],
+        "intersection": true
+      }
+    },
+    {
+      "id": "ind_34",
+      "category": "indirect",
+      "question": "Which films pair Leonardo DiCaprio with director Martin Scorsese?",
+      "ground_truth_answer": "DiCaprio and Scorsese collaborated on Gangs of New York, The Aviator, The Departed, Shutter Island, and The Wolf of Wall Street.",
+      "ground_truth_movies": [
+        "Gangs of New York",
+        "The Aviator",
+        "The Departed",
+        "Shutter Island",
+        "The Wolf of Wall Street",
+        "Killers of the Flower Moon"
+      ],
+      "difficulty": "hard",
+      "_anchor": {
+        "people": [
+          "Leonardo DiCaprio",
+          "Martin Scorsese"
+        ],
+        "roles": [
+          "actor",
+          "director"
+        ],
+        "intersection": true
+      }
+    },
+    {
+      "id": "ind_35",
+      "category": "indirect",
+      "question": "What films did Robert De Niro make with director Martin Scorsese?",
+      "ground_truth_answer": "De Niro and Scorsese collaborated on Mean Streets, Taxi Driver, Raging Bull, Goodfellas, Casino, and The Irishman, among others.",
+      "ground_truth_movies": [
+        "Mean Streets",
+        "Taxi Driver",
+        "New York, New York",
+        "Raging Bull",
+        "The King of Comedy",
+        "GoodFellas",
+        "Cape Fear",
+        "Casino",
+        "The Irishman",
+        "Killers of the Flower Moon"
+      ],
+      "difficulty": "hard",
+      "_anchor": {
+        "people": [
+          "Robert De Niro",
+          "Martin Scorsese"
+        ],
+        "roles": [
+          "actor",
+          "director"
+        ],
+        "intersection": true
+      }
+    },
+    {
+      "id": "ind_36",
+      "category": "indirect",
+      "question": "Which films pair Johnny Depp with director Tim Burton?",
+      "ground_truth_answer": "Depp and Burton collaborated on Edward Scissorhands, Ed Wood, Sleepy Hollow, Charlie and the Chocolate Factory, Sweeney Todd, and Alice in Wonderland, among others.",
+      "ground_truth_movies": [
+        "Edward Scissorhands",
+        "Ed Wood",
+        "Sleepy Hollow",
+        "Charlie and the Chocolate Factory",
+        "Corpse Bride",
+        "Sweeney Todd: The Demon Barber of Fleet Street",
+        "Alice in Wonderland",
+        "Dark Shadows"
+      ],
+      "difficulty": "hard",
+      "_anchor": {
+        "people": [
+          "Johnny Depp",
+          "Tim Burton"
+        ],
+        "roles": [
+          "actor",
+          "director"
+        ],
+        "intersection": true
+      }
+    },
+    {
+      "id": "ind_37",
+      "category": "indirect",
+      "question": "What films did Tom Hanks make with director Steven Spielberg?",
+      "ground_truth_answer": "Hanks and Spielberg collaborated on Saving Private Ryan, Catch Me If You Can, The Terminal, Bridge of Spies, and The Post.",
+      "ground_truth_movies": [
+        "Saving Private Ryan",
+        "Catch Me If You Can",
+        "The Terminal",
+        "Bridge of Spies",
+        "The Post"
+      ],
+      "difficulty": "hard",
+      "_anchor": {
+        "people": [
+          "Tom Hanks",
+          "Steven Spielberg"
+        ],
+        "roles": [
+          "actor",
+          "director"
+        ],
+        "intersection": true
+      }
+    },
+    {
+      "id": "ind_38",
+      "category": "indirect",
+      "question": "Which films pair Samuel L. Jackson with director Quentin Tarantino?",
+      "ground_truth_answer": "Jackson and Tarantino collaborated on Pulp Fiction, Jackie Brown, Django Unchained, and The Hateful Eight.",
+      "ground_truth_movies": [
+        "Pulp Fiction",
+        "Jackie Brown",
+        "Django Unchained",
+        "The Hateful Eight"
+      ],
+      "difficulty": "hard",
+      "_anchor": {
+        "people": [
+          "Samuel L. Jackson",
+          "Quentin Tarantino"
+        ],
+        "roles": [
+          "actor",
+          "director"
+        ],
+        "intersection": true
+      }
+    },
+    {
+      "id": "ind_39",
+      "category": "indirect",
+      "question": "Which films were scored by Hans Zimmer?",
+      "ground_truth_answer": "Hans Zimmer scored Gladiator, The Dark Knight, Inception, Interstellar, Dunkirk, Blade Runner 2049, and Dune, among many others.",
+      "ground_truth_movies": [
+        "Gladiator",
+        "The Dark Knight",
+        "Inception",
+        "Interstellar",
+        "Dunkirk",
+        "Blade Runner 2049",
+        "Dune"
+      ],
+      "difficulty": "hard",
+      "_anchor": {
+        "person": "Hans Zimmer",
+        "role": "composer"
+      }
+    },
+    {
+      "id": "ind_40",
+      "category": "indirect",
+      "question": "What films were scored by Ennio Morricone?",
+      "ground_truth_answer": "Ennio Morricone scored The Good, the Bad and the Ugly, Once Upon a Time in the West, Cinema Paradiso, and The Hateful Eight, among many others.",
+      "ground_truth_movies": [
+        "The Good, the Bad and the Ugly",
+        "Once Upon a Time in the West",
+        "Cinema Paradiso",
+        "The Hateful Eight"
+      ],
+      "difficulty": "hard",
+      "_anchor": {
+        "person": "Ennio Morricone",
+        "role": "composer"
+      }
+    },
+    {
+      "id": "ind_41",
+      "category": "indirect",
+      "question": "Which films had cinematography by Roger Deakins?",
+      "ground_truth_answer": "Roger Deakins shot The Shawshank Redemption, Fargo, No Country for Old Men, Skyfall, Sicario, Blade Runner 2049, and 1917, among others.",
+      "ground_truth_movies": [
+        "The Shawshank Redemption",
+        "Fargo",
+        "No Country for Old Men",
+        "Skyfall",
+        "Sicario",
+        "Blade Runner 2049",
+        "1917"
+      ],
+      "difficulty": "hard",
+      "_anchor": {
+        "person": "Roger Deakins",
+        "role": "cinematographer"
+      }
+    },
+    {
+      "id": "ind_42",
+      "category": "indirect",
+      "question": "What films were written by Aaron Sorkin?",
+      "ground_truth_answer": "Aaron Sorkin wrote A Few Good Men, The Social Network, Moneyball, Steve Jobs, Molly's Game, and The Trial of the Chicago 7.",
+      "ground_truth_movies": [
+        "A Few Good Men",
+        "Malice",
+        "The American President",
+        "Charlie Wilson's War",
+        "The Social Network",
+        "Moneyball",
+        "Steve Jobs",
+        "Molly's Game",
+        "The Trial of the Chicago 7",
+        "Being the Ricardos"
+      ],
+      "difficulty": "hard",
+      "_anchor": {
+        "person": "Aaron Sorkin",
+        "role": "writer"
+      }
+    },
+    {
+      "id": "ind_43",
+      "category": "indirect",
+      "question": "Which films did Park Chan-wook direct?",
+      "ground_truth_answer": "Park Chan-wook directed Oldboy, Sympathy for Lady Vengeance, Stoker, The Handmaiden, and Decision to Leave.",
+      "ground_truth_movies": [
+        "Joint Security Area",
+        "Sympathy for Mr. Vengeance",
+        "Oldboy",
+        "Three... Extremes",
+        "Lady Vengeance",
+        "I'm a Cyborg, But That's OK",
+        "Thirst",
+        "Stoker",
+        "The Handmaiden",
+        "Decision to Leave",
+        "No Other Choice"
+      ],
+      "difficulty": "hard",
+      "_anchor": {
+        "person": "Park Chan-wook",
+        "role": "director"
+      }
+    },
+    {
+      "id": "ind_44",
+      "category": "indirect",
+      "question": "What films did Jordan Peele direct?",
+      "ground_truth_answer": "Jordan Peele directed Get Out, Us, and Nope.",
+      "ground_truth_movies": [
+        "Get Out",
+        "Us",
+        "Nope"
+      ],
+      "difficulty": "easy",
+      "_anchor": {
+        "person": "Jordan Peele",
+        "role": "director"
+      }
+    },
+    {
+      "id": "ind_45",
+      "category": "indirect",
+      "question": "Which movies has Brad Pitt starred in?",
+      "ground_truth_answer": "Brad Pitt starred in Se7en, Fight Club, Ocean's Eleven, Inglourious Basterds, Moneyball, The Big Short, and Once Upon a Time in Hollywood, among others.",
+      "ground_truth_movies": [
+        "Thelma & Louise",
+        "A River Runs Through It",
+        "Cool World",
+        "Kalifornia",
+        "True Romance",
+        "Interview with the Vampire",
+        "Legends of the Fall",
+        "Se7en",
+        "Twelve Monkeys",
+        "Sleepers",
+        "Seven Years in Tibet",
+        "The Devil's Own",
+        "Meet Joe Black",
+        "Fight Club",
+        "Snatch",
+        "Ocean's Eleven",
+        "Spy Game",
+        "The Mexican",
+        "Sinbad: Legend of the Seven Seas",
+        "Ocean's Twelve",
+        "Troy",
+        "Mr. & Mrs. Smith",
+        "Babel",
+        "Ocean's Thirteen",
+        "The Assassination of Jesse James by the Coward Robert Ford",
+        "Burn After Reading",
+        "The Curious Case of Benjamin Button",
+        "Inglourious Basterds",
+        "Megamind",
+        "Happy Feet Two",
+        "Moneyball",
+        "The Tree of Life",
+        "Killing Them Softly",
+        "12 Years a Slave",
+        "The Counselor",
+        "World War Z",
+        "Fury",
+        "By the Sea",
+        "The Big Short",
+        "Allied",
+        "War Machine",
+        "Ad Astra",
+        "Once Upon a Time... in Hollywood",
+        "Babylon",
+        "Bullet Train",
+        "The Lost City",
+        "Wolfs",
+        "F1"
+      ],
+      "difficulty": "hard",
+      "_anchor": {
+        "person": "Brad Pitt",
+        "role": "actor"
+      }
+    },
+    {
+      "id": "ind_46",
+      "category": "indirect",
+      "question": "List the films starring Keanu Reeves.",
+      "ground_truth_answer": "Keanu Reeves starred in Point Break, Speed, The Matrix and its sequels, Constantine, and the John Wick films.",
+      "ground_truth_movies": [
+        "Dangerous Liaisons",
+        "Bill & Ted's Excellent Adventure",
+        "Parenthood",
+        "Bill & Ted's Bogus Journey",
+        "My Own Private Idaho",
+        "Point Break",
+        "Bram Stoker's Dracula",
+        "Little Buddha",
+        "Much Ado About Nothing",
+        "Speed",
+        "A Walk in the Clouds",
+        "Johnny Mnemonic",
+        "Chain Reaction",
+        "The Devil's Advocate",
+        "The Matrix",
+        "The Gift",
+        "The Replacements",
+        "The Watcher",
+        "Hardball",
+        "Sweet November",
+        "Something's Gotta Give",
+        "The Animatrix",
+        "The Matrix Reloaded",
+        "The Matrix Revolutions",
+        "Constantine",
+        "A Scanner Darkly",
+        "The Lake House",
+        "Street Kings",
+        "The Day the Earth Stood Still",
+        "Henry's Crime",
+        "47 Ronin",
+        "Man of Tai Chi",
+        "John Wick",
+        "Knock Knock",
+        "Exposed",
+        "Keanu",
+        "The Neon Demon",
+        "The Whole Truth",
+        "John Wick: Chapter 2",
+        "SPF-18",
+        "The Bad Batch",
+        "To the Bone",
+        "Destination Wedding",
+        "Replicas",
+        "Siberia",
+        "Always Be My Maybe",
+        "John Wick: Chapter 3 - Parabellum",
+        "Toy Story 4",
+        "Bill & Ted Face the Music",
+        "The SpongeBob Movie: Sponge on the Run",
+        "The Matrix Resurrections",
+        "DC League of Super-Pets",
+        "John Wick: Chapter 4",
+        "Sonic the Hedgehog 3",
+        "Ballerina",
+        "Good Fortune"
+      ],
+      "difficulty": "hard",
+      "_anchor": {
+        "person": "Keanu Reeves",
+        "role": "actor"
+      }
+    },
+    {
+      "id": "ind_47",
+      "category": "indirect",
+      "question": "Which films has Anya Taylor-Joy appeared in?",
+      "ground_truth_answer": "Anya Taylor-Joy appeared in The Witch, Split, Emma, Last Night in Soho, The Menu, and Furiosa.",
+      "ground_truth_movies": [
+        "Morgan",
+        "The Witch",
+        "Marrowbone",
+        "Split",
+        "Thoroughbreds",
+        "Glass",
+        "Emma.",
+        "Radioactive",
+        "The New Mutants",
+        "Last Night in Soho",
+        "Amsterdam",
+        "The Menu",
+        "The Northman",
+        "The Super Mario Bros. Movie",
+        "Furiosa: A Mad Max Saga",
+        "The Gorge",
+        "The Super Mario Galaxy Movie"
+      ],
+      "difficulty": "medium",
+      "_anchor": {
+        "person": "Anya Taylor-Joy",
+        "role": "actor"
+      }
+    },
+    {
+      "id": "ind_48",
+      "category": "indirect",
+      "question": "What films has Margot Robbie starred in?",
+      "ground_truth_answer": "Margot Robbie starred in The Wolf of Wall Street, I, Tonya, Once Upon a Time in Hollywood, Bombshell, and Barbie, among others.",
+      "ground_truth_movies": [
+        "About Time",
+        "The Wolf of Wall Street",
+        "Focus",
+        "Z for Zachariah",
+        "Suicide Squad",
+        "The Legend of Tarzan",
+        "Whiskey Tango Foxtrot",
+        "Goodbye Christopher Robin",
+        "I, Tonya",
+        "Mary Queen of Scots",
+        "Peter Rabbit",
+        "Terminal",
+        "Bombshell",
+        "Once Upon a Time... in Hollywood",
+        "Birds of Prey (and the Fantabulous Emancipation of One Harley Quinn)",
+        "Peter Rabbit 2: The Runaway",
+        "The Suicide Squad",
+        "Amsterdam",
+        "Babylon",
+        "Barbie",
+        "A Big Bold Beautiful Journey",
+        "\"Wuthering Heights\""
+      ],
+      "difficulty": "medium",
+      "_anchor": {
+        "person": "Margot Robbie",
+        "role": "actor"
+      }
+    },
+    {
+      "id": "ind_49",
+      "category": "indirect",
+      "question": "Which films were scored by John Williams?",
+      "ground_truth_answer": "John Williams scored Jaws, Star Wars, Raiders of the Lost Ark, E.T., Jurassic Park, Schindler's List, and the Harry Potter films, among many others.",
+      "ground_truth_movies": [
+        "Jaws",
+        "Star Wars",
+        "Raiders of the Lost Ark",
+        "E.T. the Extra-Terrestrial",
+        "Jurassic Park",
+        "Schindler's List",
+        "Harry Potter and the Philosopher's Stone"
+      ],
+      "difficulty": "hard",
+      "_anchor": {
+        "person": "John Williams",
+        "role": "composer"
+      }
+    },
+    {
+      "id": "ind_50",
+      "category": "indirect",
+      "question": "What films did Roger Deakins shoot for the Coen brothers?",
+      "ground_truth_answer": "Roger Deakins shot Barton Fink, Fargo, The Big Lebowski, O Brother Where Art Thou?, No Country for Old Men, and True Grit for the Coen brothers, among others.",
+      "ground_truth_movies": [
+        "Fargo",
+        "The Big Lebowski",
+        "O Brother, Where Art Thou?",
+        "No Country for Old Men",
+        "True Grit"
+      ],
+      "difficulty": "hard",
+      "_anchor": {
+        "people": [
+          "Roger Deakins",
+          "Joel Coen"
+        ],
+        "roles": [
+          "cinematographer",
+          "director"
+        ],
+        "intersection": true
+      }
+    },
     {
       "id": "fact_01",
       "category": "factual",
@@ -205,7 +1828,7 @@
       "question": "Other crime films directed by Martin Scorsese",
       "ground_truth_answer": "Martin Scorsese directed Goodfellas, The Departed, Casino, and The Irishman, among other crime films.",
       "ground_truth_movies": [
-        "Goodfellas",
+        "GoodFellas",
         "The Departed",
         "Casino",
         "The Irishman"
@@ -1730,5 +3353,17 @@
         "Interstellar"
       ]
     }
-  ]
+  ],
+  "_ground_truth_regeneration": {
+    "source": "local movies/movie_people/people tables",
+    "supported_roles": [
+      "actor",
+      "director",
+      "writer"
+    ],
+    "anchors_seen": 50,
+    "anchors_updated": 0,
+    "anchors_unchanged": 45,
+    "anchors_skipped": 5
+  }
 }

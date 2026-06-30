@@ -15,10 +15,10 @@ async def main():
     print(f"Built {len(chunks)} chunks")
     print()
     print("=== Sample chunk ===")
-    print(chunks[0][1])
+    print(chunks[0].content)
     print()
     print("=== Another sample ===")
-    print(chunks[5][1])
+    print(chunks[5].content)
 
 
 if __name__ == "__main__":

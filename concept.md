@@ -141,7 +141,7 @@ The key architectural idea: run both searches and **combine their rankings**, no
   - **Context window discipline** — only top-k chunks go in, keeping the prompt small and on-topic.
 
 ## 12. Generation (grounded answer)
-`generate` (`app/rag/generator.py:40`) → Cerebras (OpenAI-compatible client).
+`generate` (`app/rag/generator.py:40`) → Groq (OpenAI-compatible client).
 - **Sub-concepts:**
   - **Grounding / anti-hallucination** — the system prompt (`app/rag/generator.py:9`) says
     *answer using ONLY the numbered movies; if context lacks it, say so and stop*. This is what

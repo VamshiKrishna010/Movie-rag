@@ -7,6 +7,7 @@ import { GenreProvider } from "./context/GenreContext";
 import { SearchProvider } from "./context/SearchContext";
 import AdminPage from "./pages/AdminPage";
 import AuthPage from "./pages/AuthPage";
+import ChatPage from "./pages/ChatPage";
 import HomePage from "./pages/HomePage";
 import MovieDetailPage from "./pages/MovieDetailPage";
 
@@ -25,6 +26,7 @@ function AppRoutes() {
             </AdminRoute>
           }
         />
+        <Route path="/chat" element={<ChatPage />} />
         <Route path="/" element={<HomePage />} />
         <Route path="/movie/:id" element={<MovieDetailPage />} />
       </Routes>

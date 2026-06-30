@@ -111,7 +111,12 @@ def test_recall_at_k_requires_relevance_labels() -> None:
 
 @pytest.mark.parametrize(
     ("strategy", "retriever_attribute"),
-    [("hybrid", "retrieve"), ("dense", "retrieve_dense")],
+    [
+        ("hybrid", "retrieve"),
+        ("dense", "retrieve_dense"),
+        ("sparse", "retrieve_sparse"),
+        ("routed", "retrieve_routed_for_eval"),
+    ],
 )
 def test_evaluate_items_selects_strategy_and_preserves_rank_order(
     monkeypatch,
@@ -142,6 +147,14 @@ def test_evaluate_items_selects_strategy_and_preserves_rank_order(
     ]
 
 
+def test_resolve_retriever_supports_sparse() -> None:
+    assert mrr.resolve_retriever("sparse") is mrr.retrieve_sparse
+
+
+def test_resolve_retriever_supports_routed() -> None:
+    assert mrr.resolve_retriever("routed") is mrr.retrieve_routed_for_eval
+
+
 def test_evaluate_items_surfaces_retrieval_failure() -> None:
     async def failing_retriever(_question: str, _k: int):
         raise ConnectionError("database unavailable")
@@ -155,6 +168,56 @@ def test_evaluate_items_surfaces_retrieval_failure() -> None:
                 retriever=failing_retriever,
             )
         )
+
+
+def test_evaluate_items_runs_with_bounded_parallelism_and_preserves_order() -> None:
+    active = 0
+    max_active = 0
+
+    async def concurrent_retriever(question: str, _k: int):
+        nonlocal active, max_active
+        active += 1
+        max_active = max(max_active, active)
+        await asyncio.sleep(0.01)
+        active -= 1
+        return [_chunk(1, "Relevant Movie")]
+
+    items = [
+        _item(item_id=f"item_{index}", question=f"Question {index}")
+        for index in range(6)
+    ]
+    records = asyncio.run(
+        mrr.evaluate_items(
+            items,
+            strategy="hybrid",
+            k=5,
+            workers=2,
+            retriever=concurrent_retriever,
+        )
+    )
+
+    assert max_active == 2
+    assert [record["id"] for record in records] == [
+        item["id"] for item in items
+    ]
+
+
+def test_evaluate_items_requires_positive_workers() -> None:
+    with pytest.raises(ValueError, match="workers must be greater than zero"):
+        asyncio.run(
+            mrr.evaluate_items(
+                [_item()],
+                strategy="hybrid",
+                k=5,
+                workers=0,
+            )
+        )
+
+
+def test_parser_accepts_worker_count() -> None:
+    args = mrr.build_parser().parse_args(["--workers", "7"])
+
+    assert args.workers == 7
 
 
 def test_load_items_rejects_empty_ground_truth_movies(tmp_path) -> None:

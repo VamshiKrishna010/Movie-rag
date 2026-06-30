@@ -1,5 +1,6 @@
 import asyncio
 from functools import lru_cache
+from threading import Lock
 
 from sentence_transformers import SentenceTransformer
 
@@ -7,17 +8,20 @@ MODEL_NAME = "BAAI/bge-small-en-v1.5"
 _QUERY_PREFIX = "Represent this sentence for searching relevant passages: "
 
 _model: SentenceTransformer | None = None
+_model_lock = Lock()
 
 
 def get_model() -> SentenceTransformer:
     """Lazy-load the embedding model (downloads ~130MB on first run, then cached)."""
     global _model
     if _model is None:
-        _model = SentenceTransformer(MODEL_NAME)
+        with _model_lock:
+            if _model is None:
+                _model = SentenceTransformer(MODEL_NAME)
     return _model
 
 
-def embed_texts(texts: list[str], batch_size: int = 64) -> list[list[float]]:
+def embed_texts(texts: list[str], batch_size: int = 128) -> list[list[float]]:
     """Embed a list of texts. Returns one 384-dim vector per text."""
     if not texts:
         return []
@@ -37,7 +41,7 @@ def format_vector(vec: list[float]) -> str:
     return "[" + ",".join(f"{x:.6f}" for x in vec) + "]"
 
 
-@lru_cache(maxsize=512)
+@lru_cache(maxsize=1024)
 def _embed_query_cached(prefixed: str) -> tuple[float, ...]:
     """CPU-bound embed; tuple is hashable for lru_cache."""
     model = get_model()

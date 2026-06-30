@@ -23,7 +23,7 @@ MRR will follow the standard definition: each query scores `1 / rank` for its fi
    ```
 
    - Default to `hybrid` and `k=5`.
-   - Support `--strategy hybrid|dense`, mapped directly to the existing `retrieve()` and `retrieve_dense()` functions in [retriever.py](D:/Git_projects/movie-rag/app/rag/retriever.py:195).
+   - Support `--strategy hybrid|dense|sparse`, mapped to hybrid, dense-only, and keyword/FTS-only retrieval.
    - Load questions and `ground_truth_movies` from [dataset.json](D:/Git_projects/movie-rag/eval/dataset.json:3).
    - Process queries sequentially and fail clearly on retrieval or malformed-label errors instead of recording artificial zeroes.
    - Print per-category MRR@K and overall MRR@K.
@@ -44,7 +44,11 @@ MRR will follow the standard definition: each query scores `1 / rank` for its fi
   app\.venv\Scripts\python.exe -m pytest tests/test_eval_metrics.py
   app\.venv\Scripts\python.exe -m eval.mrr --strategy hybrid --k 10
   app\.venv\Scripts\python.exe -m eval.mrr --strategy dense --k 10
-  ```
+  app\.venv\Scripts\python.exe -m eval.mrr --strategy sparse --k 10
+```
+
+The evaluator uses four concurrent retrieval workers by default. Pass
+`--workers 1` to run sequentially or choose another positive worker count.
 
 - Confirm the reported overall MRR equals the arithmetic mean of the CSV `reciprocal_rank` column.
 
